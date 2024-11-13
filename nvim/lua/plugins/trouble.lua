@@ -1,39 +1,46 @@
-return {
-    "folke/trouble.nvim",
-    cmd = { "TroubleToggle", "Trouble" },
-    opts = { use_diagnostic_signs = true },
+local M = {
+    'folke/trouble.nvim',
+    ft = { 'lua', 'go' },
+    event = 'VeryLazy',
     keys = {
-        { "<leader>xx", "<cmd>TroubleToggle document_diagnostics<cr>",  desc = "Document Diagnostics (Trouble)" },
-        { "<leader>xX", "<cmd>TroubleToggle workspace_diagnostics<cr>", desc = "Workspace Diagnostics (Trouble)" },
-        { "<leader>xL", "<cmd>TroubleToggle loclist<cr>",               desc = "Location List (Trouble)" },
-        { "<leader>xQ", "<cmd>TroubleToggle quickfix<cr>",              desc = "Quickfix List (Trouble)" },
         {
-            "[q",
-            function()
-                if require("trouble").is_open() then
-                    require("trouble").previous({ skip_groups = true, jump = true })
-                else
-                    local ok, err = pcall(vim.cmd.cprev)
-                    if not ok then
-                        vim.notify(err, vim.log.levels.ERROR)
-                    end
-                end
-            end,
-            desc = "Previous trouble/quickfix item",
+            '<leader>xd',
+            '<cmd>Trouble diagnostics toggle<cr>',
+            desc = 'Diagnostics (Trouble)',
         },
         {
-            "]q",
-            function()
-                if require("trouble").is_open() then
-                    require("trouble").next({ skip_groups = true, jump = true })
-                else
-                    local ok, err = pcall(vim.cmd.cnext)
-                    if not ok then
-                        vim.notify(err, vim.log.levels.ERROR)
-                    end
-                end
-            end,
-            desc = "Next trouble/quickfix item",
+            '<leader>xx',
+            '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
+            desc = 'Buffer Diagnostics (Trouble)',
+        },
+        {
+            '<leader>xs',
+            '<cmd>Trouble symbols toggle focus=false<cr>',
+            desc = 'Symbols (Trouble)',
+        },
+        {
+            '<leader>xl',
+            '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
+            desc = 'LSP Definitions / references / ... (Trouble)',
+        },
+        {
+            '<leader>xL',
+            '<cmd>Trouble loclist toggle<cr>',
+            desc = 'Location List (Trouble)',
+        },
+        {
+            '<leader>xQ',
+            '<cmd>Trouble qflist toggle<cr>',
+            desc = 'Quickfix List (Trouble)',
         },
     },
 }
+
+function M.config()
+    require('trouble').setup({
+        auto_close = true,
+        focus = true,
+    })
+end
+
+return M

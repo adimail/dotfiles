@@ -14,19 +14,22 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # Aliases
 alias vv='nvim'
+alias f='fzf'
 alias gd='gotodesktop'
 alias wifi='readwifinearme'
 alias viewdb='view-main-database'
 alias rt='remove-task'
 alias at='insert-task'
-alias q='exit'
 alias cal='Get-Calendar'
 alias internet='Get-InternetStatus'
 alias cls='clear'
 alias wr='writenote'
+alias t='tmux'
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+# export PATH="$HOME/.zig:$PATH"
+# export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -62,7 +65,7 @@ zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 # DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+DISABLE_LS_COLORS="true"
 
 # Uncomment the following line to disable auto-setting terminal title.
 DISABLE_AUTO_TITLE="true"
@@ -87,7 +90,7 @@ ENABLE_CORRECTION="true"
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+HIST_STAMPS="dd.mm.yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -100,6 +103,7 @@ ENABLE_CORRECTION="true"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search)
 
 source $ZSH/oh-my-zsh.sh
+source <(fzf --zsh)
 
 # User configuration
 
@@ -134,6 +138,11 @@ function la {
     else
         ls
     fi
+}
+
+function notebook {
+	cd ~/desktop/notes/notebooks
+	jupyter lab
 }
 
 function Get-Calendar {
@@ -191,10 +200,10 @@ function writenote {
     month=$(date '+%b' | tr '[:upper:]' '[:lower:]')
     date=$(date '+%d')
     year=$(date '+%Y')
-    
+
     dirName="${month}${year}"
     dirPath="$HOME/Desktop/notes/self/$dirName"
-    fileName="${date}${month}.txt"
+    fileName="${date}${month}.md"
 
     if [ ! -d "$dirPath" ]; then
         mkdir -p "$dirPath"
@@ -208,3 +217,7 @@ function writenote {
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
