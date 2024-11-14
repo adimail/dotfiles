@@ -19,8 +19,15 @@ if vim.g.neovide then
     vim.g.neovide_cursor_vfx_mode = 'ripple'
 
     -- remap nvimTree keymap
-    vim.keymap.set('n', '<D-n>', '<Cmd>NvimTreeToggle<CR>')
+    vim.keymap.set('n', '<D-b>', '<Cmd>NvimTreeToggle<CR>', { noremap = true, silent = true })
     vim.opt.laststatus = 3
+
+    function confirm_close_tab()
+        local confirm = vim.fn.confirm("Are you sure you want to close this tab?", "&Yes\n&No", 2)
+        if confirm == 1 then
+            vim.cmd("bdelete")  -- Close the current buffer/tab
+        end
+    end
 
     -- command mapping
     vim.keymap.set({ 'i', 'n' }, '<D-a>', '<Esc>ggVG') -- select all

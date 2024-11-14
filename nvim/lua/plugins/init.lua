@@ -156,34 +156,6 @@ return {
             ]])
         end,
     },
-    { ---- > An efficient fuzzy finder that helps to locate files, buffers, mrus, gtags, etc. on the fly for both vim and neovim.
-        'Yggdroot/LeaderF',
-        enabled = true,
-        event = 'VeryLazy',
-        config = function()
-            vim.cmd([[
-               let g:Lf_HideHelp = 1
-               let g:Lf_UseCache = 0
-               let g:Lf_UseVersionControlTool = 0
-               let g:Lf_IgnoreCurrentBufferName = 1
-               " Show icons, icons are shown by default
-               let g:Lf_ShowDevIcons = 1
-               " popup mode
-               let g:Lf_WindowPosition = 'popup'
-               let g:Lf_PreviewInPopup = 1
-               let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font': "DejaVu Sans Mono for Powerline" }
-               let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
-               let g:Lf_WildIgnore = {
-                   \ 'dir': ['.git', 'node_modules'],
-                   \ 'file': []
-                   \}
-
-                   let g:Lf_RootMarkers = ['.git', '.gitignore', 'node_modules', 'go.mod']
-                   " mode explain: https://github.com/Yggdroot/LeaderF/blob/master/doc/leaderf.txt#L485-L497
-                   let g:Lf_WorkingDirectoryMode = 'A'
-               ]])
-        end,
-    },
     { 'williamboman/mason-lspconfig.nvim' },
     {
         ---- A code preview plugin.

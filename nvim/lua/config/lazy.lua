@@ -12,7 +12,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- leader KEY
-vim.g.mapleader = ','
+vim.g.mapleader = '\\'
 
 require('lazy').setup('plugins', {
     defaults = {
