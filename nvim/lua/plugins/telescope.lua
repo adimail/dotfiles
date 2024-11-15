@@ -48,6 +48,7 @@ return {
             '<leader>fg',
             function()
                 require('telescope.builtin').live_grep({
+                    theme = 'dropdown',
                     -- cwd = require("lazy.core.config").options.root
                 })
             end,
@@ -87,6 +88,13 @@ return {
                 vim.cmd('Telescope projects')
             end,
             desc = 'Toggle Telescope projects',
+        },
+        {
+            '<leader>fw',
+            function()
+                require('telescope.builtin').grep_string()
+            end,
+            desc = 'Grerp strings below the cursor',
         },
     },
     config = function()

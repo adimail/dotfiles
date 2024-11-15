@@ -16,15 +16,15 @@ typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 alias vv='nvim'
 alias f='fzf'
 alias gd='gotodesktop'
-alias wifi='readwifinearme'
-alias viewdb='view-main-database'
-alias rt='remove-task'
-alias at='insert-task'
-alias cal='Get-Calendar'
-alias internet='Get-InternetStatus'
 alias cls='clear'
 alias wr='writenote'
 alias t='tmux'
+alias nv='nvim .'
+alias ks='t kill-server'
+alias tls='t ls'
+
+#git alias
+alias gs='git status'
 
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH

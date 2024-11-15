@@ -7,9 +7,10 @@ NVIM_DIR="$DEST_DIR/nvim"
 TMUX_DIR="$DEST_DIR/tmux"
 ZSH_DIR="$DEST_DIR/zsh"
 HTOP_DIR="$DEST_DIR/htop"
+SCRIPTS_DIR="$DEST_DIR/scripts"
 
 # Create the directories
-mkdir -p "$NEOFETCH_DIR" "$NVIM_DIR" "$TMUX_DIR" "$ZSH_DIR" "$HTOP_DIR"
+mkdir -p "$NEOFETCH_DIR" "$NVIM_DIR" "$TMUX_DIR" "$ZSH_DIR" "$HTOP_DIR" "$SCRIPTS_DIR"
 
 # Paths to source files
 ZSHRC="$HOME/.zshrc"
@@ -17,6 +18,7 @@ NEOFETCH_CONFIG="$HOME/.config/neofetch/config.conf"
 NVIM_CONFIG_DIR="$HOME/.config/nvim"
 TMUX_CONF="$HOME/.tmux.conf"
 HTOPRC="$HOME/.config/htop/htoprc"
+SCRIPTS_SRC_DIR="$HOME/scripts"
 
 # Copy files to their respective directories
 if [ -f "$ZSHRC" ]; then
@@ -49,4 +51,10 @@ else
     echo "Htop configuration file not found."
 fi
 
-echo "Configuration files have been copied into their respective directories."
+if [ -d "$SCRIPTS_SRC_DIR" ]; then
+    cp -r "$SCRIPTS_SRC_DIR"/* "$SCRIPTS_DIR/"
+else
+    echo "Scripts directory not found."
+fi
+
+echo "Configuration files and scripts have been copied into their respective directories."
