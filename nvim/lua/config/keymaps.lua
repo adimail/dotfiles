@@ -1,149 +1,124 @@
-vim.o.timeoutlen = 300
+-- ==========================
+-- General Settings
+-- ==========================
+vim.o.timeoutlen = 300 -- Set the timeout length for mapped sequences in milliseconds
 
+-- Keymap utility
 local bind = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
--- ============= Basic Keymaps =============
---
--- vim.api.nvim_create_user_command('TransparentToggle', 'hi Normal ctermbg=NONE guibg=NONE | hi EndOfBuffer guibg=NONE ctermbg=NONE', {})
--- bind('n', '<F3>', '<CMD>TransparentToggle<CR>')
+-- ==========================
+-- Basic Keymaps
+-- ==========================
+-- Undo and redo actions
+bind('n', 'u', '<CMD>undo<CR>', opts) -- Undo
+bind('n', '<C-r>', '<CMD>redo<CR>', opts) -- Redo
 
-bind('n', ';', ':')
-bind('n', 'U', '<C-r>', opts)
-bind('v', ';', ':', opts)
+-- Command-line convenience shortcuts
+bind('c', 'W', 'w', opts) -- `W` for save
+bind('c', 'WQ', 'wq', opts) -- `WQ` for save and quit
+bind('c', 'Wq', 'wq', opts) -- `Wq` for save and quit
+bind('c', 'QA', 'qa', opts) -- `QA` for quit all
 
-bind('c', 'W', 'w', opts)
-bind('c', 'WQ', 'wq', opts)
-bind('c', 'Wq', 'wq', opts)
-bind('c', 'QA', 'qa', opts)
-
--- do not copy delete and change command
-bind('n', 'd', [["_d]], opts)
+-- Prevent copy to clipboard for delete/change commands
+bind('n', 'd', [["_d]], opts) -- Delete without copying to clipboard
 bind('v', 'd', [["_d]], opts)
-bind('n', 'c', [["_c]], opts)
+bind('n', 'c', [["_c]], opts) -- Change without copying to clipboard
 bind('v', 'c', [["_c]], opts)
 
-bind('n', '<C-o>', '<C-o>zz', opts)
-bind('n', '<C-i>', '<C-i>zz', opts)
+-- Center the cursor after jumping back and forward
+bind('n', '<C-o>', '<C-o>zz', opts) -- Jump back
+bind('n', '<C-i>', '<C-i>zz', opts) -- Jump forward
 
-bind('n', 'q', '<Nop>', opts)
-bind('n', 'H', 'g^', opts)
-bind('n', 'L', 'g_', opts)
+-- Improved navigation in lines
+bind('n', 'H', 'g^', opts) -- Jump to the start of the first non-blank character
+bind('n', 'L', 'g_', opts) -- Jump to the end of the last non-blank character
 bind('v', 'H', 'g^', opts)
 bind('v', 'L', 'g_', opts)
+
+-- Move by visual lines instead of actual lines
 bind('n', 'k', 'gk', opts)
 bind('n', 'j', 'gj', opts)
-bind('v', '<tab>', '<S->>gv', opts)
-bind('v', '<S-tab>', '<S-<>gv', opts)
-bind('n', '<C-left>', '<CMD>bp<CR>', opts)
-bind('n', '<C-right>', '<CMD>bn<CR>', opts)
 
-bind('n', '<C-t>', '<CMD>tabnew<CR>', opts)
-bind('n', '<C-t>', '<Esc><CMD>tabnew<CR>', opts)
+-- Adjust indent in visual mode and reselect
+bind('v', '<tab>', '<S->>gv', opts) -- Shift-right and reselect
+bind('v', '<S-tab>', '<S-<>gv', opts) -- Shift-left and reselect
 
-bind('n', '<ESC>', '<CMD>noh<CR>', opts)
+-- Buffer navigation
+bind('n', '<C-left>', '<CMD>bp<CR>', opts) -- Previous buffer
+bind('n', '<C-right>', '<CMD>bn<CR>', opts) -- Next buffer
 
-bind('n', '<leader>0', '<CMD>tablast<CR>', opts)
-bind('n', '<leader>dd', ':%bdelete<CR>', opts)
+-- Tab management
+bind('n', '<C-t>', '<CMD>tabnew<CR>', opts) -- Open a new tab
+bind('n', '<ESC>', '<CMD>noh<CR>', opts) -- Clear search highlighting
 
--- copy to system clipboard
-bind('n', '<C-c>', '"+y', opts)
-bind('n', '<C-h>', '<C-w>h', opts)
-bind('n', '<C-j>', '<C-w>j', opts)
-bind('n', '<C-k>', '<C-w>k', opts)
-bind('n', '<C-l>', '<C-w>l', opts)
-bind('n', '<C-q>', '<C-w>q', opts)
-bind('n', '<C-\\>', '<C-w><bar>', opts)
+-- Tab navigation
+bind('n', '<leader>0', '<CMD>tablast<CR>', opts) -- Go to the last tab
+bind('n', '<leader>dd', ':%bdelete<CR>', opts) -- Close all buffers
 
--- Auto indent pasted text
--- bind('n', 'p', ']p', opts)
--- bind('n', 'P', '[p', opts)
-bind('n', '(', '%', opts)
-bind('n', ', opts)', '%', opts)
+-- Copy to system clipboard
+bind('n', '<C-c>', '"+y', opts) -- Copy text to the system clipboard
 
--- resize window
-bind('n', '<S-Up>', '<cmd>resize +2<CR>', opts)
-bind('n', '<S-Down>', '<cmd>resize -2<CR>', opts)
-bind('n', '<S-Right>', '<cmd>vertical resize +5<CR>', opts)
-bind('n', '<S-Left>', '<cmd>vertical resize -5<CR>', opts)
+-- Window navigation
+bind('n', '<C-h>', '<C-w>h', opts) -- Move to the left window
+bind('n', '<C-j>', '<C-w>j', opts) -- Move to the below window
+bind('n', '<C-k>', '<C-w>k', opts) -- Move to the above window
+bind('n', '<C-l>', '<C-w>l', opts) -- Move to the right window
+bind('n', '<C-q>', '<C-w>q', opts) -- Close the current window
+bind('n', '<C-\\>', '<C-w><bar>', opts) -- Equalize window size
 
+-- Resize splits
+bind('n', '<S-Up>', '<cmd>resize +2<CR>', opts) -- Increase height
+bind('n', '<S-Down>', '<cmd>resize -2<CR>', opts) -- Decrease height
+bind('n', '<S-Right>', '<cmd>vertical resize +5<CR>', opts) -- Increase width
+bind('n', '<S-Left>', '<cmd>vertical resize -5<CR>', opts) -- Decrease width
+
+-- Search with \v enabled
 bind('n', '<space>', '/\\v', opts)
+
+-- Exit terminal mode with Escape
 bind('t', '<Esc>', '<C-\\><C-n>', opts)
 
--- tab quick swich
-bind('n', '<leader>th', '<CMD>tabfirst<CR>', opts)
-bind('n', '<leader>tl', '<CMD>tablast<CR>', opts)
-bind('n', '<leader>tj', '<CMD>tabnext<CR>', opts)
-bind('n', '<leader>tk', '<CMD>tabprev<CR>', opts)
-bind('n', '<leader>tn', '<CMD>tabnext<CR>', opts)
--- bind('n', '<leader>tp', '<CMD>tabprev<CR>', opts)
-bind('n', '<leader>te', '<CMD>tabedit<CR>', opts)
--- bind('n', '<leader>td', '<CMD>tabclose<CR>', opts)
-bind('n', '<leader>tm', '<CMD>tabm<CR>', opts)
+-- Select all text
+bind('n', '<C-a>', 'ggVG', opts)
 
--- open vscode from current directory
-bind('n', '<leader>cd', "<CMD>let $VIM_DIR=expand('%:p:h')<CR>:silent !code $VIM_DIR<CR>")
--- select all text
-bind('n', '<M-a>', 'ggVG', opts)
+-- Move cursor line to top of screen (like `zt`) with `z<space>`
+bind('n', 'z<space>', 'zt', opts)
 
--- ============= Plugin Keymaps =============
--- lsp restart
-bind('n', '<leader>lr', '<CMD>LspRestart<CR>', opts)
-bind('n', '<leader>ls', '<CMD>LspStop<CR>', opts)
-bind('n', '<leader>lS', '<CMD>LspStart<CR>', opts)
--- git open current repo
-bind('n', '<leader>go', '<CMD>:!git open<CR><CR>', opts)
--- toggleTerm & Lazygit
-bind('n', '<leader>tf', '<CMD>exe v:count1 . "ToggleTerm"<CR>', opts)
-bind('n', '<leader>tb', '<CMD>ToggleTerm size=12 direction=horizontal<CR>', opts)
-bind('n', '<leader>tt', '<CMD>ToggleTerm direction=tab<CR>', opts)
-bind('n', '<leader>gg', '<CMD>lua _Lazygit_toggle()<CR>', opts)
+-- Move selected text up and down
+bind('x', '<S-Up>', ":move '<-2<CR>gv=gv", opts) -- Move selected text up
+bind('x', '<S-Down>', ":move '>+1<CR>gv=gv", opts) -- Move selected text down
 
--- vim-translator
--- bind('n', '<leader>ts', '<CMD>TranslateW<CR>', opts)
---
+-- Duplicate and move selected text
+bind('x', '<A-S-Up>', ":copy '<-1<CR>gv=gv", opts)
+bind('x', '<A-S-Down>', ":copy '>+0<CR>gv=gv", opts)
 
--- treesitter
-bind('n', '<leader>hd', '<CMD>TSDisable highlight<CR>', opts)
-bind('n', '<leader>he', '<CMD>TSEnable highlight<CR>', opts)
+-- ==========================
+-- Plugin Keymaps
+-- ==========================
+-- LSP Management
+bind('n', '<leader>lr', '<CMD>LspRestart<CR>', opts) -- Restart LSP
+bind('n', '<leader>ls', '<CMD>LspStop<CR>', opts) -- Stop LSP
+bind('n', '<leader>lS', '<CMD>LspStart<CR>', opts) -- Start LSP
 
--- telescope-dap
--- bind('n', '<leader>dcc', '<CMD>Telescope dap commands<CR>', opts)
--- bind('n', '<leader>dcf', '<CMD>Telescope dap configurations<CR>', opts)
--- bind('n', '<leader>dl', '<CMD>Telescope dap list_breakpoints<CR>', opts)
--- bind('n', '<leader>dv', '<CMD>Telescope dap variables<CR>', opts)
--- bind('n', '<leader>df', '<CMD>Telescope dap frames<CR>', opts)
--- -- dap
--- bind('n', '<leader>bp', '<CMD>DapToggleBreakpoint<CR>', opts)
--- bind('n', '<leader>ds', '<CMD>DapTerminate<CR>', opts)
--- bind('n', '<leader>dt', '<CMD>DapTerminate<CR>', opts)
--- bind('n', '<leader>db', '<CMD>DapContinue<CR>', opts)
--- bind('n', '<leader>du', '<CMD>lua require("dapui").toggle()<CR>', opts)
+-- Git Integration
+bind('n', '<leader>go', '<CMD>:!git open<CR><CR>', opts) -- Open the current repo in a browser
+bind('n', '<leader>gs', '<CMD>LazyGit<CR>', opts) -- Open LazyGit
+bind('n', '<leader>gc', '<CMD>LazyGitConfig<CR>', opts) -- Open LazyGit config view
+bind('n', '<leader>gb', '<CMD>LazyGitBranches<CR>', opts) -- Open branch management
 
--- -- undotree
-bind('n', '<leader>oh', ':UndotreeToggle <BAR> :UndotreeFocus<CR>', opts)
+-- ToggleTerm
+bind('n', '<leader>tf', '<CMD>exe v:count1 . "ToggleTerm"<CR>', opts) -- Open terminal
+bind('n', '<leader>tb', '<CMD>ToggleTerm size=12 direction=horizontal<CR>', opts) -- Horizontal terminal
+bind('n', '<leader>tt', '<CMD>ToggleTerm direction=tab<CR>', opts) -- Tab terminal
 
--- -- tagbar
--- bind('n', '<leader>tb', ':TagbarToggle<CR>', opts)
+-- NvimTree
+bind('n', '<leader>nt', '<CMD>NvimTreeToggle<CR>', opts) -- Toggle NvimTree
+bind('n', '<leader>nf', '<CMD>NvimTreeFindFile<CR>', opts) -- Focus on the current file in NvimTree
 
--- plenary debug
-bind(
-    'n',
-    '<leader>nd',
-    ':lua require("plenary.profile").start("profile.log", { flame = true })<CR>',
-    opts
-)
-bind(
-    'n',
-    '<leader>ns',
-    ':lua require("plenary.profile").stop()<CR> | :!flamegraph.pl profile.log > flame.svg && rm -f profile.log && open flame.svg<CR>',
-    opts
-)
---
--- close lspinlayHit
-bind(
-    'n',
-    '<leader>ih',
-    '<CMD>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<CR>',
-    opts
-)
+-- Treesitter Highlight Toggle
+bind('n', '<leader>hd', '<CMD>TSDisable highlight<CR>', opts) -- Disable highlight
+bind('n', '<leader>he', '<CMD>TSEnable highlight<CR>', opts) -- Enable highlight
+
+-- UndoTree
+bind('n', '<leader>oh', ':UndotreeToggle <BAR> :UndotreeFocus<CR>', opts) -- Open UndoTree and focus it
