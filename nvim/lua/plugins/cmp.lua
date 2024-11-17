@@ -12,6 +12,7 @@ local M = {
         'saadparwaiz1/cmp_luasnip',
         'octaltree/cmp-look',
         'tzachar/cmp-tabnine',
+        'hrsh7th/cmp-cmdline',
         {
             'Exafunction/codeium.nvim',
             enabled = false,
@@ -274,17 +275,16 @@ function M.config()
         },
     })
 
-    -- require("cmp").setup.cmdline(":", {
-    --     sources = {
-    --         { name = "cmdline", max_item_count = 10 },
-    --     },
-    -- })
-    -- require("cmp").setup.cmdline("/", {
-    --     sources = {
-    --         { name = "buffer" },
-    --     },
-    -- })
-    --
+    require('cmp').setup.cmdline(':', {
+        sources = {
+            { name = 'cmdline', max_item_count = 10 },
+        },
+    })
+    require('cmp').setup.cmdline('/', {
+        sources = {
+            { name = 'buffer' },
+        },
+    })
 end
 
 return M
