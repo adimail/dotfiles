@@ -1,68 +1,65 @@
 #!/bin/bash
 
-# Define directories
+# Define destination directories
 DEST_DIR=$(pwd) # Current folder
-NEOFETCH_DIR="$DEST_DIR/neofetch"
-NVIM_DIR="$DEST_DIR/nvim"
-TMUX_DIR="$DEST_DIR/tmux"
-ZSH_DIR="$DEST_DIR/zsh"
-HTOP_DIR="$DEST_DIR/htop"
-SCRIPTS_DIR="$DEST_DIR/scripts"
-GITUI_DIR="$DEST_DIR/gitui"
+DEST_NEOFETCH_DIR="$DEST_DIR/neofetch"
+DEST_NVIM_DIR="$DEST_DIR/nvim"
+DEST_TMUX_DIR="$DEST_DIR/tmux"
+DEST_ZSH_DIR="$DEST_DIR/zsh"
+DEST_HTOP_DIR="$DEST_DIR/htop"
+DEST_SCRIPTS_DIR="$DEST_DIR/scripts"
 
-# Create the directories
-mkdir -p "$NEOFETCH_DIR" "$NVIM_DIR" "$TMUX_DIR" "$ZSH_DIR" "$HTOP_DIR" "$SCRIPTS_DIR" "$GITUI_DIR"
+# Create the destination directories
+mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" "$DEST_HTOP_DIR" "$DEST_SCRIPTS_DIR"
 
-# Paths to source files
-ZSHRC="$HOME/.zshrc"
-NEOFETCH_CONFIG="$HOME/.config/neofetch/config.conf"
-NVIM_CONFIG_DIR="$HOME/.config/nvim"
-TMUX_CONF="$HOME/.tmux.conf"
-HTOPRC="$HOME/.config/htop/htoprc"
-SCRIPTS_SRC_DIR="$HOME/scripts"
-GITUI_SRC_DIR="$HOME/.config/gitui/"
+# Define source directories and files
+SOURCE_ZSHRC="$HOME/.zshrc"
+SOURCE_NEOFETCH_CONFIG="$HOME/.config/neofetch/config.conf"
+SOURCE_NVIM_CONFIG_DIR="$HOME/.config/nvim"
+SOURCE_TMUX_CONF="$HOME/.tmux.conf"
+SOURCE_HTOPRC="$HOME/.config/htop/htoprc"
+SOURCE_SCRIPTS_DIR="$HOME/scripts"
 
-# Copy files to their respective directories
-if [ -f "$ZSHRC" ]; then
-	cp "$ZSHRC" "$ZSH_DIR/"
+# Zsh configuration
+if [ -f "$SOURCE_ZSHRC" ]; then
+	cp "$SOURCE_ZSHRC" "$DEST_ZSH_DIR/"
 else
 	echo "Zsh configuration file not found."
 fi
 
-if [ -f "$NEOFETCH_CONFIG" ]; then
-	cp "$NEOFETCH_CONFIG" "$NEOFETCH_DIR/"
+# Neofetch configuration
+if [ -f "$SOURCE_NEOFETCH_CONFIG" ]; then
+	cp "$SOURCE_NEOFETCH_CONFIG" "$DEST_NEOFETCH_DIR/"
 else
 	echo "Neofetch configuration file not found."
 fi
 
-if [ -d "$NVIM_CONFIG_DIR" ]; then
-	cp -r "$NVIM_CONFIG_DIR"/* "$NVIM_DIR/"
+# Neovim configuration
+if [ -d "$SOURCE_NVIM_CONFIG_DIR" ]; then
+	cp -r "$SOURCE_NVIM_CONFIG_DIR"/* "$DEST_NVIM_DIR/"
 else
 	echo "Neovim configuration directory not found."
 fi
 
-if [ -f "$TMUX_CONF" ]; then
-	cp "$TMUX_CONF" "$TMUX_DIR/"
+# Tmux configuration
+if [ -f "$SOURCE_TMUX_CONF" ]; then
+	cp "$SOURCE_TMUX_CONF" "$DEST_TMUX_DIR/"
 else
 	echo "Tmux configuration file not found."
 fi
 
-if [ -f "$HTOPRC" ]; then
-	cp "$HTOPRC" "$HTOP_DIR/"
+# Htop configuration
+if [ -f "$SOURCE_HTOPRC" ]; then
+	cp "$SOURCE_HTOPRC" "$DEST_HTOP_DIR/"
 else
 	echo "Htop configuration file not found."
 fi
 
-if [ -d "$SCRIPTS_SRC_DIR" ]; then
-	cp -r "$SCRIPTS_SRC_DIR"/* "$SCRIPTS_DIR/"
+# Scripts
+if [ -d "$SOURCE_SCRIPTS_DIR" ]; then
+	cp -r "$SOURCE_SCRIPTS_DIR"/* "$DEST_SCRIPTS_DIR/"
 else
 	echo "Scripts directory not found."
-fi
-
-if [ -d "$GITUI_SRC_DIR" ]; then
-	cp -r "$GITUI_SRC_DIR"/* "$GITUI_DIR/"
-else
-	echo "GitUI configuration directory not found."
 fi
 
 echo "Configuration files and scripts have been copied into their respective directories."
