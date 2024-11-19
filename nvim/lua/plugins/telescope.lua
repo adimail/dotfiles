@@ -185,8 +185,6 @@ return {
                     '%.epub',
                     '%.flac',
                     '%.tar.gz',
-                    '%.css',
-                    '%.js',
                 },
                 mappings = {
                     i = {

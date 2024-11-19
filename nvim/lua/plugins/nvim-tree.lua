@@ -84,6 +84,19 @@ function M.config()
         end, opts('Print Node Path'))
 
         vim.keymap.set('n', 'o', api.node.run.system, opts('Run System'))
+
+        -- File management
+        vim.keymap.set('n', '<leader>Fa', api.fs.create, opts('Create File/Folder'))
+        vim.keymap.set('n', '<leader>Fr', api.fs.rename, opts('Rename File/Folder'))
+        vim.keymap.set('n', '<leader>Fs', api.fs.rename_sub, opts('Rename with Substitution'))
+        vim.keymap.set('n', '<leader>Fd', api.fs.remove, opts('Delete File/Folder'))
+        vim.keymap.set('n', '<leader>Ft', api.fs.trash, opts('Move to Trash'))
+        vim.keymap.set('n', '<leader>Fy', api.fs.copy.node, opts('Copy File/Folder'))
+        vim.keymap.set('n', '<leader>Fx', api.fs.cut, opts('Cut File/Folder'))
+        vim.keymap.set('n', '<leader>Fp', api.fs.paste, opts('Paste File/Folder'))
+        vim.keymap.set('n', '<leader>Fc', api.fs.copy.filename, opts('Copy Filename'))
+        vim.keymap.set('n', '<leader>Fv', api.fs.copy.relative_path, opts('Copy Relative Path'))
+        vim.keymap.set('n', '<leader>Fb', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
     end
 
     -- END: keymapping Migration
@@ -109,7 +122,7 @@ function M.config()
         hijack_unnamed_buffer_when_opening = false,
         root_dirs = {},
         prefer_startup_root = true,
-        sync_root_with_cwd = false,
+        sync_root_with_cwd = true,
         reload_on_bufenter = true,
         respect_buf_cwd = true,
         on_attach = on_attach,
@@ -147,7 +160,7 @@ function M.config()
             group_empty = false,
             highlight_git = false,
             full_name = true,
-            highlight_opened_files = 'none',
+            highlight_opened_files = 'all',
             highlight_modified = 'none',
             root_folder_label = ':~:s?$?/..?',
             indent_width = 2,

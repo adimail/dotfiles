@@ -13,14 +13,10 @@ export LC_ALL=en_US.UTF-8
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 # Aliases
-alias vv='nvim'
 alias f='fzf'
-alias gd='gotodesktop'
 alias cls='clear'
-alias wr='writenote'
 alias t='tmux'
 alias nv='nvim .'
-alias ks='t kill-server'
 alias tls='t ls'
 
 #git alias
@@ -137,47 +133,9 @@ function whereis {
     command -v "$1"
 }
 
-function la {
-    if [ "$1" == "hidden" ]; then
-        ls -a
-    else
-        ls
-    fi
-}
-
 function notebook {
-	cd ~/desktop/notes/notebooks
+	cd ~/notes/notebooks
 	jupyter lab
-}
-
-function Get-Calendar {
-    monthName="${1:-$(date '+%b')}"
-    year="${2:-$(date '+%Y')}"
-
-    cal -h "$monthName" "$year"
-}
-
-function remove {
-    if [ -n "$1" ]; then
-        rm -rf "$1"
-        echo "Successfully removed $1"
-    else
-        echo "Please enter the name of the file/folder you would like to remove"
-    fi
-}
-
-function yt {
-    if [ "$1" == "hist" ]; then
-        open "https://www.youtube.com/feed/history"
-    elif [ -z "$1" ]; then
-        open "https://www.youtube.com"
-    else
-        echo "Invalid command: commands available=> hist"
-    fi
-}
-
-function gd {
-    cd "~/Desktop"
 }
 
 function Get-InternetStatus {
@@ -201,24 +159,43 @@ function readwifinearme {
 }
 
 function writenote {
-    d=$(date)
+    # Get current date details
     month=$(date '+%b' | tr '[:upper:]' '[:lower:]')
     date=$(date '+%d')
     year=$(date '+%Y')
 
+    # Define directory and file paths
     dirName="${month}${year}"
-    dirPath="$HOME/Desktop/notes/self/$dirName"
+    dirPath="$HOME/notes/self/$dirName"
     fileName="${date}${month}.md"
 
-    if [ ! -d "$dirPath" ]; then
-        mkdir -p "$dirPath"
+    # Ensure the directory exists
+    mkdir -p "$dirPath"
+
+    # Define tmux session name
+    session_name="notes"
+
+    if [[ -z "$TMUX" ]]; then
+        # Not inside tmux, check if the session exists
+        if tmux has-session -t "$session_name" 2>/dev/null; then
+            tmux attach-session -t "$session_name"
+        else
+            # Create a new session and open the note
+            tmux new-session -s "$session_name" -c "$dirPath" -d
+            tmux send-keys -t "$session_name" "nvim $fileName" C-m
+            tmux attach-session -t "$session_name"
+        fi
+    else
+        # Already inside a tmux session
+        if ! tmux has-session -t "$session_name" 2>/dev/null; then
+            # Create a new detached session
+            tmux new-session -ds "$session_name" -c "$dirPath"
+        fi
+        # Open the note in the existing session
+        tmux switch-client -t "$session_name"
+        tmux send-keys -t "$session_name" "nvim $fileName" C-m
     fi
-
-    cd "$dirPath"
-
-    nvim "$fileName"
 }
-
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

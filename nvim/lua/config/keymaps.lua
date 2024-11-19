@@ -87,14 +87,6 @@ bind('n', '<C-a>', 'ggVG', opts)
 -- Move cursor line to top of screen (like `zt`) with `z<space>`
 bind('n', 'z<space>', 'zt', opts)
 
--- Move selected text up and down
-bind('x', '<S-Up>', ":move '<-2<CR>gv=gv", opts) -- Move selected text up
-bind('x', '<S-Down>', ":move '>+1<CR>gv=gv", opts) -- Move selected text down
-
--- Duplicate and move selected text
-bind('x', '<A-S-Up>', ":copy '<-1<CR>gv=gv", opts)
-bind('x', '<A-S-Down>', ":copy '>+0<CR>gv=gv", opts)
-
 -- ==========================
 -- Plugin Keymaps
 -- ==========================
@@ -124,3 +116,8 @@ bind('n', '<leader>he', '<CMD>TSEnable highlight<CR>', opts) -- Enable highlight
 
 -- UndoTree
 bind('n', '<leader>oh', ':UndotreeToggle <BAR> :UndotreeFocus<CR>', opts) -- Open UndoTree and focus it
+
+-- Toggle spell check with <leader>st
+bind('n', '<leader>st', function()
+    vim.opt.spell = not vim.opt.spell -- Toggle spell check
+end, vim.tbl_extend('force', opts, { desc = 'Toggle spell check' }))

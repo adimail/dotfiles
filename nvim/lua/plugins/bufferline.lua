@@ -5,7 +5,7 @@ local M = {
     lazy = false,
     dependencies = {
         'nvim-tree/nvim-web-devicons',
-        -- 'famiu/bufdelete.nvim',
+        'famiu/bufdelete.nvim',
     },
 }
 
