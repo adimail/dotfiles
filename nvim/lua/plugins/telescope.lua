@@ -96,6 +96,20 @@ return {
             end,
             desc = 'Grerp strings below the cursor',
         },
+        {
+            '<leader>gd',
+            function()
+                local success, _ = pcall(function()
+                    require('telescope.builtin').lsp_definitions({
+                        quiet = true, -- Suppress output unless results are found
+                    })
+                end)
+                if not success then
+                    vim.notify('No definition found for this function/type', vim.log.levels.ERROR)
+                end
+            end,
+            desc = 'Go to definition of the function/type under the cursor',
+        },
     },
     config = function()
         local telescope = require('telescope')

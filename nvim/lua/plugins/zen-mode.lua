@@ -1,6 +1,6 @@
 local M = {
     'folke/zen-mode.nvim',
-	enabled = false,
+    enabled = false,
     event = 'VeryLazy',
     keys = {
         {
@@ -73,7 +73,7 @@ function M.config()
 			ScrollbarHide
 			set norelativenumber
 			set nonumber
-			Barbecue hide
+			Barbecue show
 			Gitsigns toggle_current_line_blame
 			autocmd InsertEnter * set norelativenumber nonumber
 			autocmd InsertLeave * set norelativenumber nonumber

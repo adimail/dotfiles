@@ -47,6 +47,8 @@ bind('v', '<S-tab>', '<S-<>gv', opts) -- Shift-left and reselect
 -- Buffer navigation
 bind('n', '<C-left>', '<CMD>bp<CR>', opts) -- Previous buffer
 bind('n', '<C-right>', '<CMD>bn<CR>', opts) -- Next buffer
+bind('n', '<leader>bd', '<CMD>bdelete<CR>', opts) -- Close the current buffer
+bind('n', '<leader>ba', '<CMD>bufdo bd<CR>', opts) -- Close all buffers
 
 -- Tab management
 bind('n', '<C-t>', '<CMD>tabnew<CR>', opts) -- Open a new tab

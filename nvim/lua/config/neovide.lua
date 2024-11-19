@@ -23,9 +23,9 @@ if vim.g.neovide then
     vim.opt.laststatus = 3
 
     function confirm_close_tab()
-        local confirm = vim.fn.confirm("Are you sure you want to close this tab?", "&Yes\n&No", 2)
+        local confirm = vim.fn.confirm('Are you sure you want to close this tab?', '&Yes\n&No', 2)
         if confirm == 1 then
-            vim.cmd("bdelete")  -- Close the current buffer/tab
+            vim.cmd('bdelete') -- Close the current buffer/tab
         end
     end
 

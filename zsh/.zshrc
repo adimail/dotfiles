@@ -27,6 +27,10 @@ alias tls='t ls'
 alias gs='git status'
 alias G='lazygit'
 
+setopt interactive_comments
+setopt autocd
+setopt inc_append_history
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 # export PATH="$HOME/.zig:$PATH"
