@@ -121,3 +121,51 @@ bind('n', '<leader>oh', ':UndotreeToggle <BAR> :UndotreeFocus<CR>', opts) -- Ope
 bind('n', '<leader>st', function()
     vim.opt.spell = not vim.opt.spell -- Toggle spell check
 end, vim.tbl_extend('force', opts, { desc = 'Toggle spell check' }))
+
+-- ==========================
+-- Harpoon Keymaps
+-- ==========================
+-- Add the current file to Harpoon
+bind('n', '<leader>hx', function()
+    require('harpoon.mark').add_file()
+end, vim.tbl_extend('force', opts, { desc = 'Harpoon: Mark file' }))
+
+-- Navigate to the next Harpoon mark
+bind('n', '<leader>hn', function()
+    require('harpoon.ui').nav_next()
+end, vim.tbl_extend('force', opts, { desc = 'Harpoon: Navigate next' }))
+
+-- Navigate to the previous Harpoon mark
+bind('n', '<leader>hp', function()
+    require('harpoon.ui').nav_prev()
+end, vim.tbl_extend('force', opts, { desc = 'Harpoon: Navigate previous' }))
+
+-- Open the Harpoon menu
+bind('n', '<leader>hm', function()
+    require('harpoon.ui').toggle_quick_menu()
+end, vim.tbl_extend('force', opts, { desc = 'Harpoon: Open menu' }))
+
+-- Remove a Harpoon mark by index
+bind('n', '<leader>hr', function()
+    local index = tonumber(vim.fn.input('Enter Harpoon index to remove: '))
+    if index then
+        require('harpoon.mark').rm_file(index)
+        print('Removed Harpoon mark at index: ' .. index)
+    else
+        print('Invalid index')
+    end
+end, vim.tbl_extend('force', opts, { desc = 'Harpoon: Remove mark by index' }))
+
+-- Clear all Harpoon marks
+bind('n', '<leader>hc', function()
+    require('harpoon.mark').clear_all()
+    print('Cleared all Harpoon marks!')
+end, vim.tbl_extend('force', opts, { desc = 'Harpoon: Clear all marks' }))
+
+-- Telescope integration with Harpoon
+bind(
+    'n',
+    '<leader>ht',
+    '<cmd>Telescope harpoon marks<CR>',
+    vim.tbl_extend('force', opts, { desc = 'Harpoon: Telescope Marks' })
+)
