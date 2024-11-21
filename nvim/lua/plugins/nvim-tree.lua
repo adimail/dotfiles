@@ -160,12 +160,12 @@ function M.config()
             group_empty = false,
             highlight_git = false,
             full_name = true,
-            highlight_opened_files = 'all',
+            highlight_opened_files = 'name',
             highlight_modified = 'none',
             root_folder_label = ':~:s?$?/..?',
             indent_width = 2,
             indent_markers = {
-                enable = false,
+                enable = true,
                 inline_arrows = true,
                 icons = {
                     corner = '└',
@@ -204,13 +204,13 @@ function M.config()
                         symlink_open = '',
                     },
                     git = {
-                        unstaged = '✗',
-                        staged = '✓',
-                        unmerged = '',
-                        renamed = '➜',
-                        untracked = '󰜄',
-                        deleted = '',
-                        ignored = '◌',
+                        unstaged = '✗', -- git unstaged (orange text)
+                        staged = '✓', -- git staged (no color)
+                        unmerged = '', -- unmerged files (yellow)
+                        renamed = '➜', -- renamed files (purple)
+                        untracked = '󰜄', -- untracked files (light green)
+                        deleted = '', -- deleted files (red)
+                        ignored = '◌', -- ignored files (gray)
                     },
                 },
             },
@@ -247,7 +247,7 @@ function M.config()
             dotfiles = false,
             git_clean = false,
             no_buffer = false,
-            custom = { 'node_modules', '.DS_Store', '.git', '.vscode', '.idea', '.conform' },
+            custom = { '^\\.git$' }, -- Only hide the `.git` folder
             exclude = {},
         },
         filesystem_watchers = {

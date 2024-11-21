@@ -169,3 +169,22 @@ bind(
     '<cmd>Telescope harpoon marks<CR>',
     vim.tbl_extend('force', opts, { desc = 'Harpoon: Telescope Marks' })
 )
+
+bind(
+    'n',
+    '<leader>vh',
+    '<CMD>vsplit<CR><CMD>BufferLineMoveNext<CR>',
+    { noremap = true, silent = true }
+)
+bind(
+    'n',
+    '<leader>hh',
+    '<CMD>split<CR><CMD>BufferLineMoveNext<CR>',
+    { noremap = true, silent = true }
+)
+
+-- Window navigation
+bind('n', '<C-h>', '<C-w>h', opts) -- Move to the left window
+bind('n', '<C-l>', '<C-w>l', opts) -- Move to the right window
+bind('n', '<C-j>', '<C-w>j', opts) -- Move to the below window
+bind('n', '<C-k>', '<C-w>k', opts) -- Move to the above window

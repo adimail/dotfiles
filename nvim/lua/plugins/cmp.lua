@@ -13,7 +13,7 @@ local M = {
         'hrsh7th/cmp-nvim-lsp-signature-help', -- Function signature completion
         'saadparwaiz1/cmp_luasnip', -- LuaSnip snippets completion
         'octaltree/cmp-look', -- Dictionary completion
-        'tzachar/cmp-tabnine', -- TabNine AI-powered completion
+        -- 'tzachar/cmp-tabnine', -- TabNine AI-powered completion
         'hrsh7th/cmp-cmdline', -- Command-line completion
         {
             'Exafunction/codeium.nvim', -- Optional AI-based completion
@@ -143,9 +143,7 @@ function M.config()
                 }
 
                 -- Customize icons for specific sources
-                if entry.source.name == 'cmp_tabnine' then
-                    vim_item.kind = lspkind_icons['Robot']
-                elseif entry.source.name == 'look' then
+                if entry.source.name == 'look' then
                     vim_item.kind = lspkind_icons['Note']
                 end
 
@@ -154,7 +152,6 @@ function M.config()
                     nvim_lsp = vim_item.kind, -- Use kind icons for LSP
                     path = '[Path]', -- For path completions
                     luasnip = '[LuaSnip]', -- For snippets
-                    cmp_tabnine = '[TN]', -- TabNine source
                     -- emoji = '[Emoji]', -- Uncomment if using emoji
                     look = '[Dict]', -- Dictionary completions
                 })[entry.source.name] or ''
@@ -199,11 +196,9 @@ function M.config()
         -- Configure sources
         sources = {
             { name = 'nvim_lsp', priority = 50 }, -- LSP source
-            { name = 'cmp_tabnine', priority = 90 }, -- TabNine AI completions
             { name = 'luasnip', priority = 100 }, -- Snippets source
             { name = 'path', priority = 99 }, -- Path completions
             { name = 'buffer', priority = 50, max_item_count = 5 }, -- Buffer words
-            -- { name = 'emoji', priority = 50 }, -- Uncomment if using emoji
             { name = 'nvim_lsp_signature_help', priority = 50 }, -- Signature help
             {
                 name = 'look',

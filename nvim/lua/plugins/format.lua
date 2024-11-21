@@ -1,43 +1,58 @@
 local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
-    ft = { 'lua', 'go', 'yaml' },
+    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json' },
     -- keys = { { '<leader>ef', '<cmd>GuardFmt<cr>', desc = 'Format current file.' } },
 }
 
 function M.config()
-    require('conform').setup({
-        -- format_on_save = {
-        --     lsp_fallback = true,
-        --     timeout_ms = 500,
-        -- },
-        format_after_save = {
-            lsp_fallback = true,
-        },
-        log_level = vim.log.levels.ERROR,
-        notify_on_error = true,
+    local conform = require('conform')
 
+    -- Setup the conform plugin
+    conform.setup({
+        -- Automatically format files on save with optional LSP fallback
+        format_after_save = {
+            lsp_fallback = true, -- Use LSP formatter if no other formatter is found
+        },
+
+        -- Error logging configuration
+        log_level = vim.log.levels.ERROR, -- Only log errors
+        notify_on_error = true, -- Notify the user when an error occurs
+
+        -- Define formatters for specific filetypes
         formatters_by_ft = {
+            -- Lua files will use 'stylua'
             lua = { 'stylua' },
-            -- Conform will run multiple formatters sequentially
+
+            -- Go files will run both 'goimports' and 'gofumpt'
             go = { 'goimports', 'gofumpt' },
-            -- Use a sub-list to run only the first available formatter
+
+            -- JavaScript files will try 'prettierd', then 'prettier' if the first isn't available
             javascript = { { 'prettierd', 'prettier' } },
-            -- You can use a function here to determine the formatters dynamically
+
+            -- Python files use 'ruff_format' if available, otherwise fallback to 'isort' and 'black'
             python = function(bufnr)
-                if require('conform').get_formatter_info('ruff_format', bufnr).available then
+                local formatter_info = conform.get_formatter_info('ruff_format', bufnr)
+                if formatter_info.available then
                     return { 'ruff_format' }
                 else
                     return { 'isort', 'black' }
                 end
             end,
+
+            -- JSON files will use 'jq' for formatting
             json = { 'jq' },
-            -- Use the "*" filetype to run formatters on all filetypes.
+
+            -- All filetypes will use 'codespell' to check for common spelling mistakes
             ['*'] = { 'codespell' },
-            -- Use the "_" filetype to run formatters on filetypes that don't
-            -- have other formatters configured.
+
+            -- Default formatting for unknown filetypes
             ['_'] = { 'trim_whitespace' },
         },
+
+        -- Optional: Parallel formatting
+        -- You can configure this if you prefer parallel execution of formatters for improved performance
+        -- parallel_formatting = true, -- Enable running formatters in parallel (optional)
     })
 end
 

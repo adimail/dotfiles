@@ -83,13 +83,6 @@ return {
             desc = 'Toggle Telescope jumplist',
         },
         {
-            '<leader>tp',
-            function()
-                vim.cmd('Telescope projects')
-            end,
-            desc = 'Toggle Telescope projects',
-        },
-        {
             '<leader>fw',
             function()
                 require('telescope.builtin').grep_string()
@@ -118,6 +111,7 @@ return {
 
         telescope.setup({
             defaults = {
+                hidden = true,
                 layout_strategy = 'horizontal',
                 layout_config = {
                     horizontal = {
@@ -147,10 +141,9 @@ return {
                     '%.svg',
                     '%.otf',
                     '%.ttf',
-                    '.git/',
+                    '^\\.git$',
                     '%.webp',
                     '.dart_tool/',
-                    '.github/',
                     '.gradle/',
                     '.idea/',
                     '.settings/',
@@ -265,7 +258,6 @@ return {
         })
         telescope.load_extension('fzf')
         -- telescope.load_extension('dap')
-        telescope.load_extension('projects')
         -- telescope.load_extension('bookmarks')
     end,
 }

@@ -5,26 +5,27 @@ return {
         priority = 1000, -- make sure to load this before all the other start plugins
         config = function()
             vim.cmd([[
-            " https://github.com/sainnhe/gruvbox-material/blob/master/doc/gruvbox-material.txt
-            " Important!!
-            " For dark version.
-            set background=dark
-            " Set contrast.
-            " This configuration option should be placed before `colorscheme gruvbox-material`.
-            " Available values: 'hard', 'medium'(default), 'soft'
-            let g:gruvbox_material_background = 'hard'
-            " For better performance
-            let g:gruvbox_material_better_performance = 1
-			let g:gruvbox_material_enable_italic = 1
-			let g:gruvbox_material_inlay_hints_background = 'dimmed'
+        set background=dark
+        " Available values: 'hard', 'medium'(default), 'soft'
+        let g:gruvbox_material_background = 'hard'
+        let g:gruvbox_material_better_performance = 1
+        let g:gruvbox_material_enable_italic = 1
+        let g:gruvbox_material_inlay_hints_background = 'dimmed'
 
-            let g:gruvbox_material_diagnostic_text_highlight = 1
-            "let g:gruvbox_material_diagnostic_line_highlight = 1
-            let g:gruvbox_material_diagnostic_virtual_text = "colored"
-            let g:gruvbox_material_sign_column_background = 'none'
+        let g:gruvbox_material_diagnostic_text_highlight = 1
+        "let g:gruvbox_material_diagnostic_line_highlight = 1
+        let g:gruvbox_material_diagnostic_virtual_text = "colored"
+        let g:gruvbox_material_sign_column_background = 'none'
 
-            colorscheme gruvbox-material
-            ]])
+        " Additional dark adjustments
+        let g:gruvbox_material_statusline = 'default'  " keeps the statusline dark
+        let g:gruvbox_material_current_word = 'underline'  " for better visibility of the current word
+        " Make the vertical split darker
+        let g:gruvbox_material_statusline = 'dark'
+        let g:gruvbox_material_faded = 1  " Option to fade the non-active sections for a darker look
+
+        colorscheme gruvbox-material
+        ]])
         end,
     },
     { ---- A plugin show neovim startup time.

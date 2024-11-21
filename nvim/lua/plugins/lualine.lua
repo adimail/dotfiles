@@ -3,10 +3,6 @@ local M = {
     event = 'VeryLazy',
 }
 
-local function clock()
-    return ' ' .. os.date('%H:%M')
-end
-
 function M.config()
     if vim.g.started_by_firenvim then
         return
