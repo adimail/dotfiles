@@ -318,7 +318,7 @@ function M.config()
                 config = false,
                 copy_paste = false,
                 dev = false,
-                diagnostics = false,
+                diagnostics = true,
                 git = false,
                 profile = false,
                 watcher = false,

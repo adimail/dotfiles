@@ -8,6 +8,100 @@ local bind = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- ==========================
+-- LSP Keymaps
+-- ==========================
+-- Core LSP mappings
+bind('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+bind('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+bind('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+bind('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+bind('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+bind(
+    'n',
+    '<leader>wl',
+    '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
+    opts
+)
+bind('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+
+-- Diagnostics mappings
+bind('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+bind('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+bind('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+bind('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+-- Telescope diagnostics
+bind('n', '<leader>so', '<cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>', opts)
+bind('n', '<leader>sd', '<cmd>Telescope diagnostics<CR>', opts)
+
+-- Project-wide diagnostics
+bind('n', '<leader>ld', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+bind('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
+
+-- Goto-preview plugin mappings
+bind('n', 'gp', '<cmd>lua require("goto-preview").goto_preview_definition()<CR>', opts)
+bind('n', 'gpi', '<cmd>lua require("goto-preview").goto_preview_implementation()<CR>', opts)
+bind('n', 'gpt', '<cmd>lua require("goto-preview").goto_preview_type_definition()<CR>', opts)
+bind('n', 'gF', '<cmd>lua require("goto-preview").goto_preview_references()<CR>', opts)
+bind('n', 'gq', '<cmd>lua require("goto-preview").close_all_win()<CR>', opts)
+
+-- Formatting
+vim.cmd([[ command! Format execute 'lua vim.lsp.buf.format({ async = true })' ]])
+
+-- ==========================
+-- LSP Saga Keymaps
+-- ==========================
+-- Hover documentation
+bind('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
+
+-- LSP Finder
+bind('n', 'gf', '<cmd>Lspsaga finder<CR>', opts)
+bind('n', '<leader>gf', '<cmd>Lspsaga finder imp<CR>', opts)
+
+-- Code Action
+bind('n', 'gx', '<cmd>Lspsaga code_action<CR>', opts)
+
+-- Rename
+bind('n', 'gr', '<cmd>Lspsaga rename<CR>', opts)
+
+-- Go to Definition
+bind('n', 'gd', '<cmd>Lspsaga goto_definition<CR>', opts)
+
+-- Peek Definition
+bind('n', 'gP', '<cmd>Lspsaga peek_definition<CR>', opts)
+
+-- Diagnostic Navigation
+bind('n', 'gk', '<cmd>Lspsaga diagnostic_jump_prev<CR>', opts)
+bind('n', 'gj', '<cmd>Lspsaga diagnostic_jump_next<CR>', opts)
+bind(
+    'n',
+    'gK',
+    '<cmd>lua require("lspsaga.diagnostic").goto_prev({ severity = vim.diagnostic.severity.ERROR })<CR>',
+    opts
+)
+bind(
+    'n',
+    'gJ',
+    '<cmd>lua require("lspsaga.diagnostic").goto_next({ severity = vim.diagnostic.severity.ERROR })<CR>',
+    opts
+)
+
+-- Outline
+bind('n', '<leader>ol', '<cmd>Lspsaga outline<CR>', opts)
+
+-- Show Diagnostics
+bind('n', '<leader>sl', '<cmd>Lspsaga show_line_diagnostics<CR>', opts)
+bind('n', '<leader>sc', '<cmd>Lspsaga show_cursor_diagnostics<CR>', opts)
+bind('n', '<leader>sb', '<cmd>Lspsaga show_buf_diagnostics<CR>', opts)
+
+-- Code Action (Leader)
+bind('n', '<leader>ca', '<cmd>Lspsaga code_action<CR>', opts)
+
+-- Call Hierarchy
+bind('n', '<Leader>co', '<cmd>Lspsaga outgoing_calls<CR>', opts)
+bind('n', '<Leader>ci', '<cmd>Lspsaga incoming_calls<CR>', opts)
+
+-- ==========================
 -- Basic Keymaps
 -- ==========================
 -- Undo and redo actions
@@ -49,6 +143,7 @@ bind('n', '<C-left>', '<CMD>bp<CR>', opts) -- Previous buffer
 bind('n', '<C-right>', '<CMD>bn<CR>', opts) -- Next buffer
 bind('n', '<leader>bd', '<CMD>bdelete<CR>', opts) -- Close the current buffer
 bind('n', '<leader>ba', '<CMD>bufdo bd<CR>', opts) -- Close all buffers
+bind('n', '<leader>do', '<CMD>:BWipeout other<CR>', opts) -- Delete other buffers
 
 -- Tab management
 bind('n', '<C-t>', '<CMD>tabnew<CR>', opts) -- Open a new tab

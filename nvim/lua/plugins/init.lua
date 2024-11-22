@@ -59,6 +59,12 @@ return {
             vim.g.mkdp_filetypes = { 'markdown' }
         end,
         ft = { 'markdown' },
+        vim.keymap.set(
+            'n',
+            '<leader>mp',
+            '<cmd>MarkdownPreviewToggle<CR>',
+            { noremap = true, silent = true, desc = 'Toggle Markdown Preview' }
+        ),
     },
     { ---- Read or write file with sudo.
         'lambdalisue/suda.vim',

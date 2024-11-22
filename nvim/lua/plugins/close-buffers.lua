@@ -1,21 +1,19 @@
 local M = {
     'kazhala/close-buffers.nvim',
     event = 'VeryLazy',
-    keys = {
-        { '<leader>do', '<cmd>:BWipeout other<CR>', desc = 'Delete other buffers.' },
-    },
 }
 
 function M.config()
     require('close_buffers').setup({
-        filetype_ignore = { 'NvimTree', 'tagbar' }, -- Filetype to ignore when running deletions
-        file_glob_ignore = {}, -- File name glob pattern to ignore when running deletions (e.g. '*.md')
-        file_regex_ignore = {}, -- File name regex pattern to ignore when running deletions (e.g. '.*[.]md')
-        preserve_window_layout = { 'this' },
+        filetype_ignore = { 'NvimTree', 'tagbar', 'help', 'qf', 'lspinfo' },
+        file_glob_ignore = {},
+        file_regex_ignore = {},
+        preserve_window_layout = { 'this' }, -- Preserve window layout for the current buffer
         next_buffer_cmd = function(windows)
-            require('bufferline').cycle(1)
+            require('bufferline').cycle(1) -- Switch to next buffer in the bufferline
             local bufnr = vim.api.nvim_get_current_buf()
 
+            -- Ensure all windows are updated with the next buffer
             for _, window in ipairs(windows) do
                 vim.api.nvim_win_set_buf(window, bufnr)
             end

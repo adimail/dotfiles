@@ -28,7 +28,7 @@ function M.config()
 
     local diff = {
         'diff',
-        colored = false,
+        colored = true,
         symbols = { added = ' ', modified = ' ', removed = ' ' }, -- changes diff symbols
         cond = hide_in_width,
     }
@@ -99,12 +99,6 @@ function M.config()
                     'filetype',
                     colored = true, -- displays filetype icon in color if set to `true
                     icon_only = false, -- Display only icon for filetype
-                },
-                {
-                    'filesize',
-                    icon = '󰷊',
-                    cond = conditions.buffer_not_empty,
-                    color = { fg = '#a3be8c' },
                 },
             },
             lualine_y = {

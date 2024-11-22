@@ -15,6 +15,13 @@ function M.config()
             mark_branch = false,
         },
     })
+
+    -- Customizing Harpoon's appearance (colors, highlights)
+    vim.cmd([[
+        highlight HarpoonWindow guibg=#282828 guifg=#ebdbb2
+        highlight HarpoonTabLine guibg=#3c3836 guifg=#b8bb26
+        highlight HarpoonTabLineSel guibg=#504945 guifg=#d79921
+    ]])
 end
 
 return M

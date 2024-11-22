@@ -138,26 +138,6 @@ function notebook {
 	jupyter lab
 }
 
-function Get-InternetStatus {
-    network=$(networksetup -getairportnetwork en0 | awk -F": " '{print $2}')
-    if [ -n "$network" ]; then
-        echo "Connected to $network"
-    else
-        echo "Offline"
-    fi
-}
-
-function getwifipasswords {
-    networksetup -listpreferredwirelessnetworks en0 | while read -r line; do
-        networksetup -getairportpassword en0 "$line"
-        echo "------------------------"
-    done
-}
-
-function readwifinearme {
-    airport -s
-}
-
 function writenote {
     # Get current date details
     month=$(date '+%b' | tr '[:upper:]' '[:lower:]')

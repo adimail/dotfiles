@@ -32,22 +32,23 @@ hi BufferLineIndicatorVisible ctermbg=NONE guibg=NONE guifg=NONE
 hi BufferLineModified ctermbg=NONE guibg=NONE guifg=NONE
 hi BufferLineSelected ctermbg=NONE guibg=NONE guifg=NONE
 hi BufferLineVisible ctermbg=NONE guibg=NONE guifg=NONE
-hi clear Keyword                         " Clears the highlight group for Keywords
-hi clear Identifier                      " Clears the highlight group for Identifiers
-hi clear Function                        " Clears the highlight group for Functions
-hi clear Statement                       " Clears the highlight group for Statements
-hi clear Type                            " Clears the highlight group for Types
-hi clear Constant                        " Clears the highlight group for Constants
-hi clear String                          " Clears the highlight group for Strings
-hi clear Operator                        " Clears the highlight group for Operators
-hi clear PreProc                         " Clears the highlight group for Preprocessor commands
-hi clear Special                         " Clears the highlight group for Special characters
+hi clear Keyword
+hi clear Identifier
+hi clear Function
+hi clear Statement
+hi clear Type
+hi clear Constant
+hi clear String
+hi clear Operator
+hi clear PreProc
+hi clear Special
+hi clear GitSignsCurrentLineBlame
 
 " ===========================
 " Group: Comment and GitSigns
 " ===========================
-hi Comment cterm=NONE ctermfg=245 gui=NONE guifg=#928374               " Sets comment color to muted gray (#928374)
-hi GitSignsCurrentLineBlame ctermfg=245 gui=italic guifg=#928374       " Colors Git blame in muted gray and italicizes it
+hi Comment cterm=NONE ctermfg=245 gui=NONE guifg=#989898               " Sets comment color to muted gray (#928374)
+hi GitSignsCurrentLineBlame cterm=NONE ctermfg=245 gui=NONE guifg=#928374       " Colors Git blame in muted gray and italicizes it
 
 " ===========================
 " Group: Treesitter Highlights (Type, Function, and Keywords)

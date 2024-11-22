@@ -20,70 +20,6 @@ function M.config()
         -- vim.lsp.buf.inlay_hint(0, true)
 
         -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-        local opts = { noremap = true, silent = true }
-        local map = vim.api.nvim_buf_set_keymap
-        -- map(bufnr, "n", "gD", "<cmd>lua vim.lsp.buf.declaration()<CR>", opts)
-        -- use lspsaga.goto_definition instead.
-        map(bufnr, 'n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-        -- map(bufnr, "n", "K", "<cmd>lua vim.lsp.buf.hover()<CR>", opts)
-        map(bufnr, 'n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-        -- map(bufnr, 'n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-        map(bufnr, 'n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-        map(bufnr, 'n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-        map(
-            bufnr,
-            'n',
-            '<leader>wl',
-            '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>',
-            opts
-        )
-        map(bufnr, 'n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-        -- map(bufnr, 'n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-        -- map(bufnr, 'n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-        -- map(bufnr, 'n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-        map(bufnr, 'n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-        map(bufnr, 'n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-        map(bufnr, 'n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-        map(bufnr, 'n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-        map(
-            bufnr,
-            'n',
-            '<leader>so',
-            [[<cmd>lua require('telescope.builtin').lsp_document_symbols()<CR>]],
-            opts
-        )
-        vim.cmd([[ command! Format execute 'lua vim.lsp.buf.formatting()' ]])
-        -- goto preview keymappings
-        map(
-            bufnr,
-            'n',
-            'gp',
-            "<cmd>lua require('goto-preview').goto_preview_definition()<CR>",
-            opts
-        )
-        map(
-            bufnr,
-            'n',
-            'gpi',
-            "<cmd>lua require('goto-preview').goto_preview_implementation()<CR>",
-            opts
-        )
-        map(
-            bufnr,
-            'n',
-            'gpt',
-            "<cmd>lua require('goto-preview').goto_preview_type_definition()<CR>",
-            opts
-        )
-        map(bufnr, 'n', 'gq', "<cmd>lua require('goto-preview').close_all_win()<CR>", opts)
-        map(
-            bufnr,
-            'n',
-            'gF',
-            "<cmd>lua require('goto-preview').goto_preview_references()<CR>",
-            opts
-        )
     end
     -- nvim-cmp supports additional completion capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -304,6 +240,29 @@ function M.config()
         capabilities = capabilities,
     })
     -- -- --------------------------------------------------------------
+    -- Set custom highlights for the diagnostics popup
+    vim.api.nvim_set_hl(0, 'DiagnosticsBorder', { fg = '#00ff00', bg = '#1e1e1e' }) -- Green border with a dark background
+
+    -- Customize the `vim.diagnostic.open_float` function
+    vim.diagnostic.config({
+        float = {
+            border = 'rounded',
+            focusable = true,
+            style = 'minimal',
+            source = true,
+            header = '',
+            prefix = '',
+            format = function(diagnostic)
+                return diagnostic.message
+            end,
+        },
+    })
+
+    -- Override the default border highlight group used by floating windows
+    vim.cmd([[
+    highlight! link FloatBorder DiagnosticsBorder
+    highlight! link NormalFloat DiagnosticsBackground
+]])
 end
 
 return M

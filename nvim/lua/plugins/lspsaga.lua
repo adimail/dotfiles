@@ -1,63 +1,6 @@
 local M = {
     'glepnir/lspsaga.nvim',
     ft = { 'go', 'lua', 'sh' },
-    -- commit = '06a131f',
-    keys = {
-        { 'K', '<cmd>Lspsaga hover_doc<CR>', desc = 'Toggle Lspsaga hover_doc' },
-        { 'gf', '<cmd>Lspsaga finder<CR>', desc = 'Toggle Lspsaga finder' },
-        { '<leader>gf', '<cmd>Lspsaga finder imp<CR>', desc = 'Toggle Lspsaga finder imp' },
-        { 'gx', '<cmd>Lspsaga code_action<CR>', desc = 'Toggle Lspsaga code_action' },
-        { 'gr', '<cmd>Lspsaga rename<CR>', desc = 'Toggle Lspsaga rename' },
-        { 'gd', '<cmd>Lspsaga goto_definition<CR>', desc = 'Toggle Lspsaga goto_definition' },
-        { 'gP', '<cmd>Lspsaga peek_definition<CR>', desc = 'Toggle Lspsaga peek_definition' },
-        {
-            'gk',
-            '<cmd>Lspsaga diagnostic_jump_prev<CR>',
-            desc = 'Toggle Lspsaga diagnostic_jump_prev',
-        },
-        {
-            'gj',
-            '<cmd>Lspsaga diagnostic_jump_next<CR>',
-            desc = 'Toggle Lspsaga diagnostic_jump_next',
-        },
-        {
-            'gK',
-            function()
-                require('lspsaga.diagnostic').goto_prev({
-                    severity = vim.diagnostic.severity.ERROR,
-                })
-            end,
-            desc = 'Toggle Lspsaga diagnostic_prev ERROR',
-        },
-        {
-            'gJ',
-            function()
-                require('lspsaga.diagnostic').goto_next({
-                    severity = vim.diagnostic.severity.ERROR,
-                })
-            end,
-            desc = 'Toggle Lspsaga diagnostic_next ERROR',
-        },
-        { '<leader>ol', '<cmd>Lspsaga outline<cr>', desc = 'Toggle Lspsaga outline' },
-        {
-            '<leader>sl',
-            '<cmd>Lspsaga show_line_diagnostics<CR>',
-            desc = 'Toggle Lspsaga show_line_diagnostics',
-        },
-        {
-            '<leader>sc',
-            '<cmd>Lspsaga show_cursor_diagnostics<CR>',
-            desc = 'Toggle Lspsaga show_cursor_diagnostics',
-        },
-        {
-            '<leader>sb',
-            '<cmd>Lspsaga show_buf_diagnostics<CR>',
-            desc = 'Toggle Lspsaga show_buf_diagnostics',
-        },
-        { '<leader>ca', '<cmd>Lspsaga code_action<CR>', desc = 'Toggle Lspsaga code_action' },
-        { '<Leader>co', '<cmd>Lspsaga outgoing_calls<CR>', desc = 'Toggle Lspsaga outgoing_calls' },
-        { '<Leader>ci', '<cmd>Lspsaga incoming_calls<CR>', desc = 'Toggle Lspsaga incoming_calls' },
-    },
 }
 
 function M.config()
@@ -146,7 +89,14 @@ function M.config()
             respect_root = false,
             color_mode = true,
         },
-        outline = {},
+        outline = {
+            keys = {
+                jump = 'j',
+                quit = 'q',
+                up = '<Up>',
+                down = '<Down>',
+            },
+        },
         callhierarchy = {
             show_detail = false,
             keys = {

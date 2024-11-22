@@ -1,7 +1,7 @@
 local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
-    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json' },
+    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown' },
     -- keys = { { '<leader>ef', '<cmd>GuardFmt<cr>', desc = 'Format current file.' } },
 }
 
@@ -28,7 +28,7 @@ function M.config()
             go = { 'goimports', 'gofumpt' },
 
             -- JavaScript files will try 'prettierd', then 'prettier' if the first isn't available
-            javascript = { { 'prettierd', 'prettier' } },
+            javascript = { 'prettierd', 'prettier' },
 
             -- Python files use 'ruff_format' if available, otherwise fallback to 'isort' and 'black'
             python = function(bufnr)
@@ -42,6 +42,9 @@ function M.config()
 
             -- JSON files will use 'jq' for formatting
             json = { 'jq' },
+
+            -- Markdown files will use 'prettierd' for formatting
+            markdown = { 'prettierd' },
 
             -- All filetypes will use 'codespell' to check for common spelling mistakes
             ['*'] = { 'codespell' },

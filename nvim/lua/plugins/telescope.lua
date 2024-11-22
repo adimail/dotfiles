@@ -33,6 +33,12 @@ return {
         {
             'nvim-telescope/telescope-dap.nvim',
         },
+        {
+            'folke/which-key.nvim',
+            config = function()
+                require('which-key').setup({})
+            end,
+        },
     },
     keys = {
         {
@@ -87,7 +93,7 @@ return {
             function()
                 require('telescope.builtin').grep_string()
             end,
-            desc = 'Grerp strings below the cursor',
+            desc = 'Grep strings below the cursor',
         },
         {
             '<leader>gd',
@@ -102,6 +108,14 @@ return {
                 end
             end,
             desc = 'Go to definition of the function/type under the cursor',
+        },
+        {
+            '<leader>va',
+            function()
+                -- This should now work without needing to load which_key extension
+                require('which-key').show()
+            end,
+            desc = 'View all keybindings',
         },
     },
     config = function()
@@ -242,7 +256,6 @@ return {
                         ['<PageDown>'] = actions.results_scrolling_down,
 
                         ['?'] = actions.which_key,
-                        ['<c-t>'] = trouble.open_with_trouble,
                     },
                 },
             },
@@ -257,7 +270,7 @@ return {
             },
         })
         telescope.load_extension('fzf')
-        -- telescope.load_extension('dap')
-        -- telescope.load_extension('bookmarks')
+        -- telescope.load_extension('dap')  -- Uncomment if you want to enable DAP extension
+        -- telescope.load_extension('bookmarks')  -- Uncomment if you want to enable bookmarks extension
     end,
 }
