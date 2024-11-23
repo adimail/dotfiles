@@ -260,9 +260,9 @@ function M.config()
 
     -- Override the default border highlight group used by floating windows
     vim.cmd([[
-    highlight! link FloatBorder DiagnosticsBorder
-    highlight! link NormalFloat DiagnosticsBackground
-]])
+		highlight! link FloatBorder DiagnosticsBorder
+		highlight! link NormalFloat DiagnosticsBackground
+	]])
 end
 
 return M

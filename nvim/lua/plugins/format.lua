@@ -2,7 +2,7 @@ local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
     ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown' },
-    -- keys = { { '<leader>ef', '<cmd>GuardFmt<cr>', desc = 'Format current file.' } },
+    keys = { { '<leader>ef', '<cmd>GuardFmt<cr>', desc = 'Format current file.' } },
 }
 
 function M.config()
@@ -42,9 +42,10 @@ function M.config()
 
             -- JSON files will use 'jq' for formatting
             json = { 'jq' },
-
-            -- Markdown files will use 'prettierd' for formatting
             markdown = { 'prettierd' },
+            html = { 'prettierd', 'prettier' },
+            css = { 'prettierd', 'prettier' },
+            scss = { 'prettierd', 'prettier' },
 
             -- All filetypes will use 'codespell' to check for common spelling mistakes
             ['*'] = { 'codespell' },

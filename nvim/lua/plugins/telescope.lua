@@ -68,6 +68,13 @@ return {
             desc = 'Search opened buffers',
         },
         {
+            '<leader>O',
+            function()
+                require('telescope.builtin').buffers()
+            end,
+            desc = 'Search opened buffers',
+        },
+        {
             '<leader>fh',
             function()
                 require('telescope.builtin').help_tags()

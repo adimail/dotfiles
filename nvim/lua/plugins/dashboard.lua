@@ -2,25 +2,21 @@ local M = {
     'glepnir/dashboard-nvim',
     event = 'VimEnter',
     dependencies = { { 'nvim-tree/nvim-web-devicons' } },
-    -- enable = false
 }
 
 function M.config()
-    -- local home = os.getenv("HOME")
     local db = require('dashboard')
     db.setup({
-        -- theme: hyper, doom
         theme = 'hyper',
         config = {
             week_header = { enable = true },
-            packages = { enable = true }, -- show how many plugins neovim loaded
-            -- limit how many projects list, action when you press key or enter it will run this action.
-            project = {
-                limit = 8,
-                -- label = '',
-                action = 'Telescope find_files cwd=',
+            packages = { enable = false },
+            mru = {
+                limit = 10,
+                icon = ' ',
+                label = 'Recent Files',
+                cwd_only = true,
             },
-            -- footer = { "\n\n岂能尽如人意，但求无愧我心。"}, -- footer
             shortcut = {
                 {
                     desc = '󰚰 Update',
@@ -35,18 +31,19 @@ function M.config()
                     key = 'f',
                 },
                 {
-                    desc = ' Apps',
-                    group = 'Special',
-                    action = 'Telescope app',
-                    key = 'a',
+                    desc = ' Grep',
+                    group = 'Label',
+                    action = 'Telescope live_grep',
+                    key = 'g',
                 },
                 {
-                    desc = ' dotfiles',
-                    group = 'Number',
-                    action = 'Telescope find_files cwd=~/.config/nvim',
-                    key = 'd',
+                    desc = '󰗼 Quit',
+                    group = 'Error',
+                    action = 'qa',
+                    key = 'q',
                 },
             },
+            footer = {},
         },
     })
 end

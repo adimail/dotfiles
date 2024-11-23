@@ -2,37 +2,44 @@ return {
     'kevinhwang91/nvim-ufo',
     dependencies = 'kevinhwang91/promise-async',
     enabled = true,
-    event = 'VeryLazy',
-    opts = {
-        -- INFO: Uncomment to use treeitter as fold provider, otherwise nvim lsp is used
-        -- provider_selector = function(bufnr, filetype, buftype)
-        --   return { "treesitter", "indent" }
-        -- end,
-        open_fold_hl_timeout = 400,
-        close_fold_kinds_for_ft = { default = { 'imports', 'comment' } },
+    event = 'VeryLazy', -- Load the plugin lazily
 
+    opts = {
+        -- Uncomment this section if you prefer to use TreeSitter as the fold provider
+        provider_selector = function()
+            return { 'treesitter', 'indent' }
+        end,
+
+        -- Folding configurations
+        open_fold_hl_timeout = 400, -- Time to highlight open folds
+        close_fold_kinds_for_ft = { default = { 'imports', 'comment' } }, -- Default fold kinds
+
+        -- Preview window configurations
         preview = {
             win_config = {
-                border = { '', '─', '', '', '', '─', '', '' },
-                -- winhighlight = "Normal:Folded",
-                winblend = 0,
+                border = { '', '─', '', '', '', '─', '', '' }, -- Custom border for the preview window
+                winblend = 0, -- No transparency for the preview window
             },
             mappings = {
-                scrollU = '<C-u>',
-                scrollD = '<C-d>',
-                jumpTop = '[',
-                jumpBot = ']',
+                scrollU = '<C-u>', -- Scroll up in preview window
+                scrollD = '<C-d>', -- Scroll down in preview window
+                jumpTop = '[', -- Jump to the top of the folded lines
+                jumpBot = ']', -- Jump to the bottom of the folded lines
             },
         },
     },
+
     init = function()
-        vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
-        vim.o.foldcolumn = '1' -- '0' is not bad
-        vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
-        vim.o.foldlevelstart = 99
-        vim.o.foldenable = true
+        -- Set up folding UI appearance
+        vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]] -- Customize fold symbols
+        vim.o.foldcolumn = '1' -- Show fold indicators in a column
+        vim.o.foldlevel = 99 -- Set the fold level to a high value (we'll adjust per filetype if needed)
+        vim.o.foldlevelstart = 99 -- Start with all folds open
+        vim.o.foldenable = true -- Enable folding
     end,
+
     config = function(_, opts)
+        -- Custom function to handle virtual text for folded lines
         local handler = function(virtText, lnum, endLnum, width, truncate)
             local newVirtText = {}
             local totalLines = vim.api.nvim_buf_line_count(0)
@@ -41,6 +48,8 @@ return {
             local sufWidth = vim.fn.strdisplaywidth(suffix)
             local targetWidth = width - sufWidth
             local curWidth = 0
+
+            -- Add virtual text for the folded lines
             for _, chunk in ipairs(virtText) do
                 local chunkText = chunk[1]
                 local chunkWidth = vim.fn.strdisplaywidth(chunkText)
@@ -51,7 +60,8 @@ return {
                     local hlGroup = chunk[2]
                     table.insert(newVirtText, { chunkText, hlGroup })
                     chunkWidth = vim.fn.strdisplaywidth(chunkText)
-                    -- str width returned from truncate() may less than 2nd argument, need padding
+
+                    -- Padding if the truncated text doesn't fill the target width
                     if curWidth + chunkWidth < targetWidth then
                         suffix = suffix .. (' '):rep(targetWidth - curWidth - chunkWidth)
                     end
@@ -59,23 +69,21 @@ return {
                 end
                 curWidth = curWidth + chunkWidth
             end
+
+            -- Right-align the suffix (percentage of folded lines)
             local rAlignAppndx =
                 math.max(math.min(vim.opt.textwidth['_value'], width - 1) - curWidth - sufWidth, 0)
             suffix = (' '):rep(rAlignAppndx) .. suffix
             table.insert(newVirtText, { suffix, 'MoreMsg' })
             return newVirtText
         end
+
         opts['fold_virt_text_handler'] = handler
-        require('ufo').setup(opts)
-        vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
-        vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-        vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds)
-        vim.keymap.set('n', 'K', function()
-            local winid = require('ufo').peekFoldedLinesUnderCursor()
-            if not winid then
-                -- vim.lsp.buf.hover()
-                vim.cmd([[ Lspsaga hover_doc ]])
-            end
-        end)
+        require('ufo').setup(opts) -- Set up the plugin with the options
+
+        -- Keybindings for folding
+        vim.keymap.set('n', 'zR', require('ufo').openAllFolds) -- Open all folds
+        vim.keymap.set('n', 'zM', require('ufo').closeAllFolds) -- Close all folds
+        vim.keymap.set('n', 'zr', require('ufo').openFoldsExceptKinds) -- Open folds except specified types
     end,
 }

@@ -177,6 +177,30 @@ function writenote {
     fi
 }
 
+# Kill tmux session by name
+tks() {
+  if [[ -z "$1" ]]; then
+    echo "Please provide a session name."
+    return 1
+  fi
+
+  tmux kill-session -t "$1"
+}
+
+# Attach to tmux session by name
+ta() {
+  if [[ -z "$1" ]]; then
+    echo "Please provide a session name to attach to."
+    return 1
+  fi
+
+  tmux attach-session -t "$1"
+}
+
+tk0() {
+  tmux kill-session -t 0
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 

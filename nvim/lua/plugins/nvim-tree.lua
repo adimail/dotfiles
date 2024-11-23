@@ -137,7 +137,7 @@ function M.config()
             centralize_selection = false,
             cursorline = true,
             width = 30,
-            side = 'left',
+            side = 'right',
             preserve_window_proportions = false,
             number = false,
             relativenumber = false,
@@ -194,8 +194,8 @@ function M.config()
                     bookmark = '',
                     modified = '●',
                     folder = {
-                        arrow_closed = '',
-                        arrow_open = '',
+                        arrow_closed = '▶',
+                        arrow_open = '▼',
                         default = '',
                         open = '',
                         empty = '',
@@ -204,13 +204,13 @@ function M.config()
                         symlink_open = '',
                     },
                     git = {
-                        unstaged = '✗', -- git unstaged (orange text)
-                        staged = '✓', -- git staged (no color)
-                        unmerged = '', -- unmerged files (yellow)
-                        renamed = '➜', -- renamed files (purple)
-                        untracked = '󰜄', -- untracked files (light green)
-                        deleted = '', -- deleted files (red)
-                        ignored = '◌', -- ignored files (gray)
+                        unstaged = '✗',
+                        staged = '✓',
+                        unmerged = '',
+                        renamed = '➜',
+                        untracked = '󰜄',
+                        deleted = '',
+                        ignored = '◌',
                     },
                 },
             },

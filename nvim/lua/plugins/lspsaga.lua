@@ -112,6 +112,15 @@ function M.config()
         beacon = { enable = true, frequency = 7 },
         server_filetype_map = {},
     })
+
+    -- Hover documentation with Lspsaga when no fold is under cursor
+    vim.keymap.set('n', 'K', function()
+        local winid = require('ufo').peekFoldedLinesUnderCursor()
+        if not winid then
+            -- Show LSP hover doc if no fold is under cursor
+            vim.cmd([[ Lspsaga hover_doc ]])
+        end
+    end)
 end
 
 return M

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+current_command=$(tmux display-message -p '#{pane_current_command}')
+
+# Check if the current command is 'nvim'
+if [[ "$current_command" != "nvim" ]]; then
+	# Open a new tmux window with Neovim in the current pane's directory
+	tmux neww -c "$(tmux display-message -p '#{pane_current_path}')" "nvim ."
+	tmux rename-window "Neovim"
+fi
