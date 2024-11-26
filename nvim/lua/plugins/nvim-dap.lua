@@ -53,6 +53,45 @@ function M.config()
         },
     }
 
+    dap.adapters.python = {
+        type = 'executable',
+        command = 'python',
+        args = { '-m', 'debugpy.adapter' },
+    }
+
+    dap.configurations.python = {
+        {
+            type = 'python',
+            request = 'launch',
+            name = 'Launch File',
+            program = '${file}',
+            pythonPath = function()
+                -- Use the virtual environment if available
+                local venv_path = os.getenv('VIRTUAL_ENV')
+                if venv_path then
+                    return venv_path .. '/bin/python'
+                end
+                return 'python' -- fallback to system Python
+            end,
+        },
+        {
+            type = 'python',
+            request = 'launch',
+            name = 'Launch Flask',
+            program = '${workspaceFolder}/app.py',
+            args = { 'run', '--no-debugger', '--no-reload' },
+            pythonPath = function()
+                return 'python'
+            end,
+        },
+        {
+            type = 'python',
+            request = 'attach',
+            name = 'Attach to Process',
+            processId = require('dap.utils').pick_process,
+        },
+    }
+
     -- nvim-dap-ui settings.
 
     require('dapui').setup({

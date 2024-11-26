@@ -137,7 +137,7 @@ function M.config()
             centralize_selection = false,
             cursorline = true,
             width = 30,
-            side = 'right',
+            side = 'left',
             preserve_window_proportions = false,
             number = false,
             relativenumber = false,

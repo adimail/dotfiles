@@ -2,61 +2,62 @@ local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
     ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown' },
-    keys = { { '<leader>ef', '<cmd>GuardFmt<cr>', desc = 'Format current file.' } },
+    -- Uncomment below to bind a key for manual formatting
+    -- keys = { { '<leader>ef', '<cmd>ConformFormat<cr>', desc = 'Format current file.' } },
 }
 
 function M.config()
     local conform = require('conform')
 
-    -- Setup the conform plugin
     conform.setup({
-        -- Automatically format files on save with optional LSP fallback
         format_after_save = {
-            lsp_fallback = true, -- Use LSP formatter if no other formatter is found
+            lsp_fallback = true,
         },
 
-        -- Error logging configuration
-        log_level = vim.log.levels.ERROR, -- Only log errors
-        notify_on_error = true, -- Notify the user when an error occurs
+        -- Logging and notifications
+        log_level = vim.log.levels.ERROR, -- Log only errors
+        notify_on_error = true, -- Show notification if an error occurs during formatting
 
         -- Define formatters for specific filetypes
         formatters_by_ft = {
-            -- Lua files will use 'stylua'
+            -- Lua files use 'stylua' for formatting
             lua = { 'stylua' },
 
-            -- Go files will run both 'goimports' and 'gofumpt'
+            -- Go files run 'goimports' and 'gofumpt' in sequence
             go = { 'goimports', 'gofumpt' },
 
-            -- JavaScript files will try 'prettierd', then 'prettier' if the first isn't available
+            -- JavaScript/TypeScript files use 'prettierd', fallback to 'prettier' if unavailable
             javascript = { 'prettierd', 'prettier' },
+            typescript = { 'prettierd', 'prettier' },
 
-            -- Python files use 'ruff_format' if available, otherwise fallback to 'isort' and 'black'
-            python = function(bufnr)
-                local formatter_info = conform.get_formatter_info('ruff_format', bufnr)
-                if formatter_info.available then
-                    return { 'ruff_format' }
-                else
-                    return { 'isort', 'black' }
-                end
-            end,
-
-            -- JSON files will use 'jq' for formatting
+            -- JSON files use 'jq' for lightweight formatting
             json = { 'jq' },
+
+            -- Markdown files rely on 'prettierd' for consistent formatting
             markdown = { 'prettierd' },
+
+            -- HTML, CSS, and SCSS use 'prettierd' as primary formatter
             html = { 'prettierd', 'prettier' },
             css = { 'prettierd', 'prettier' },
             scss = { 'prettierd', 'prettier' },
+            htmldjango = { 'prettierd', 'django-html' },
 
-            -- All filetypes will use 'codespell' to check for common spelling mistakes
-            ['*'] = { 'codespell' },
+            -- Python files prioritize 'ruff_format' if available; otherwise, use 'isort' and 'black'
+            python = function(bufnr)
+                local formatter_info = conform.get_formatter_info('ruff_format', bufnr)
+                if formatter_info.available then
+                    return { 'ruff_format' } -- Use ruff's formatter if available
+                else
+                    return { 'isort', 'black' } -- Fallback to isort (imports) and black (code)
+                end
+            end,
 
-            -- Default formatting for unknown filetypes
+            -- Catch-all: Trim trailing whitespace for all files
             ['_'] = { 'trim_whitespace' },
         },
 
-        -- Optional: Parallel formatting
-        -- You can configure this if you prefer parallel execution of formatters for improved performance
-        -- parallel_formatting = true, -- Enable running formatters in parallel (optional)
+        -- Enable parallel formatting (optional for faster execution)
+        -- parallel_formatting = true, -- Uncomment if you want to enable parallel formatting
     })
 end
 

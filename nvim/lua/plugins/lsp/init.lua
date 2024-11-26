@@ -2,7 +2,11 @@ local M = {
     'neovim/nvim-lspconfig',
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
-        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/nvim-cmp', -- Auto-completion plugin
+        'hrsh7th/cmp-nvim-lsp', -- LSP completions
+        'hrsh7th/cmp-buffer', -- Buffer completions
+        'hrsh7th/cmp-path', -- Path completions
+        'hrsh7th/cmp-cmdline', -- Command-line completions
     },
 }
 
@@ -238,7 +242,60 @@ function M.config()
 
     nvim_lsp.html.setup({
         capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { 'html', 'htmldjango' }, -- Ensure HTML and related filetypes are included
+        settings = {
+            html = {
+                suggest = {
+                    html5 = true,
+                    css = true,
+                    js = true,
+                },
+            },
+        },
     })
+
+    -- -------------------- Python LSP Settings --------------------
+    nvim_lsp.pyright.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            python = {
+                analysis = {
+                    typeCheckingMode = 'basic',
+                    autoSearchPaths = true,
+                    useLibraryCodeForTypes = true,
+                    diagnosticMode = 'workspace',
+                    -- Enable auto-import functionality for better workflow
+                    autoImportCompletion = true,
+                },
+            },
+        },
+    })
+
+    -- Using Jedi Language Server for advanced Python features like Jinja2 support
+    nvim_lsp.jedi_language_server.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'python', 'jinja', 'jinja2' },
+        settings = {
+            jedi = {
+                completion = {
+                    enableSnippets = true,
+                },
+                -- Enable advanced static analysis and type inference
+                enable = {
+                    'completion',
+                    'hover',
+                    'signature',
+                    'goto',
+                    'rename',
+                    'refactor',
+                },
+            },
+        },
+    })
+
     -- -- --------------------------------------------------------------
     -- Set custom highlights for the diagnostics popup
     vim.api.nvim_set_hl(0, 'DiagnosticsBorder', { fg = '#00ff00', bg = '#1e1e1e' }) -- Green border with a dark background

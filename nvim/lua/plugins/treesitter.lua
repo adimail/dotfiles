@@ -147,6 +147,7 @@ return {
                     'yaml', -- "wgsl",
                     'json',
                     'groovy',
+                    'htmldjango',
                 },
                 sync_install = false,
                 auto_install = false,
