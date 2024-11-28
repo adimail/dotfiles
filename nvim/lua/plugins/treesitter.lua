@@ -148,6 +148,7 @@ return {
                     'json',
                     'groovy',
                     'htmldjango',
+                    'perl',
                 },
                 sync_install = false,
                 auto_install = false,

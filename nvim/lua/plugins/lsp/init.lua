@@ -237,6 +237,18 @@ function M.config()
     --     },
     --   },
     -- }
+
+    -- -------------------- Perl LSP settings --------------------
+    nvim_lsp.perlpls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        root_dir = function()
+            return nvim_lsp.util.root_pattern('Makefile', 'Build.PL', 'perl5', 'lib')(
+                vim.fn.expand('%:p')
+            )
+        end,
+    })
+
     -- -------------------- html lsp settings -- --------------------
     capabilities.textDocument.completion.completionItem.snippetSupport = true
 
