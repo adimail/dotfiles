@@ -18,6 +18,7 @@ alias cls='clear'
 alias t='tmux'
 alias nv='nvim .'
 alias tls='t ls'
+alias sessionizer='~/scripts/sessionizer'
 
 #git alias
 alias gs='git status'

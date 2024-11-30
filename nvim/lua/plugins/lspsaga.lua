@@ -1,6 +1,7 @@
 local M = {
     'glepnir/lspsaga.nvim',
-    ft = { 'go', 'lua', 'sh' },
+    event = 'BufRead',
+    ft = { 'go', 'lua', 'sh', 'python', 'perl' },
 }
 
 function M.config()

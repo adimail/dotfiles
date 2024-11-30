@@ -95,6 +95,7 @@ bind('n', '<Leader>ci', '<cmd>Lspsaga incoming_calls<CR>', opts)
 -- Undo and Redo
 bind('n', 'u', '<CMD>undo<CR>', opts) -- Undo
 bind('n', '<C-r>', '<CMD>redo<CR>', opts) -- Redo
+bind('x', 'p', '"_dP', opts) -- Prevent Overwriting Register During Paste
 
 -- Command-line Shortcuts
 bind('c', 'W', 'w', opts) -- Save
