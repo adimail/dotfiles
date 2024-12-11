@@ -23,6 +23,7 @@ alias sessionizer='~/scripts/sessionizer'
 #git alias
 alias gs='git status'
 alias G='lazygit'
+alias gitl="git log --graph --decorate --all --pretty=format:'%C(auto)%h%d %C(#888888)(%an; %ar)%Creset %s'"
 
 setopt interactive_comments
 setopt autocd

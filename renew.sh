@@ -16,7 +16,7 @@ mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" 
 SOURCE_ZSHRC="$HOME/.zshrc"
 SOURCE_NEOFETCH_CONFIG="$HOME/.config/neofetch/config.conf"
 SOURCE_NVIM_CONFIG_DIR="$HOME/.config/nvim"
-SOURCE_TMUX_CONF="$HOME/.tmux.conf"
+SOURCE_TMUX_CONF="$HOME/.tmux/.tmux.conf"
 SOURCE_HTOPRC="$HOME/.config/htop/htoprc"
 SOURCE_SCRIPTS_DIR="$HOME/scripts"
 

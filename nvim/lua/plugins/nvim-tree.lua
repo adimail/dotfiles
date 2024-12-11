@@ -50,6 +50,32 @@ function M.config()
         vim.cmd.tabprev()
     end
 
+    local function reveal_in_explorer()
+        local api = require('nvim-tree.api')
+        local node = api.tree.get_node_under_cursor()
+
+        if not node or not node.absolute_path then
+            print('No file selected to reveal!')
+            return
+        end
+
+        local path = node.absolute_path
+
+        -- Platform-specific commands
+        if vim.fn.has('win32') == 1 then
+            -- Windows command to open File Explorer
+            vim.fn.system({ 'explorer', '/select,', path })
+        elseif vim.fn.has('mac') == 1 then
+            -- macOS command to open Finder
+            vim.fn.system({ 'open', '-R', path })
+        elseif vim.fn.has('unix') == 1 then
+            -- Linux command to open the default file manager
+            vim.fn.system({ 'xdg-open', vim.fn.fnamemodify(path, ':h') })
+        else
+            print('Reveal in explorer not supported on this platform!')
+        end
+    end
+
     vim.keymap.set('n', 'T', open_tab_silent)
     -- NEW: keymapping Migration (default)
     local function on_attach(bufnr)
@@ -97,6 +123,7 @@ function M.config()
         vim.keymap.set('n', '<leader>Fc', api.fs.copy.filename, opts('Copy Filename'))
         vim.keymap.set('n', '<leader>Fv', api.fs.copy.relative_path, opts('Copy Relative Path'))
         vim.keymap.set('n', '<leader>Fb', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
+        vim.keymap.set('n', '<leader>Fe', reveal_in_explorer, { desc = 'Reveal in Explorer' })
     end
 
     -- END: keymapping Migration

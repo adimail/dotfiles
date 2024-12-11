@@ -102,6 +102,8 @@ bind('c', 'W', 'w', opts) -- Save
 bind('c', 'WQ', 'wq', opts) -- Save and quit
 bind('c', 'Wq', 'wq', opts)
 bind('c', 'QA', 'qa', opts) -- Quit all
+bind('n', '<C-_>', 'gcc', opts)
+bind('v', '<C-_>', 'gc', opts)
 
 -- Clipboard Management
 bind('n', 'd', [["_d]], opts) -- Delete without copying
