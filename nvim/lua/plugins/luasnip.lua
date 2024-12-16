@@ -22,9 +22,8 @@ function M.config()
         update_events = { 'TextChanged', 'TextChangedI' },
         region_check_events = { 'CursorMoved', 'CursorMovedI', 'CursorHold' },
     })
-    -- require('luasnip.loaders.from_lua').lazy_load({
-    --     paths = vim.fn.stdpath('config') .. '/lua/snippets',
-    -- })
-end
 
+    -- custom snippets
+    require('luasnip.loaders.from_lua').load({ paths = { '~/.config/nvim/lua/snippets' } })
+end
 return M

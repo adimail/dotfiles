@@ -50,6 +50,80 @@ function M.config()
         vim.cmd.tabprev()
     end
 
+    local function duplicate_file_auto()
+        local api = require('nvim-tree.api')
+        local node = api.tree.get_node_under_cursor()
+
+        if not node or not node.absolute_path then
+            print('No file selected to duplicate!')
+            return
+        end
+
+        local src_path = node.absolute_path
+        local src_name = vim.fn.fnamemodify(src_path, ':t') -- Extract filename
+        local src_dir = vim.fn.fnamemodify(src_path, ':h') -- Extract directory
+
+        -- Define the new file name
+        local new_file_name = src_name:gsub('(%..+)$', '-copy%1')
+        if new_file_name == src_name then
+            new_file_name = src_name .. '-copy' -- Handle files without extensions
+        end
+        local dest_path = src_dir .. '/' .. new_file_name
+
+        -- Check if file exists
+        if vim.fn.filereadable(dest_path) == 1 then
+            print('Error: File "' .. new_file_name .. '" already exists! Aborting.')
+            return
+        end
+
+        -- Read and write file contents
+        local contents = vim.fn.readfile(src_path)
+        vim.fn.writefile(contents, dest_path)
+
+        print('File duplicated to: ' .. dest_path)
+        api.tree.reload() -- Refresh nvim-tree
+    end
+
+    local function duplicate_file_custom()
+        local api = require('nvim-tree.api')
+        local node = api.tree.get_node_under_cursor()
+
+        if not node or not node.absolute_path then
+            print('No file selected to duplicate!')
+            return
+        end
+
+        local src_path = node.absolute_path
+        local src_dir = vim.fn.fnamemodify(src_path, ':h') -- Extract directory
+
+        -- Prompt for new filename
+        local new_file_name = vim.fn.input('Enter new file name: ', '', 'file')
+        if new_file_name == '' then
+            print('Error: No file name provided. Aborting.')
+            return
+        end
+
+        local dest_path = src_dir .. '/' .. new_file_name
+
+        -- Check if file exists, ask to retry
+        while vim.fn.filereadable(dest_path) == 1 do
+            print('Error: File "' .. new_file_name .. '" already exists! Try again.')
+            new_file_name = vim.fn.input('Enter new file name: ', '', 'file')
+            if new_file_name == '' then
+                print('Error: No file name provided. Aborting.')
+                return
+            end
+            dest_path = src_dir .. '/' .. new_file_name
+        end
+
+        -- Read and write file contents
+        local contents = vim.fn.readfile(src_path)
+        vim.fn.writefile(contents, dest_path)
+
+        print('File duplicated to: ' .. dest_path)
+        api.tree.reload() -- Refresh nvim-tree
+    end
+
     local function reveal_in_explorer()
         local api = require('nvim-tree.api')
         local node = api.tree.get_node_under_cursor()
@@ -124,6 +198,13 @@ function M.config()
         vim.keymap.set('n', '<leader>Fv', api.fs.copy.relative_path, opts('Copy Relative Path'))
         vim.keymap.set('n', '<leader>Fb', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
         vim.keymap.set('n', '<leader>Fe', reveal_in_explorer, { desc = 'Reveal in Explorer' })
+        vim.keymap.set('n', '<leader>FDd', duplicate_file_auto, opts('Duplicate File'))
+        vim.keymap.set(
+            'n',
+            '<leader>FDa',
+            duplicate_file_custom,
+            opts('Duplicate File with Custom Name')
+        )
     end
 
     -- END: keymapping Migration
