@@ -67,12 +67,12 @@ function M.config()
     local servers = {
         'bashls',
         'sqlls',
-        -- 'clangd',
-        -- 'texlab',
+        'clangd',
+        'texlab',
         'dockerls',
         'marksman',
         'ansiblels',
-        'denols',
+        'ts_ls',
     }
 
     for _, lsp in ipairs(servers) do
@@ -280,6 +280,48 @@ function M.config()
                     diagnosticMode = 'workspace',
                     -- Enable auto-import functionality for better workflow
                     autoImportCompletion = true,
+                },
+            },
+        },
+    })
+
+    -- -------------------- ts_ls LSP Settings --------------------
+    nvim_lsp.ts_ls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        root_dir = nvim_lsp.util.root_pattern(
+            'package.json',
+            'tsconfig.json',
+            'jsconfig.json',
+            '.git'
+        ),
+        settings = {
+            completions = {
+                completeFunctionCalls = true,
+            },
+        },
+    })
+
+    -- -------------------- clangd LSP Settings --------------------
+    nvim_lsp.clangd.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = {
+            'clangd',
+            '--background-index',
+            '--clang-tidy',
+            '--completion-style=detailed',
+            '--header-insertion=never',
+        },
+        root_dir = nvim_lsp.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.git'),
+        settings = {
+            clangd = {
+                inlayHints = {
+                    enabled = true,
+                    parameterNames = true,
+                    parameterTypes = true,
+                    variableTypes = true,
+                    functionReturnTypes = true,
                 },
             },
         },

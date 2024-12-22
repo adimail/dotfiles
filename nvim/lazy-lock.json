@@ -28,6 +28,7 @@
   "highlight-undo.nvim": { "branch": "main", "commit": "5f588b420179a31d7073854bfd07ed9d5f364645" },
   "indent-blankline.nvim": { "branch": "master", "commit": "259357fa4097e232730341fa60988087d189193a" },
   "lazy.nvim": { "branch": "main", "commit": "7c493713bc2cb392706866eeba53aaef6c8e9fc6" },
+  "lspkind.nvim": { "branch": "master", "commit": "d79a1c3299ad0ef94e255d045bed9fa26025dab6" },
   "lsplinks.nvim": { "branch": "master", "commit": "088c91e7aa0eaa24508db77ccf827440ca72760f" },
   "lspsaga.nvim": { "branch": "main", "commit": "2710a0ad97b5aaff404cd4756c296df454b3f726" },
   "lualine.nvim": { "branch": "master", "commit": "2a5bae925481f999263d6f5ed8361baef8df4f83" },

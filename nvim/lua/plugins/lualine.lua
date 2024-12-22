@@ -61,6 +61,25 @@ function M.config()
         end,
     }
 
+    -- Function to check if a virtual environment is active
+    local function get_venv_name()
+        local venv = os.getenv('VIRTUAL_ENV')
+        if venv then
+            -- Extract the name of the virtual environment
+            return vim.fn.fnamemodify(venv, ':t')
+        end
+        return nil
+    end
+
+    -- Function to add (py venv) to the right of encoding if a virtual environment is active
+    local function py_venv_status()
+        local venv_name = get_venv_name()
+        if venv_name then
+            return '(py venv)' -- Add label if venv is active
+        end
+        return ''
+    end
+
     require('lualine').setup({
         options = {
             icons_enabled = true,
@@ -100,6 +119,7 @@ function M.config()
                     colored = true, -- displays filetype icon in color if set to `true
                     icon_only = false, -- Display only icon for filetype
                 },
+                py_venv_status,
             },
             lualine_y = {
                 -- "progress",

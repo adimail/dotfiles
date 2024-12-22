@@ -2,12 +2,13 @@ local ls = require('luasnip')
 local s = ls.snippet
 local t = ls.text_node
 local i = ls.insert_node
+local rep = require('luasnip.extras').rep
 
 return {
     -- main function
     s('main', {
-        t({ '#include <iostream>', '', 'int main() {', '    ' }),
-        i(1, 'std::cout << "Hello, World!" << std::endl;'),
+        t({ '#include <iostream>', '', 'using namespace std;', '', 'int main() {', '    ' }),
+        i(1, 'cout << "Hello, World!" << endl;'),
         t({ '', '    return 0;', '}' }),
     }),
     -- for loop
@@ -37,8 +38,26 @@ return {
     }),
     -- cout snippet
     s('cout', {
-        t('std::cout << "'),
+        t('cout << "'),
         i(1, 'text_here'),
-        t('" << std::endl;'),
+        t('" << endl;'),
+    }),
+    -- leetcode solution
+    s('lc', {
+        t({
+            '#include <iostream>',
+            '',
+            'using namespace std;',
+            '',
+            'class Solution {',
+            'public:',
+            '    int ',
+        }),
+        i(1, 'methodname'),
+        t('() {'),
+        t({ '', '    }', '};', '', 'int main() {', '    Solution sol;', '    cout << sol.' }),
+        rep(1),
+        t('() << endl;'),
+        t({ '', '    return 0;', '}' }),
     }),
 }
