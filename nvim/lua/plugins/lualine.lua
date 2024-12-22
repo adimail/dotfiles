@@ -75,7 +75,7 @@ function M.config()
     local function py_venv_status()
         local venv_name = get_venv_name()
         if venv_name then
-            return '(py venv)' -- Add label if venv is active
+            return 'venv 📦' -- Add label if venv is active
         end
         return ''
     end

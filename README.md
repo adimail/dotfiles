@@ -51,35 +51,45 @@
 | `<leader>ht`   | Search harpoon marks                                    |
 | `<leader>cf`   | Fuzzy search in the current buffer without line numbers |
 
-## NVIM plugins
+## Plugins
 
-- **barbecue.lua**: Breadcrumb navigation bar for your Neovim.
-- **flash.lua**: Navigation with a flash-style highlighting mechanism.
-- **neotest.lua**: Running and managing tests directly within Neovim.
-- **nvim-ufo.lua**: Adds folding capabilities with better context awareness.
-- **which-key.lua**: Displays available keybindings in a popup window.
-- **close-buffers.lua**: Allows better buffer management, like closing multiple buffers at once.
-- **format.lua**: A plugin for on-the-fly code formatting.
-- **lsp**: Neovim LSP client.
-- **nvim-dap.lua**: Integrates debugging tools using the Debug Adapter Protocol (DAP).
-- **scrollbar.lua**: Adds a customizable scrollbar to Neovim.
-- **cmp.lua**: Implements a completion framework for coding.
-- **gitsigns.lua**: Displays Git changes and diffs in the sign column.
-- **lspsaga.lua**: Enhances the default LSP UI with rich features like code actions and diagnostics.
-- **nvim-hlslens.lua**: Highlights search matches and displays additional information.
-- **telescope.lua**: A fuzzy finder for files, buffers, and other resources.
-- **cursorword.lua**: Highlights the word under the cursor.
-- **gomove.lua**: Adds easy-to-use keybindings for moving and duplicating text.
-- **lualine.lua**: A customizable status line for Neovim.
-- **luasnip.lua**: A snippet engine for managing code templates (Stored in /lua/snippets/).
-- **nvim-spectre.lua**: A search-and-replace tool with a preview feature.
-- **nvim-surround.lua**: Simplifies surrounding text objects with pairs (e.g., parentheses, quotes).
-- **treesitter.lua**: Provides enhanced syntax highlighting and code understanding using Tree-sitter.
-- **trouble.lua**: Displays diagnostics and quickfix lists in a structured and user-friendly way.
-- **dashboard.lua**: Adds a configurable startup dashboard to Neovim.
-- **harpoon.lua**: A tool to quickly navigate between frequently used files.
-- **indent-blankline.lua**: Adds visual indicators for indentation levels.
-- **mason.lua**: Manages LSP servers, DAP servers, linters, and formatters.
-- **nvim-tree.lua**: Adds a file explorer sidebar to Neovim.
-- **todo-comments.lua**: Highlights and organizes TODO comments in code.
-- **diffview.lua**: Provides a Git diff viewer for better version control.
+This is the list of plugins avaliable in this config.
+
+| Plugin Name              | Description                                                                       |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| **barbecue.lua**         | Breadcrumb navigation bar for your Neovim.                                        |
+| **flash.lua**            | Navigation with a flash-style highlighting mechanism.                             |
+| **neotest.lua**          | Running and managing tests directly within Neovim.                                |
+| **nvim-ufo.lua**         | Adds folding capabilities with better context awareness.                          |
+| **which-key.lua**        | Displays available keybindings in a popup window.                                 |
+| **close-buffers.lua**    | Allows better buffer management, like closing multiple buffers at once.           |
+| **format.lua**           | A plugin for on-the-fly code formatting.                                          |
+| **lsp**                  | Neovim LSP client.                                                                |
+| **nvim-dap.lua**         | Integrates debugging tools using the Debug Adapter Protocol (DAP).                |
+| **scrollbar.lua**        | Adds a customizable scrollbar to Neovim.                                          |
+| **cmp.lua**              | Implements a completion framework for coding.                                     |
+| **gitsigns.lua**         | Displays Git changes and diffs in the sign column.                                |
+| **lspsaga.lua**          | Enhances the default LSP UI with rich features like code actions and diagnostics. |
+| **nvim-hlslens.lua**     | Highlights search matches and displays additional information.                    |
+| **telescope.lua**        | A fuzzy finder for files, buffers, and other resources.                           |
+| **cursorword.lua**       | Highlights the word under the cursor.                                             |
+| **gomove.lua**           | Adds easy-to-use keybindings for moving and duplicating text.                     |
+| **lualine.lua**          | A customizable status line for Neovim.                                            |
+| **luasnip.lua**          | A snippet engine for managing code templates (Stored in /lua/snippets/).          |
+| **nvim-spectre.lua**     | A search-and-replace tool with a preview feature.                                 |
+| **nvim-surround.lua**    | Simplifies surrounding text objects with pairs (e.g., parentheses, quotes).       |
+| **treesitter.lua**       | Provides enhanced syntax highlighting and code understanding using Tree-sitter.   |
+| **trouble.lua**          | Displays diagnostics and quickfix lists in a structured and user-friendly way.    |
+| **dashboard.lua**        | Adds a configurable startup dashboard to Neovim.                                  |
+| **harpoon.lua**          | A tool to quickly navigate between frequently used files.                         |
+| **indent-blankline.lua** | Adds visual indicators for indentation levels.                                    |
+| **mason.lua**            | Manages LSP servers, DAP servers, linters, and formatters.                        |
+| **nvim-tree.lua**        | Adds a file explorer sidebar to Neovim.                                           |
+| **todo-comments.lua**    | Highlights and organizes TODO comments in code.                                   |
+| **diffview.lua**         | Provides a Git diff viewer for better version control.                            |
+
+## SS
+
+![Screenshot](assets/ss1.png)
+![Screenshot](assets/ss2.png)
+![Screenshot](assets/ss3.png)
