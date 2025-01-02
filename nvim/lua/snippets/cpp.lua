@@ -39,7 +39,7 @@ return {
     -- cout snippet
     s('cout', {
         t('cout << "'),
-        i(1, 'text_here'),
+        i(1, ''),
         t('" << endl;'),
     }),
     -- leetcode solution

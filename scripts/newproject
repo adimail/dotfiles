@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+base_directory=$(echo -e "$HOME/personal/\n$HOME/scripts/\n$HOME/work/\n$HOME/Documents/GitHub/" | fzf --prompt="Select a base directory: ")
+
+base_directory=$(eval echo "$base_directory")
+
+if [[ -z "$base_directory" ]]; then
+	echo "No directory selected. Exiting."
+	exit 1
+fi
+
+read -rp "Enter the new folder name: " folder_name
+
+if [[ -z "$folder_name" ]]; then
+	echo "No folder name provided. Exiting."
+	exit 1
+fi
+
+new_folder="$base_directory/$folder_name"
+
+if [[ -d "$new_folder" ]]; then
+	read -n 1 -rp "Folder $folder_name already exists. Press 'l' to open tmux in $folder_name, or any other key to exit: " choice
+	echo
+	if [[ "$choice" != "l" ]]; then
+		echo "Operation cancelled. Exiting."
+		exit 1
+	fi
+else
+	mkdir -p "$new_folder"
+	if [[ $? -ne 0 ]]; then
+		echo "Failed to create folder. Exiting."
+		exit 1
+	fi
+	echo "Folder created at: $new_folder"
+fi
+
+session_name=$(basename "$new_folder" | tr ' ' '_')
+
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+	tmux new-session -s "$session_name" -c "$new_folder"
+	exit 0
+fi
+
+if ! tmux list-sessions | grep -q "^$session_name:"; then
+	tmux new-session -ds "$session_name" -c "$new_folder"
+fi
+
+# Attach or switch to the tmux session
+if [[ -z $TMUX ]]; then
+	tmux attach-session -t "$session_name"
+else
+	tmux switch-client -t "$session_name"
+fi

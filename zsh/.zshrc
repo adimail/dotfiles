@@ -19,6 +19,7 @@ alias t='tmux'
 alias nv='nvim .'
 alias tls='t ls'
 alias sessionizer='~/scripts/sessionizer'
+alias newproj='~/scripts/newproject'
 
 #git alias
 alias gs='git status'
@@ -148,7 +149,7 @@ function writenote {
 
     # Define directory and file paths
     dirName="${month}${year}"
-    dirPath="$HOME/notes/self/$dirName"
+    dirPath="$HOME/personal/notes/self/$dirName"
     fileName="${date}${month}.md"
 
     # Ensure the directory exists
