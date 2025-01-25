@@ -20,46 +20,56 @@ SOURCE_TMUX_CONF="$HOME/.tmux/.tmux.conf"
 SOURCE_HTOPRC="$HOME/.config/htop/htoprc"
 SOURCE_SCRIPTS_DIR="$HOME/scripts"
 
+# Function to copy file and show diff
+copy_and_log() {
+	local source=$1
+	local destination=$2
+	if [ -e "$source" ]; then
+		if [ ! -e "$destination" ] || ! cmp -s "$source" "$destination"; then
+			cp "$source" "$destination"
+			echo "Copied: $source → $destination"
+			git diff --no-index "$destination" "$source" | sed 's/^/    /'
+		else
+			echo "No changes in: $source"
+		fi
+	else
+		echo "Source not found: $source"
+	fi
+}
+
+# Function to copy directory and show diff
+copy_dir_and_log() {
+	local source_dir=$1
+	local destination_dir=$2
+	if [ -d "$source_dir" ]; then
+		mkdir -p "$destination_dir"
+		find "$source_dir" -type d -name ".git" -prune -o -type f -print | while IFS= read -r file; do
+			local relative_path="${file#"$source_dir"/}"
+			local dest_file="$destination_dir/$relative_path"
+			mkdir -p "$(dirname "$dest_file")"
+			copy_and_log "$file" "$dest_file"
+		done
+	else
+		echo "Source directory not found: $source_dir"
+	fi
+}
+
 # Zsh configuration
-if [ -f "$SOURCE_ZSHRC" ]; then
-	cp "$SOURCE_ZSHRC" "$DEST_ZSH_DIR/"
-else
-	echo "Zsh configuration file not found."
-fi
+copy_and_log "$SOURCE_ZSHRC" "$DEST_ZSH_DIR/.zshrc"
 
 # Neofetch configuration
-if [ -f "$SOURCE_NEOFETCH_CONFIG" ]; then
-	cp "$SOURCE_NEOFETCH_CONFIG" "$DEST_NEOFETCH_DIR/"
-else
-	echo "Neofetch configuration file not found."
-fi
+copy_and_log "$SOURCE_NEOFETCH_CONFIG" "$DEST_NEOFETCH_DIR/config.conf"
 
 # Neovim configuration
-if [ -d "$SOURCE_NVIM_CONFIG_DIR" ]; then
-	cp -r "$SOURCE_NVIM_CONFIG_DIR"/* "$DEST_NVIM_DIR/"
-else
-	echo "Neovim configuration directory not found."
-fi
+copy_dir_and_log "$SOURCE_NVIM_CONFIG_DIR" "$DEST_NVIM_DIR"
 
 # Tmux configuration
-if [ -f "$SOURCE_TMUX_CONF" ]; then
-	cp "$SOURCE_TMUX_CONF" "$DEST_TMUX_DIR/"
-else
-	echo "Tmux configuration file not found."
-fi
+copy_and_log "$SOURCE_TMUX_CONF" "$DEST_TMUX_DIR/.tmux.conf"
 
 # Htop configuration
-if [ -f "$SOURCE_HTOPRC" ]; then
-	cp "$SOURCE_HTOPRC" "$DEST_HTOP_DIR/"
-else
-	echo "Htop configuration file not found."
-fi
+copy_and_log "$SOURCE_HTOPRC" "$DEST_HTOP_DIR/htoprc"
 
 # Scripts
-if [ -d "$SOURCE_SCRIPTS_DIR" ]; then
-	cp -r "$SOURCE_SCRIPTS_DIR"/* "$DEST_SCRIPTS_DIR/"
-else
-	echo "Scripts directory not found."
-fi
+copy_dir_and_log "$SOURCE_SCRIPTS_DIR" "$DEST_SCRIPTS_DIR"
 
-echo "Configuration files and scripts have been copied into their respective directories."
+echo "Configuration files and scripts have been processed."

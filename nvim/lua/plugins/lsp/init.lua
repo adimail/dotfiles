@@ -285,6 +285,24 @@ function M.config()
         },
     })
 
+    -- -------------------- CSS LSP Settings --------------------
+    nvim_lsp.cssls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'css', 'scss', 'less' },
+        settings = {
+            css = {
+                validate = true,
+            },
+            less = {
+                validate = true,
+            },
+            scss = {
+                validate = true,
+            },
+        },
+    })
+
     -- -------------------- ts_ls LSP Settings --------------------
     nvim_lsp.ts_ls.setup({
         on_attach = on_attach,
@@ -298,6 +316,34 @@ function M.config()
         settings = {
             completions = {
                 completeFunctionCalls = true,
+            },
+        },
+    })
+
+    -- -------------------- LaTeX LSP Settings --------------------
+    nvim_lsp.texlab.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'tex', 'bib' },
+        settings = {
+            texlab = {
+                build = {
+                    executable = 'latexmk',
+                    args = { '-pdf', '-interaction=nonstopmode', '-synctex=1', '%f' },
+                    forwardSearchAfter = true,
+                    onSave = true,
+                },
+                forwardSearch = {
+                    executable = 'zathura',
+                    args = { '--synctex-forward', '%l:1:%f', '%p' },
+                },
+                chktex = {
+                    onOpenAndSave = true,
+                    onEdit = false,
+                },
+                diagnostics = {
+                    ignoredPatterns = { '^Overfull', '^Underfull' },
+                },
             },
         },
     })
