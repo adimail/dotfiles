@@ -102,6 +102,29 @@ function srv() {
     python3 -m http.server $port
 }
 
+function sol() {
+    local clear_flag=0
+    local file="sol.cpp"
+
+    for arg in "$@"; do
+        if [[ "$arg" == "--clear" ]]; then
+            clear_flag=1
+        else
+            file="$arg"
+        fi
+    done
+
+    if [[ $clear_flag -eq 1 ]]; then
+        clear
+    fi
+
+    if [[ -f "$file" ]]; then
+        g++ -std=c++11 "$file" -o out && ./out
+    else
+        echo "Error: File '$file' not found."
+    fi
+}
+
 function notebook {
 	cd ~/notes/notebooks
 	jupyter lab
@@ -185,3 +208,7 @@ PERL5LIB="/Users/aditya/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5L
 PERL_LOCAL_LIB_ROOT="/Users/aditya/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
 PERL_MB_OPT="--install_base \"/Users/aditya/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/aditya/perl5"; export PERL_MM_OPT;
+
+# JAVA
+export JAVA_HOME=$(/usr/libexec/java_home -v 23.0.2)
+export PATH=$JAVA_HOME/bin:$PATH

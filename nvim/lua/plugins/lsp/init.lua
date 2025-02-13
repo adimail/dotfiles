@@ -268,22 +268,22 @@ function M.config()
     })
 
     -- -------------------- Python LSP Settings --------------------
-    nvim_lsp.pyright.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        settings = {
-            python = {
-                analysis = {
-                    typeCheckingMode = 'basic',
-                    autoSearchPaths = true,
-                    useLibraryCodeForTypes = true,
-                    diagnosticMode = 'workspace',
-                    -- Enable auto-import functionality for better workflow
-                    autoImportCompletion = true,
-                },
-            },
-        },
-    })
+    -- nvim_lsp.pyright.setup({
+    --     on_attach = on_attach,
+    --     capabilities = capabilities,
+    --     settings = {
+    --         python = {
+    --             analysis = {
+    --                 typeCheckingMode = 'basic',
+    --                 autoSearchPaths = true,
+    --                 useLibraryCodeForTypes = true,
+    --                 diagnosticMode = 'workspace',
+    --                 -- Enable auto-import functionality for better workflow
+    --                 autoImportCompletion = true,
+    --             },
+    --         },
+    --     },
+    -- })
 
     -- -------------------- CSS LSP Settings --------------------
     nvim_lsp.cssls.setup({
@@ -343,6 +343,45 @@ function M.config()
                 },
                 diagnostics = {
                     ignoredPatterns = { '^Overfull', '^Underfull' },
+                },
+            },
+        },
+    })
+
+    -- -------------------- JAVA jdtls LSP Settings --------------------
+    nvim_lsp.jdtls.setup({
+        cmd = { 'jdtls' },
+        root_dir = nvim_lsp.util.root_pattern('pom.xml', 'gradle.build', '.git'),
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            java = {
+                signatureHelp = { enabled = true },
+                contentProvider = { preferred = 'fernflower' },
+                completion = {
+                    favoriteStaticMembers = {
+                        'org.junit.Assert.*',
+                        'org.mockito.Mockito.*',
+                        'org.mockito.ArgumentMatchers.*',
+                        'org.mockito.Answers.*',
+                    },
+                    importOrder = {
+                        'java',
+                        'javax',
+                        'com',
+                        'org',
+                    },
+                },
+                sources = {
+                    organizeImports = {
+                        starThreshold = 9999,
+                        staticStarThreshold = 9999,
+                    },
+                },
+                codeGeneration = {
+                    toString = {
+                        template = '${object.className}{${member.name()}=${member.value}, ${otherMembers}}',
+                    },
                 },
             },
         },

@@ -25,6 +25,12 @@ bind(
     opts
 )
 
+-- Formatters
+bind('n', '<leader>fa', function()
+    vim.cmd('args **/*')
+    vim.cmd('argdo silent! ConformFormat | update')
+end, vim.tbl_extend('force', opts, { desc = 'Format all files in project' }))
+
 -- ==========================
 -- Diagnostics Keymaps
 -- ==========================
