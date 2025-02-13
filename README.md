@@ -7,6 +7,15 @@
   </a>
 </p>
 
+## One script setup
+
+Windows
+
+```bash
+Set-ExecutionPolicy Unrestricted -Scope CurrentUser
+iex (iwr 'https://raw.githubusercontent.com/adimail/dotfiles/refs/heads/main/windows.ps1')
+```
+
 ## Keybindings
 
 ### LSP
