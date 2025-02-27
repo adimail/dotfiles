@@ -193,6 +193,10 @@ tk0() {
   tmux kill-session -t 0
 }
 
+function cursor {
+  open -a "/Applications/Cursor.app" "$@"
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 

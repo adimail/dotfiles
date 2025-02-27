@@ -118,6 +118,7 @@ return {
                     'gitignore',
                     'go',
                     'html',
+                    'dockerfile',
                     'http',
                     'java',
                     'javascript',
