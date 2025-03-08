@@ -15,6 +15,7 @@ alias nv='nvim .'
 alias tls='t ls'
 alias sessionizer='~/scripts/sessionizer'
 alias newproj='~/scripts/newproject'
+alias countdown='~/scripts/countdown'
 
 #git alias
 alias gs='git status'
