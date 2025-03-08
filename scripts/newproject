@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
-base_directory=$(echo -e "$HOME/personal/\n$HOME/scripts/\n$HOME/work/\n$HOME/Documents/GitHub/\n$HOME/hackathons/" | fzf --prompt="Select a base directory: ")
+directories=("$HOME/personal/" "$HOME/personal/college/" "$HOME/personal/scrappers/" "$HOME/scripts/" "$HOME/work/" "$HOME/Documents/GitHub/" "$HOME/hackathons/")
+
+base_directory=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory: ")
 
 base_directory=$(eval echo "$base_directory")
 

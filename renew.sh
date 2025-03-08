@@ -8,9 +8,10 @@ DEST_TMUX_DIR="$DEST_DIR/tmux"
 DEST_ZSH_DIR="$DEST_DIR/zsh"
 DEST_HTOP_DIR="$DEST_DIR/htop"
 DEST_SCRIPTS_DIR="$DEST_DIR/scripts"
+DEST_GHOSTTY_DIR="$DEST_DIR/ghostty"
 
 # Create the destination directories
-mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" "$DEST_HTOP_DIR" "$DEST_SCRIPTS_DIR"
+mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" "$DEST_HTOP_DIR" "$DEST_SCRIPTS_DIR" "$DEST_GHOSTTY_DIR"
 
 # Define source directories and files
 SOURCE_ZSHRC="$HOME/.zshrc"
@@ -19,6 +20,7 @@ SOURCE_NVIM_CONFIG_DIR="$HOME/.config/nvim"
 SOURCE_TMUX_CONF="$HOME/.tmux/.tmux.conf"
 SOURCE_HTOPRC="$HOME/.config/htop/htoprc"
 SOURCE_SCRIPTS_DIR="$HOME/scripts"
+SOURCE_GHOSTTY_CONFIG="$HOME/.config/ghostty/config"
 
 # Function to copy file and show diff
 copy_and_log() {
@@ -71,5 +73,8 @@ copy_and_log "$SOURCE_HTOPRC" "$DEST_HTOP_DIR/htoprc"
 
 # Scripts
 copy_dir_and_log "$SOURCE_SCRIPTS_DIR" "$DEST_SCRIPTS_DIR"
+
+# Ghostty configuration
+copy_and_log "$SOURCE_GHOSTTY_CONFIG" "$DEST_GHOSTTY_DIR/config"
 
 echo "Configuration files and scripts have been processed."

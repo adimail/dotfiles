@@ -34,6 +34,10 @@ alias nb='npm run build'
 alias cr='clear'
 alias c='cd $(fd --type directory | fzf)'
 
+# Python
+alias python="/opt/homebrew/bin/python3.11"
+alias pip="/opt/homebrew/bin/pip3.11"
+
 setopt interactive_comments
 setopt autocd
 setopt inc_append_history
