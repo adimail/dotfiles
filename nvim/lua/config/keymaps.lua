@@ -186,6 +186,12 @@ end, opts)
 -- NvimTree
 bind('n', '<leader>nt', '<CMD>NvimTreeToggle<CR>', opts) -- Toggle NvimTree
 bind('n', '<leader>nf', '<CMD>NvimTreeFindFile<CR>', opts)
+bind(
+    'n',
+    '<leader>D',
+    require('nvim-tree.api').marks.bulk.delete,
+    vim.tbl_extend('force', opts, { desc = 'Delete Selected Files' })
+)
 
 -- Telescope Integration
 bind('n', '<leader>ht', '<cmd>Telescope harpoon marks<CR>', opts)

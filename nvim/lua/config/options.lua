@@ -172,3 +172,10 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
+
+vim.cmd([[
+    let g:gruvbox_material_transparent_background = 1
+    let g:gruvbox_material_sign_column_background = 'none'
+    highlight Normal guibg=NONE ctermbg=NONE
+    highlight NonText guibg=NONE ctermbg=NONE
+]])
