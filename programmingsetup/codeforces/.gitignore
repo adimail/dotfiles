@@ -1,0 +1,5 @@
+__pycache__
+out
+.DS_Store
+input.txt
+output.txt

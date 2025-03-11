@@ -1,0 +1,80 @@
+#!/bin/bash
+
+if [ $# -lt 1 ]; then
+	echo "Usage: $0 <problem_number> [language] [-f]"
+	exit 1
+fi
+
+PROBLEM_NUMBER=$1
+force_flag=false
+language=""
+
+shift
+
+for arg in "$@"; do
+	if [ "$arg" = "-f" ]; then
+		force_flag=true
+	else
+		language=$arg
+	fi
+done
+
+if [ -z "$language" ]; then
+	language=cpp
+fi
+
+DATE=$(date +"%b%Y")
+
+VALID_EXTENSIONS=(py java cpp js ts rb go cs sh)
+
+is_valid_extension() {
+	local ext=$1
+	for valid in "${VALID_EXTENSIONS[@]}"; do
+		if [ "$valid" == "$ext" ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+if ! is_valid_extension "$language"; then
+	echo "Invalid language. Valid options are: ${VALID_EXTENSIONS[*]}"
+	exit 1
+fi
+
+case $language in
+py) EXT="py" ;;
+java) EXT="java" ;;
+cpp) EXT="cpp" ;;
+js) EXT="js" ;;
+ts) EXT="ts" ;;
+rb) EXT="rb" ;;
+go) EXT="go" ;;
+cs) EXT="cs" ;;
+sh) EXT="sh" ;;
+*)
+	echo "Unexpected error."
+	exit 1
+	;;
+esac
+
+FOLDER="${PROBLEM_NUMBER}-${DATE}"
+FILEPATH="${FOLDER}/sol.${EXT}"
+
+mkdir -p "$FOLDER"
+
+if [ -f "$FILEPATH" ] && [ "$force_flag" = false ]; then
+	echo "File $FILEPATH already exists. Use -f flag to force overwrite. (Current path copied)"
+	echo "nvim $FILEPATH" | pbcopy
+	exit 1
+fi
+
+TEMPLATE="templates/${language}.${language}"
+if [ -f "$TEMPLATE" ]; then
+	cp "$TEMPLATE" "$FILEPATH"
+	echo "nvim $FILEPATH" | pbcopy
+	echo "nvim $FILEPATH (copied to clipboard)"
+else
+	touch "$FILEPATH"
+	echo "Template does not exist for $language. Created an empty file: $FILEPATH"
+fi

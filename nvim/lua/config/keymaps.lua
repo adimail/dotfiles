@@ -48,6 +48,17 @@ bind('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 bind('n', '<leader>ld', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 bind('n', '<leader>qd', '<cmd>lua vim.diagnostic.setqflist()<CR>', opts)
 
+-- ==========================
+-- Code Runner Keymaps
+-- ==========================
+bind('n', '<leader>rr', ':RunCode<CR>', opts)
+bind('n', '<leader>rf', ':RunFile<CR>', opts)
+bind('n', '<leader>rft', ':RunFile tab<CR>', opts)
+bind('n', '<leader>rp', ':RunProject<CR>', opts)
+bind('n', '<leader>rc', ':RunClose<CR>', opts)
+bind('n', '<leader>crf', ':CRFiletype<CR>', opts)
+bind('n', '<leader>crp', ':CRProjects<CR>', opts)
+
 -- Telescope Diagnostics Integration
 bind('n', '<leader>so', '<cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>', opts)
 bind('n', '<leader>sd', '<cmd>Telescope diagnostics<CR>', opts)

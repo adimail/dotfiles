@@ -178,4 +178,5 @@ vim.cmd([[
     let g:gruvbox_material_sign_column_background = 'none'
     highlight Normal guibg=NONE ctermbg=NONE
     highlight NonText guibg=NONE ctermbg=NONE
+    highlight TermNormal guibg=#282828 ctermbg=235
 ]])

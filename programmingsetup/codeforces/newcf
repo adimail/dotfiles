@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Usage check
+if [ $# -lt 3 ]; then
+	echo "Usage: $0 <division> <round> <problem> [language]"
+	echo "For Educational Rounds: $0 e <round> <problem> [language]"
+	exit 1
+fi
+
+# Parameters
+DIVISION=$1
+ROUND=$2
+PROBLEM=$3
+LANGUAGE=${4:-cpp}
+
+# Valid languages
+VALID_LANGUAGES=("cpp" "py")
+
+# Check if language is valid
+is_valid_language() {
+	local lang=$1
+	for valid in "${VALID_LANGUAGES[@]}"; do
+		if [ "$valid" == "$lang" ]; then
+			return 0
+		fi
+	done
+	return 1
+}
+
+# Validate language
+if ! is_valid_language "$LANGUAGE"; then
+	echo "Invalid language. Valid options are: ${VALID_LANGUAGES[*]}"
+	exit 1
+fi
+
+# Set file extension based on language
+case $LANGUAGE in
+cpp) EXT="cpp" ;;
+py) EXT="py" ;;
+esac
+
+# Determine directory structure
+if [ "$DIVISION" == "e" ]; then
+	FOLDER="Educational_Rounds/${ROUND}"
+else
+	FOLDER="Div_${DIVISION}/${ROUND}"
+fi
+
+# Create directory structure
+mkdir -p "$FOLDER"
+
+# Set filepath
+FILEPATH="${FOLDER}/${PROBLEM}.${EXT}"
+
+# Check if file already exists
+if [ -f "$FILEPATH" ]; then
+	echo "File $FILEPATH already exists. Exiting..."
+	echo "nvim $FILEPATH" | pbcopy
+	echo "(Editor command copied to clipboard: nvim $FILEPATH)"
+	exit 0
+fi
+
+TEMPLATE_DIR="templates"
+mkdir -p "$TEMPLATE_DIR"
+
+# Template file
+TEMPLATE="${TEMPLATE_DIR}/${LANGUAGE}.${EXT}"
+
+# Create file with template if exists, otherwise create empty file
+if [ -f "$TEMPLATE" ]; then
+	cp "$TEMPLATE" "$FILEPATH"
+	echo "Created $FILEPATH from template"
+else
+	touch "$FILEPATH"
+	echo "No template found for ${LANGUAGE}. Created empty file: $FILEPATH"
+	echo "You can create a template at ${TEMPLATE}"
+fi
+
+echo "nvim $FILEPATH" | pbcopy
+echo "Editor command copied to clipboard: nvim $FILEPATH"

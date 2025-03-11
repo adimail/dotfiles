@@ -36,8 +36,7 @@ alias cr='clear'
 alias c='cd $(fd --type directory | fzf)'
 
 # Python
-alias python="/opt/homebrew/bin/python3.11"
-alias pip="/opt/homebrew/bin/pip3.11"
+export PATH=$HOME/Library/Python/3.9/bin:$PATH
 
 setopt interactive_comments
 setopt autocd
