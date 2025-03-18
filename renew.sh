@@ -17,8 +17,7 @@ DEST_CODEFORCES_DIR="$DEST_PROGRAMMINGSETUP_DIR/codeforces"
 DEST_LEETCODE_DIR="$DEST_PROGRAMMINGSETUP_DIR/leetcode"
 
 # Create the destination directories
-mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" "$DEST_HTOP_DIR" "$DEST_SCRIPTS_DIR" "$DEST_GHOSTTY_DIR" "$DEST_CLANGD_DIR"
-mkdir -p "$DEST_CODEFORCES_DIR" "$DEST_LEETCODE_DIR"
+mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" "$DEST_HTOP_DIR" "$DEST_SCRIPTS_DIR" "$DEST_GHOSTTY_DIR" "$DEST_CLANGD_DIR" "$DEST_CODEFORCES_DIR" "$DEST_LEETCODE_DIR"
 
 # Define source directories and files
 SOURCE_ZSHRC="$HOME/.zshrc"
@@ -29,11 +28,12 @@ SOURCE_HTOPRC="$HOME/.config/htop/htoprc"
 SOURCE_SCRIPTS_DIR="$HOME/scripts"
 SOURCE_GHOSTTY_CONFIG="$HOME/.config/ghostty/config"
 SOURCE_CLANGD="$HOME/.clangd"
+SOURCE_FORMAT_CLANGD="$HOME/.clang-format"
 
 # Programming setup sources
-SOURCE_NEWCF="$HOME/personal/cp/newcf"
-SOURCE_GITIGNORE="$HOME/personal/cp/.gitignore"
-SOURCE_TEMPLATES_CODEFORCES="$HOME/personal/cp/templates"
+SOURCE_NEWCF="$HOME/personal/cf/newcf"
+SOURCE_GITIGNORE="$HOME/personal/cf/.gitignore"
+SOURCE_TEMPLATES_CODEFORCES="$HOME/personal/cf/templates"
 
 SOURCE_LC_NEW="$HOME/personal/lc/new"
 SOURCE_TEMPLATES_LEETCODE="$HOME/personal/lc/templates"
@@ -95,6 +95,7 @@ copy_and_log "$SOURCE_GHOSTTY_CONFIG" "$DEST_GHOSTTY_DIR/config"
 
 # Clangd configuration
 copy_and_log "$SOURCE_CLANGD" "$DEST_CLANGD_DIR/.clangd"
+copy_and_log "$SOURCE_FORMAT_CLANGD" "$DEST_CLANGD_DIR/.clang-format"
 
 ######################################
 # Codeforces Setup
@@ -117,4 +118,5 @@ copy_and_log "$SOURCE_LC_NEW" "$DEST_LEETCODE_DIR/new"
 # Copy templates directory for leetcode
 copy_dir_and_log "$SOURCE_TEMPLATES_LEETCODE" "$DEST_LEETCODE_DIR/templates"
 
+echo ""
 echo "All configuration files and programming setup files have been processed."

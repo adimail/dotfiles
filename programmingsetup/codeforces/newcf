@@ -2,8 +2,18 @@
 
 # Usage check
 if [ $# -lt 3 ]; then
-	echo "Usage: $0 <division> <round> <problem> [language]"
-	echo "For Educational Rounds: $0 e <round> <problem> [language]"
+	echo "------------------------------------------------------------------"
+	echo "               USAGE                    "
+	echo "------------------------------------------------------------------"
+	echo "For Contests:       $0 <division> <round> <problem> [language]"
+	echo "For Educational:    $0 e <round> <problem> [language]"
+	echo "For Gym:            $0 g <round> <problem> [language]"
+	echo ""
+	echo "Examples:"
+	echo "  $0 2 800 A cpp    # Division 2, Round 800, Problem A, C++"
+	echo "  $0 e 123 B py     # Educational Round 123, Problem B, Python"
+	echo "  $0 g 456 C        # Gym Round 456, Problem C, default language"
+	echo "------------------------------------------------------------------"
 	exit 1
 fi
 
@@ -42,6 +52,8 @@ esac
 # Determine directory structure
 if [ "$DIVISION" == "e" ]; then
 	FOLDER="Educational_Rounds/${ROUND}"
+elif [ "$DIVISION" == "g" ]; then
+	FOLDER="Gym/${ROUND}"
 else
 	FOLDER="Div_${DIVISION}/${ROUND}"
 fi

@@ -259,8 +259,6 @@ function M.config()
             html = {
                 suggest = {
                     html5 = true,
-                    css = true,
-                    js = true,
                 },
             },
         },

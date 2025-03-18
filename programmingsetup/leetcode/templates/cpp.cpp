@@ -8,6 +8,7 @@ public:
 
 int main() {
   Solution solution;
+  // vector<int> nums = {1, 3, 8, 48, 10};
 
   // ----- integer -----
   // int result = solution.method();

@@ -193,6 +193,42 @@ ta() {
   tmux attach-session -t "$1"
 }
 
+# Function: tlogs
+# Usage:
+#   tlogs             - Opens the base logs directory.
+#   tlogs [subdir]    - Opens the specified subdirectory under ~/personal/logs/tmux.
+#   tlogs -ui         - Runs python3 ~/personal/logs/tmux/run.py.
+tlogs() {
+    local base_dir="$HOME/personal/logs/tmux"
+
+    # Ensure no more than one argument is provided.
+    if [[ $# -gt 1 ]]; then
+        echo "Usage: tlogs [subdirectory]" >&2
+        return 1
+    fi
+
+    # If the argument is exactly "-ui", run the Python script.
+    if [[ $# -eq 1 && "$1" == "-ui" ]]; then
+        python3 "$base_dir/run.py"
+        return $?
+    fi
+
+    # Determine the target directory: either base or base/subdirectory.
+    local target_dir="$base_dir"
+    if [[ $# -eq 1 ]]; then
+        target_dir="$base_dir/$1"
+    fi
+
+    # Check if the target directory exists.
+    if [[ -d "$target_dir" ]]; then
+        open "$target_dir"
+        echo "Opening: $target_dir"
+    else
+        echo "Error: Directory '$target_dir' does not exist." >&2
+        return 2
+    fi
+}
+
 tk0() {
   tmux kill-session -t 0
 }

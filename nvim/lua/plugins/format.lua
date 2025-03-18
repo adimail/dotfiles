@@ -23,6 +23,9 @@ function M.config()
             -- Lua files use 'stylua' for formatting
             lua = { 'stylua' },
 
+            -- cpp formatters
+            cpp = { 'clang-format' },
+
             -- Go files run 'goimports' and 'gofumpt' in sequence
             go = { 'goimports', 'gofumpt' },
 
@@ -37,10 +40,11 @@ function M.config()
             markdown = { 'prettierd' },
 
             -- HTML, CSS, and SCSS use 'prettierd' as primary formatter
-            html = { 'prettierd', 'prettier' },
+            html = { 'djlint' },
+            htmldjango = { 'djlint' },
+
             css = { 'prettierd', 'prettier' },
             scss = { 'prettierd', 'prettier' },
-            htmldjango = { 'prettierd', 'django-html' },
 
             -- Python files prioritize 'ruff_format' if available; otherwise, use 'isort' and 'black'
             python = function(bufnr)
