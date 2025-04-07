@@ -6,24 +6,24 @@ local M = {
         'hrsh7th/cmp-nvim-lsp', -- LSP completions
         'hrsh7th/cmp-buffer', -- Buffer completions
         'hrsh7th/cmp-path', -- Path completions
+        'b0o/schemastore.nvim', -- JSON/YAML schema support
     },
 }
 
 function M.config()
+    ------------------------------------------------------------------
+    -- Plugin Setup & Required Modules
+    ------------------------------------------------------------------
     require('neodev').setup({})
     local nvim_lsp = require('lspconfig')
-    -- local configs = require 'lspconfig/configs'
-    -- ------------------
+    local navic = require('nvim-navic')
 
-    local on_attach = function(_, bufnr)
-        -- require("lsp-format").on_attach(client)
-        -- require("nvim-navic").attach(client, bufnr)
-
-        -- enable inlay hint
-        -- vim.lsp.buf.inlay_hint(0, true)
-
-        -- vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+    local on_attach = function(client, bufnr)
+        if client.server_capabilities.documentSymbolProvider then
+            navic.attach(client, bufnr)
+        end
     end
+
     -- nvim-cmp supports additional completion capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -32,7 +32,9 @@ function M.config()
         lineFoldingOnly = true,
     }
 
-    -- -------------------- general settings -- --------------------
+    ------------------------------------------------------------------
+    -- General Diagnostic Settings
+    ------------------------------------------------------------------
     vim.fn.sign_define('DiagnosticSignError', {
         texthl = 'DiagnosticSignError',
         text = ' ✗',
@@ -54,15 +56,9 @@ function M.config()
         numhl = 'DiagnosticSignInfo',
     })
 
-    vim.diagnostic.config({
-        signs = true,
-        update_in_insert = false,
-        underline = true,
-        severity_sort = true,
-        virtual_text = true,
-    })
-
-    -- -------------------------- common lsp server ----------------------
+    ------------------------------------------------------------------
+    -- Common LSP Servers Setup
+    ------------------------------------------------------------------
     local servers = {
         'bashls',
         'sqlls',
@@ -72,6 +68,7 @@ function M.config()
         'marksman',
         'ansiblels',
         'ts_ls',
+        'jdtls',
     }
 
     for _, lsp in ipairs(servers) do
@@ -84,7 +81,11 @@ function M.config()
         })
     end
 
-    -- -------------------- go lsp settings -- --------------------
+    ------------------------------------------------------------------
+    -- Language Specific LSP Configurations
+    ------------------------------------------------------------------
+
+    -- Go LSP Settings
     nvim_lsp.gopls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -112,8 +113,8 @@ function M.config()
             },
         },
     })
-    -- -------------------- yaml lsp settings -- --------------------
-    -- install yaml-language-server first!!! --  yarn global add yaml-language-server
+
+    -- YAML LSP Settings
     nvim_lsp.yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -156,7 +157,7 @@ function M.config()
         single_file_support = true,
     })
 
-    -- -------------------- lua lsp settings -- --------------------
+    -- Lua LSP Settings
     local settings = {
         Lua = {
             hint = { enable = true },
@@ -196,9 +197,9 @@ function M.config()
         flags = { debounce_text_changes = 150 },
         capabilities = capabilities,
     })
-    -- -------------------- nginx lsp settings -- --------------------
-    local configs = require('lspconfig.configs')
 
+    -- Nginx LSP Settings
+    local configs = require('lspconfig.configs')
     local root_files = {
         'default.conf',
         'nginx.conf',
@@ -219,7 +220,7 @@ function M.config()
     end
     nvim_lsp.nginx_ls.setup({})
 
-    -- -------------------- sql lsp settings -- --------------------
+    -- SQL LSP Settings (commented out)
     -- nvim_lsp.sqls.setup{
     --   settings = {
     --     sqls = {
@@ -237,7 +238,7 @@ function M.config()
     --   },
     -- }
 
-    -- -------------------- Perl LSP settings --------------------
+    -- Perl LSP Settings
     nvim_lsp.perlpls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -248,9 +249,8 @@ function M.config()
         end,
     })
 
-    -- -------------------- html lsp settings -- --------------------
+    -- HTML LSP Settings
     capabilities.textDocument.completion.completionItem.snippetSupport = true
-
     nvim_lsp.html.setup({
         capabilities = capabilities,
         on_attach = on_attach,
@@ -264,25 +264,37 @@ function M.config()
         },
     })
 
-    -- -------------------- Python LSP Settings --------------------
-    -- nvim_lsp.pyright.setup({
-    --     on_attach = on_attach,
-    --     capabilities = capabilities,
-    --     settings = {
-    --         python = {
-    --             analysis = {
-    --                 typeCheckingMode = 'basic',
-    --                 autoSearchPaths = true,
-    --                 useLibraryCodeForTypes = true,
-    --                 diagnosticMode = 'workspace',
-    --                 -- Enable auto-import functionality for better workflow
-    --                 autoImportCompletion = true,
-    --             },
-    --         },
-    --     },
-    -- })
+    -- Python LSP Settings
+    nvim_lsp.pyright.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            python = {
+                analysis = {
+                    typeCheckingMode = 'basic',
+                    autoSearchPaths = true,
+                    useLibraryCodeForTypes = true,
+                    diagnosticMode = 'workspace',
+                    autoImportCompletion = true,
+                },
+            },
+        },
+    })
 
-    -- -------------------- CSS LSP Settings --------------------
+    -- JSON LSP settings
+    nvim_lsp.jsonls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        settings = {
+            json = {
+                schemas = require('schemastore').json.schemas(),
+                validate = { enable = true },
+            },
+        },
+        filetypes = { 'json', 'jsonc' },
+    })
+
+    -- CSS LSP Settings
     nvim_lsp.cssls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -300,7 +312,7 @@ function M.config()
         },
     })
 
-    -- -------------------- ts_ls LSP Settings --------------------
+    -- TypeScript/JavaScript LSP Settings (ts_ls)
     nvim_lsp.ts_ls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -317,7 +329,7 @@ function M.config()
         },
     })
 
-    -- -------------------- LaTeX LSP Settings --------------------
+    -- LaTeX LSP Settings
     nvim_lsp.texlab.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -345,7 +357,7 @@ function M.config()
         },
     })
 
-    -- -------------------- JAVA jdtls LSP Settings --------------------
+    -- Java LSP Settings (jdtls)
     nvim_lsp.jdtls.setup({
         cmd = { 'jdtls' },
         root_dir = nvim_lsp.util.root_pattern('pom.xml', 'gradle.build', '.git'),
@@ -384,7 +396,7 @@ function M.config()
         },
     })
 
-    -- -------------------- clangd LSP Settings --------------------
+    -- Clangd LSP Settings
     nvim_lsp.clangd.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -409,35 +421,34 @@ function M.config()
         },
     })
 
-    -- Using Jedi Language Server for advanced Python features like Jinja2 support
-    nvim_lsp.jedi_language_server.setup({
+    -- Ember LSP Settings (Handlebars templates)
+    nvim_lsp.ember.setup({
         on_attach = on_attach,
         capabilities = capabilities,
-        filetypes = { 'python', 'jinja', 'jinja2' },
-        settings = {
-            jedi = {
-                completion = {
-                    enableSnippets = true,
-                },
-                -- Enable advanced static analysis and type inference
-                enable = {
-                    'completion',
-                    'hover',
-                    'signature',
-                    'goto',
-                    'rename',
-                    'refactor',
-                },
-            },
-        },
+        filetypes = { 'handlebars', 'hbs' },
+        root_dir = function(fname)
+            return nvim_lsp.util.root_pattern('ember-cli-build.js', 'package.json')(fname)
+        end,
     })
 
-    -- -- --------------------------------------------------------------
-    -- Set custom highlights for the diagnostics popup
+    ------------------------------------------------------------------
+    -- Diagnostic UI Configuration
+    ------------------------------------------------------------------
     vim.api.nvim_set_hl(0, 'DiagnosticsBorder', { fg = '#00ff00', bg = '#1e1e1e' }) -- Green border with a dark background
 
-    -- Customize the `vim.diagnostic.open_float` function
     vim.diagnostic.config({
+        signs = {
+            text = {
+                [vim.diagnostic.severity.ERROR] = '✗',
+                [vim.diagnostic.severity.WARN] = '❢',
+                [vim.diagnostic.severity.HINT] = '',
+                [vim.diagnostic.severity.INFO] = '𝓲',
+            },
+        },
+        update_in_insert = false,
+        underline = true,
+        severity_sort = true,
+        virtual_text = true,
         float = {
             border = 'rounded',
             focusable = true,
@@ -451,7 +462,6 @@ function M.config()
         },
     })
 
-    -- Override the default border highlight group used by floating windows
     vim.cmd([[
 		highlight! link FloatBorder DiagnosticsBorder
 		highlight! link NormalFloat DiagnosticsBackground

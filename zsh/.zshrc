@@ -240,10 +240,6 @@ function cursor {
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # perl
 source ${HOME}/perl5/perlbrew/etc/bashrc
 
@@ -256,3 +252,11 @@ PERL_MM_OPT="INSTALL_BASE=/Users/aditya/perl5"; export PERL_MM_OPT;
 # JAVA
 export JAVA_HOME=$(/usr/libexec/java_home -v 23.0.2)
 export PATH=$JAVA_HOME/bin:$PATH
+
+# pnpm
+export PNPM_HOME="/Users/aditya/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end

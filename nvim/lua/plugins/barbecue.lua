@@ -1,11 +1,11 @@
 local spec = {
     'utilyre/barbecue.nvim',
     -- event = 'UIEnter',
-    ft = { 'go', 'lua', 'yaml', 'yml', 'markdown' },
+    ft = { 'go', 'lua', 'yaml', 'yml', 'markdown', 'python', 'cpp', 'json' },
     dependencies = {
         'neovim/nvim-lspconfig',
         'smiteshp/nvim-navic',
-        'nvim-tree/nvim-web-devicons', -- optional dependency
+        'nvim-tree/nvim-web-devicons',
     },
 }
 

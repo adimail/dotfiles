@@ -214,6 +214,13 @@ function M.config()
     })
 
     -- Additional filetype-specific configurations
+    cmp.setup.filetype({ 'handlebars', 'hbs' }, {
+        sources = {
+            { name = 'nvim_lsp' },
+            { name = 'buffer' },
+            { name = 'path' },
+        },
+    })
     cmp.setup.filetype('TelescopePrompt', { sources = {} })
     cmp.setup.filetype({ 'vim', 'markdown' }, {
         sources = {

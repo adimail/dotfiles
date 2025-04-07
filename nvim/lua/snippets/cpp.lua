@@ -7,7 +7,7 @@ local rep = require('luasnip.extras').rep
 return {
     -- main function
     s('main', {
-        t({ '#include <iostream>', '', 'using namespace std;', '', 'int main() {', '    ' }),
+        t({ '#include <bits/stdc++.h>', '', 'using namespace std;', '', 'int main() {', '    ' }),
         i(1, 'cout << "Hello, World!" << endl;'),
         t({ '', '    return 0;', '}' }),
     }),
