@@ -41,11 +41,18 @@ fi
 repo_url="https://github.com/${owner}/${repo_name}.git"
 clone_path="$base/$repo_name"
 
+read -rp "Enter maximum depth (press Enter for no limit): " max_depth
+
+clone_cmd="git clone --single-branch"
+[[ -n "$max_depth" ]] && clone_cmd="$clone_cmd --depth $max_depth"
+
+# Confirm cloning
 echo ""
 echo "Repository owner: $owner"
 echo "Repository name: $repo_name"
 echo "Repository URL: $repo_url"
 echo "Clone path: $clone_path"
+echo "Clone command: $clone_cmd"
 echo ""
 
 if [[ -d "$clone_path" ]]; then

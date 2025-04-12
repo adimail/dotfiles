@@ -14,6 +14,7 @@ alias t='tmux'
 alias nv='nvim .'
 alias tls='t ls'
 alias sessionizer='~/scripts/sessionizer'
+alias gclt='~/scripts/gclt'
 alias newproj='~/scripts/newproject'
 alias countdown='~/scripts/countdown'
 
