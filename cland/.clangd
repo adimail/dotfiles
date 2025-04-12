@@ -3,7 +3,9 @@ CompileFlags:
     - -I/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/aarch64-apple-darwin24
     - -I/opt/homebrew/Cellar/gcc/14.2.0_1/include/c++/14/aarch64-apple-darwin24/bits
     - -Wall
-    - -O2
+    - -Wextra
     - -Wshadow
     - -Wno-unused-const-variable
+    - -Wunused-variable
+    - -O2
     - -std=c++11

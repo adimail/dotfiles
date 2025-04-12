@@ -47,8 +47,6 @@ copy_and_log() {
 			cp "$source" "$destination"
 			echo "Copied: $source → $destination"
 			git diff --no-index "$destination" "$source" | sed 's/^/    /'
-		else
-			echo "No changes in: $source"
 		fi
 	else
 		echo "Source not found: $source"

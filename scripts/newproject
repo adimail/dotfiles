@@ -28,8 +28,7 @@ if [[ -d "$new_folder" ]]; then
 		exit 1
 	fi
 else
-	mkdir -p "$new_folder"
-	if [[ $? -ne 0 ]]; then
+	if ! mkdir -p "$new_folder"; then
 		echo "Failed to create folder. Exiting."
 		exit 1
 	fi

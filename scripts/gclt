@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+directories=(
+	"$HOME/personal/tmp"
+	"$HOME/work/"
+	"$HOME/hackathons/"
+	"$HOME/Documents/GitHub/"
+)
+
+base=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory to clone into: ")
+base=$(eval echo "$base")
+
+if [[ -z "$base" ]]; then
+	echo "No directory selected. Exiting."
+	exit 1
+fi
+
+read -rp "Enter the Git repository URL or owner/repo: " raw_input
+
+# Sanitize input by removing bracketed paste mode and other non-URL characters
+repo_input=$(echo "$raw_input" | sed -E 's/\x1B\[[0-9;]*[~a-zA-Z]//g')
+
+if [[ -z "$repo_input" ]]; then
+	echo "No input provided. Exiting."
+	exit 1
+fi
+
+if [[ "$repo_input" =~ ^https?://github\.com/([^/]+)/([^/\.]+)(\.git)?/?$ ]]; then
+	# Full GitHub URL format
+	owner="${BASH_REMATCH[1]}"
+	repo_name="${BASH_REMATCH[2]}"
+elif [[ "$repo_input" =~ ^([^/]+)/([^/\.]+)(\.git)?/?$ ]]; then
+	# owner/repo format
+	owner="${BASH_REMATCH[1]}"
+	repo_name="${BASH_REMATCH[2]}"
+else
+	echo "Invalid repository format. Please use 'owner/repo' or a GitHub URL."
+	exit 1
+fi
+
+repo_url="https://github.com/${owner}/${repo_name}.git"
+clone_path="$base/$repo_name"
+
+echo ""
+echo "Repository owner: $owner"
+echo "Repository name: $repo_name"
+echo "Repository URL: $repo_url"
+echo "Clone path: $clone_path"
+echo ""
+
+if [[ -d "$clone_path" ]]; then
+	read -n 1 -rp "Directory $repo_name already exists. Press 'l' to open it in tmux, or any other key to exit: " choice
+	echo
+	if [[ "$choice" != "l" ]]; then
+		echo "Operation cancelled. Exiting."
+		exit 1
+	fi
+else
+	echo "Cloning repository..."
+	if ! git clone "$repo_url" "$clone_path"; then
+		echo "Failed to clone repository. Exiting."
+		exit 1
+	fi
+	echo "Cloned into $clone_path"
+fi
+
+session_name=$(basename "$clone_path" | tr ' ' '_')
+tmux_running=$(pgrep tmux)
+
+if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+	tmux new-session -s "$session_name" -c "$clone_path"
+	exit 0
+fi
+
+if ! tmux list-sessions | grep -q "^$session_name:"; then
+	tmux new-session -ds "$session_name" -c "$clone_path"
+fi
+
+if [[ -z $TMUX ]]; then
+	tmux attach-session -t "$session_name"
+else
+	tmux switch-client -t "$session_name"
+fi

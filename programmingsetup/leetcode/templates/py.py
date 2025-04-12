@@ -12,6 +12,3 @@ class Solution:
 
 if __name__ == "__main__":
     solution = Solution()
-
-    result = solution.method()
-    print(result)
