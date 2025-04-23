@@ -17,6 +17,7 @@ alias sessionizer='~/scripts/sessionizer'
 alias gclt='~/scripts/gclt'
 alias newproj='~/scripts/newproject'
 alias countdown='~/scripts/countdown'
+alias grepforllm='~/scripts/grepforllm'
 
 #git alias
 alias gs='git status'
@@ -261,3 +262,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+export HOMEBREW_NO_AUTO_UPDATE=1
