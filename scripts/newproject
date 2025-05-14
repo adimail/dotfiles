@@ -1,10 +1,19 @@
 #!/usr/bin/env bash
 
-directories=("$HOME/personal/" "$HOME/personal/college/" "$HOME/personal/scrappers/" "$HOME/scripts/" "$HOME/work/" "$HOME/Documents/GitHub/" "$HOME/hackathons/")
+directories=(
+	"$HOME/personal/"
+	"$HOME/personal/tmp"
+	"$HOME/personal/college/"
+	"$HOME/personal/scrappers/"
+	"$HOME/scripts/"
+	"$HOME/work/"
+	"$HOME/Documents/GitHub/"
+	"$HOME/hackathons/"
+)
 
 base_directory=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory: ")
 
-base_directory=$(eval echo "$base_directory")
+base_directory=$(eval echo "$base_directory")  # Handles ~ expansion if fzf returns it
 
 if [[ -z "$base_directory" ]]; then
 	echo "No directory selected. Exiting."
@@ -18,37 +27,27 @@ if [[ -z "$folder_name" ]]; then
 	exit 1
 fi
 
-new_folder="$base_directory/$folder_name"
+new_folder="${base_directory%/}/$folder_name"
 
 if [[ -d "$new_folder" ]]; then
-	read -n 1 -rp "Folder $folder_name already exists. Press 'l' to open tmux in $folder_name, or any other key to exit: " choice
+	read -n 1 -rp "Folder '$folder_name' already exists. Press 'l' to launch tmux there, any other key to exit: " choice
 	echo
-	if [[ "$choice" != "l" ]]; then
-		echo "Operation cancelled. Exiting."
-		exit 1
-	fi
+	[[ "$choice" != "l" ]] && echo "Cancelled." && exit 1
 else
 	if ! mkdir -p "$new_folder"; then
-		echo "Failed to create folder. Exiting."
+		echo "Failed to create folder '$new_folder'. Exiting."
 		exit 1
 	fi
-	echo "Folder created at: $new_folder"
+	echo "Created: $new_folder"
 fi
 
-session_name=$(basename "$new_folder" | tr ' ' '_')
+session_name=$(basename "$new_folder" | tr ' ' '_' | tr . _)
 
-tmux_running=$(pgrep tmux)
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	tmux new-session -s "$session_name" -c "$new_folder"
-	exit 0
-fi
-
-if ! tmux list-sessions | grep -q "^$session_name:"; then
+# Start or attach tmux
+if ! tmux has-session -t "$session_name" 2>/dev/null; then
 	tmux new-session -ds "$session_name" -c "$new_folder"
 fi
 
-# Attach or switch to the tmux session
 if [[ -z $TMUX ]]; then
 	tmux attach-session -t "$session_name"
 else

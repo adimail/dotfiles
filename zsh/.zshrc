@@ -20,9 +20,19 @@ alias countdown='~/scripts/countdown'
 alias grepforllm='~/scripts/grepforllm'
 
 #git alias
-alias gs='git status'
+alias gs='git status --short'
 alias G='lazygit'
 alias gitl="git log --graph --decorate --all --pretty=format:'%C(auto)%h%d %C(#888888)(%an; %ar)%Creset %s'"
+alias gd="git diff --output-indicator-new='' --output-indicator-old=''"
+alias ga='git add'
+alias gac='git add . && git commit'
+alias gc='git commit'
+alias gp='git push'
+alias gu='git pull'
+alias gl='git log'
+alias gb='git branch'
+alias gi='git init'
+alias gcl='git clone'
 
 # Vim
 alias n='nvim $(fzf)'

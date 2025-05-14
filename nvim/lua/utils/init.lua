@@ -23,11 +23,3 @@ vim.api.nvim_set_keymap(
     ':lua ToggleHardMode()<CR>',
     { noremap = true, silent = true }
 )
-
--- add jinja2 filetypes
-vim.filetype.add({
-    extension = {
-        j2 = 'htmldjango', -- Use Jinja syntax for .j2 files
-        html_j2 = 'htmldjango', -- Map .html.j2 to HTML + Jinja syntax
-    },
-})

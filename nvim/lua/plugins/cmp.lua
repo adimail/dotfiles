@@ -194,7 +194,7 @@ function M.config()
         },
 
         -- Configure sources
-        sources = {
+        sources = cmp.config.sources({
             { name = 'nvim_lsp', priority = 50 }, -- LSP source
             { name = 'luasnip', priority = 100 }, -- Snippets source
             { name = 'path', priority = 99 }, -- Path completions
@@ -210,20 +210,27 @@ function M.config()
                     -- dict = '/usr/share/dict/words', -- Uncomment to specify dictionary path
                 },
             },
-        },
+        }),
     })
 
     -- Additional filetype-specific configurations
     cmp.setup.filetype({ 'handlebars', 'hbs' }, {
-        sources = {
+        sources = cmp.config.sources({
             { name = 'nvim_lsp' },
             { name = 'buffer' },
             { name = 'path' },
-        },
+        }),
     })
+
     cmp.setup.filetype('TelescopePrompt', { sources = {} })
+
+    -- Fixed configuration for markdown files - include LuaSnip
     cmp.setup.filetype({ 'vim', 'markdown' }, {
-        sources = {
+        sources = cmp.config.sources({
+            { name = 'luasnip', priority = 100 }, -- Add LuaSnip as first priority
+            { name = 'buffer', priority = 50 }, -- Buffer words are helpful
+            { name = 'path', priority = 99 }, -- Path completion for links
+            { name = 'nvim_lsp', priority = 50 }, -- LSP if you have a markdown language server
             {
                 name = 'look',
                 keyword_length = 5,
@@ -233,15 +240,16 @@ function M.config()
                     loud = true,
                 },
             },
-        },
+        }),
     })
 
     -- Command-line completion
     cmp.setup.cmdline(':', {
-        sources = { { name = 'cmdline', max_item_count = 10 } },
+        sources = cmp.config.sources({ { name = 'cmdline', max_item_count = 10 } }),
     })
+
     cmp.setup.cmdline('/', {
-        sources = { { name = 'buffer' } },
+        sources = cmp.config.sources({ { name = 'buffer' } }),
     })
 end
 

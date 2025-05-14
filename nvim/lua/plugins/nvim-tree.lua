@@ -217,6 +217,11 @@ function M.config()
                 color = '#708085',
                 name = 'Log',
             },
+            ['jinja2'] = {
+                icon = '',
+                color = '#E34F26',
+                name = 'HTML',
+            },
         },
     })
     --

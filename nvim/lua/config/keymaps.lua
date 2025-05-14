@@ -15,6 +15,16 @@ bind('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
 bind('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
 bind('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
 
+bind(
+    'n',
+    '<leader>z',
+    '<cmd>lua ToggleZenMode()<CR>',
+    vim.tbl_extend('force', opts, { desc = 'Toggle Zen Mode' })
+)
+
+-- errors
+bind('n', '<leader>xe', '<cmd>Trouble diagnostics toggle filter.severity=1<CR>', opts)
+
 -- Workspace Management
 bind('n', '<leader>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
 bind('n', '<leader>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)

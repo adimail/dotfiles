@@ -150,6 +150,8 @@ return {
                     'groovy',
                     'htmldjango',
                     'perl',
+                    'htmldjango',
+                    'jinja',
                 },
                 sync_install = false,
                 auto_install = false,

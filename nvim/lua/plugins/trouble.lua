@@ -33,6 +33,11 @@ local M = {
             '<cmd>Trouble qflist toggle<cr>',
             desc = 'Quickfix List (Trouble)',
         },
+        {
+            '<leader>xe',
+            '<cmd>Trouble diagnostics toggle filter.severity=1<cr>',
+            desc = 'Project Errors (Trouble)',
+        },
     },
 }
 

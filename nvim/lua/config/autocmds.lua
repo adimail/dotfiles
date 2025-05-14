@@ -181,6 +181,22 @@ end
 --     end,
 -- })
 
+-- Set filetype for Jinja templates
+local jinja_ft_augroup = vim.api.nvim_create_augroup('JinjaFiletypeSetup', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufNewFile', 'BufRead' }, {
+    pattern = {
+        '*.html.jinja2',
+        '*.jinja2.html',
+        '*.j2',
+        '*.jinja2',
+    },
+    group = jinja_ft_augroup,
+    callback = function()
+        vim.bo.filetype = 'htmldjango'
+        -- You could also try 'jinja.html' or just 'jinja' if 'htmldjango'
+    end,
+})
+
 -- go to last loc when opening a buffer
 vim.api.nvim_create_autocmd('BufReadPost', {
     callback = function()

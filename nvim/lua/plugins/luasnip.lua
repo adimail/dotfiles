@@ -1,3 +1,4 @@
+-- FILE: lua/plugins/luasnip.lua
 local M = {
     'L3MON4D3/LuaSnip',
     event = {
@@ -22,6 +23,8 @@ function M.config()
         update_events = { 'TextChanged', 'TextChangedI' },
         region_check_events = { 'CursorMoved', 'CursorMovedI', 'CursorHold' },
     })
+
+    luasnip.filetype_extend('markdown_inline', { 'markdown' })
 
     -- custom snippets
     require('luasnip.loaders.from_lua').load({ paths = { '~/.config/nvim/lua/snippets' } })
