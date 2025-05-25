@@ -11,7 +11,7 @@ local M = {
             desc = 'Flash Jump',
         },
         {
-            '<leader>ft',
+            '<space>',
             mode = { 'n' },
             function()
                 require('flash').treesitter()

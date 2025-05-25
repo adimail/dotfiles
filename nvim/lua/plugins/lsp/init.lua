@@ -157,6 +157,22 @@ function M.config()
         single_file_support = true,
     })
 
+    -- HTML LSP Settings
+    capabilities.textDocument.completion.completionItem.snippetSupport = true
+
+    nvim_lsp.html.setup({
+        capabilities = capabilities,
+        on_attach = on_attach,
+        filetypes = { 'html' },
+        settings = {
+            html = {
+                suggest = {
+                    html5 = true,
+                },
+            },
+        },
+    })
+
     -- Lua LSP Settings
     local settings = {
         Lua = {
@@ -262,6 +278,25 @@ function M.config()
                 },
             },
         },
+    })
+
+    -- Astro LSP Settings
+    nvim_lsp.astro.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'astro' }, -- Ensure .astro files are recognized
+        root_dir = nvim_lsp.util.root_pattern(
+            'astro.config.mjs',
+            'astro.config.js',
+            'astro.config.ts',
+            'package.json',
+            '.git'
+        ),
+        -- init_options = {
+        --    typescript = { -- If you need to specify a project-local TypeScript version
+        --        tsdk = vim.fn.getcwd() .. "/node_modules/typescript/lib"
+        --    }
+        -- },
     })
 
     -- Python LSP Settings

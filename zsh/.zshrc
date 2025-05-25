@@ -12,6 +12,7 @@ alias f='fzf'
 alias cls='clear'
 alias t='tmux'
 alias nv='nvim .'
+alias nva='source ./venv/bin/activate && nv'
 alias tls='t ls'
 alias sessionizer='~/scripts/sessionizer'
 alias gclt='~/scripts/gclt'
@@ -273,3 +274,6 @@ case ":$PATH:" in
 esac
 # pnpm end
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# bun completions
+[ -s "/Users/aditya/.bun/_bun" ] && source "/Users/aditya/.bun/_bun"

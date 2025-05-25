@@ -1,7 +1,7 @@
 local M = {
     'glepnir/lspsaga.nvim',
     event = 'BufRead',
-    ft = { 'go', 'lua', 'sh', 'python', 'perl' },
+    ft = { 'go', 'lua', 'sh', 'python', 'perl', 'astro' },
 }
 
 function M.config()
@@ -92,7 +92,7 @@ function M.config()
         },
         outline = {
             keys = {
-                jump = 'j',
+                jump = '<CR>',
                 quit = 'q',
                 up = '<Up>',
                 down = '<Down>',

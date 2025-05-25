@@ -112,7 +112,7 @@ bind(
 )
 
 -- Outline
-bind('n', '<leader>ol', '<cmd>Lspsaga outline<CR>', opts)
+bind('n', '<leader><space>', '<cmd>Lspsaga outline<CR>', opts)
 
 -- Diagnostics Display
 bind('n', '<leader>sl', '<cmd>Lspsaga show_line_diagnostics<CR>', opts)

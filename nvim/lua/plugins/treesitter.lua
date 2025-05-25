@@ -30,7 +30,7 @@ return {
     {
         'nvim-treesitter/nvim-treesitter-context',
         cmd = 'TSContextToggle',
-        ft = { 'lua', 'go' },
+        ft = { 'lua', 'go', 'astro' },
         config = function()
             require('treesitter-context').setup({
                 enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
@@ -152,6 +152,7 @@ return {
                     'perl',
                     'htmldjango',
                     'jinja',
+                    'astro',
                 },
                 sync_install = false,
                 auto_install = false,

@@ -1,7 +1,7 @@
 local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
-    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown' },
+    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown', 'html' },
     -- Uncomment below to bind a key for manual formatting
     -- keys = { { '<leader>ef', '<cmd>ConformFormat<cr>', desc = 'Format current file.' } },
 }
@@ -40,7 +40,7 @@ function M.config()
             markdown = { 'prettierd' },
 
             -- HTML, CSS, and SCSS use 'prettierd' as primary formatter
-            html = { 'djlint' },
+            html = { 'prettierd', 'prettier' },
             htmldjango = { 'djlint' },
 
             css = { 'prettierd', 'prettier' },

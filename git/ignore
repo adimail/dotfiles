@@ -1,0 +1,31 @@
+# macOS system files
+.DS_Store
+
+# env variables
+.env
+
+# Python virtual environments
+venv/
+env/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Python-related IDEs (like PyCharm, VSCode)
+.idea/
+.vscode/
+
+# Node.js dependencies
+node_modules/
+package-lock.json
+
+# Go build artifacts
+*.exe
+*.out
+*.test
+bin/
+obj/
+
+# Log files
+*.log

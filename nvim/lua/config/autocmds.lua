@@ -245,3 +245,93 @@ vim.api.nvim_create_autocmd('BufRead', {
         end
     end,
 })
+
+-- Autocommand group for Lspsaga outline auto-refresh
+local lspsaga_outline_augroup =
+    vim.api.nvim_create_augroup('LspsagaOutlineAutoRefresh', { clear = true })
+
+vim.api.nvim_create_autocmd('BufEnter', {
+    group = lspsaga_outline_augroup,
+    pattern = '*', -- Apply to all buffers initially, we'll filter inside
+    callback = function(args)
+        vim.schedule(function()
+            -- Get the buffer number we just entered
+            local current_bufnr = args.buf
+            if not vim.api.nvim_buf_is_valid(current_bufnr) then
+                return
+            end
+
+            -- Get filetype and buftype of the buffer entered
+            local current_ft = vim.bo[current_bufnr].filetype
+            local current_bt = vim.bo[current_bufnr].buftype
+
+            -- List of filetypes and buftypes to ignore (e.g., special windows)
+            -- Add any other filetypes/buftypes you want to exclude
+            local excluded_fts = {
+                'NvimTree',
+                'neo-tree',
+                'lspsagaoutline',
+                'fugitive',
+                'git',
+                'gitcommit',
+                'help',
+                'qf',
+                'terminal',
+                'toggleterm',
+                'lazy',
+                'alpha',
+                'dashboard',
+                'Trouble',
+                'spectre_panel',
+                'TelescopePrompt',
+                'undotree',
+            }
+            local excluded_bts = {
+                'nofile',
+                'nowrite',
+                'quickfix',
+                'terminal',
+                'prompt',
+                'help',
+            }
+
+            -- If the entered buffer is one of the excluded types, do nothing
+            if
+                vim.tbl_contains(excluded_fts, current_ft)
+                or vim.tbl_contains(excluded_bts, current_bt)
+            then
+                return
+            end
+
+            -- Check if the Lspsaga outline window is currently open and visible
+            local outline_win_is_open = false
+            for _, win_id in ipairs(vim.api.nvim_list_wins()) do
+                if vim.api.nvim_win_is_valid(win_id) then
+                    local win_bufnr = vim.api.nvim_win_get_buf(win_id)
+                    -- Check if the buffer in the window is valid and has the Lspsaga outline filetype
+                    if
+                        vim.api.nvim_buf_is_valid(win_bufnr)
+                        and vim.bo[win_bufnr].filetype == 'lspsagaoutline'
+                    then
+                        outline_win_is_open = true
+                        break
+                    end
+                end
+            end
+
+            if outline_win_is_open then
+                -- If the outline window is open, and we've entered a valid new code buffer,
+                -- re-trigger 'Lspsaga outline'. Lspsaga should be smart enough to
+                -- update its existing outline window with symbols from the new current_bufnr.
+                local success, err = pcall(vim.cmd, 'Lspsaga outline')
+                if not success then
+                    vim.notify(
+                        'Lspsaga: Failed to refresh outline for new buffer: '
+                            .. (err or 'unknown error'),
+                        vim.log.levels.WARN
+                    )
+                end
+            end
+        end)
+    end,
+})
