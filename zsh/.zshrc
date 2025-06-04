@@ -19,6 +19,7 @@ alias gclt='~/scripts/gclt'
 alias newproj='~/scripts/newproject'
 alias countdown='~/scripts/countdown'
 alias grepforllm='~/scripts/grepforllm'
+alias ff='~/scripts/ff.sh'
 
 #git alias
 alias gs='git status --short'
@@ -277,3 +278,6 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 # bun completions
 [ -s "/Users/aditya/.bun/_bun" ] && source "/Users/aditya/.bun/_bun"
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
