@@ -1,7 +1,7 @@
 local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
-    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown', 'html' },
+    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown', 'html', 'shfmt', 'sh' },
     -- Uncomment below to bind a key for manual formatting
     -- keys = { { '<leader>ef', '<cmd>ConformFormat<cr>', desc = 'Format current file.' } },
 }
@@ -58,6 +58,8 @@ function M.config()
 
             -- Catch-all: Trim trailing whitespace for all files
             ['_'] = { 'trim_whitespace' },
+
+            sh = { 'shfmt' },
         },
 
         -- Enable parallel formatting (optional for faster execution)

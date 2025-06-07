@@ -11,6 +11,7 @@ DEST_SCRIPTS_DIR="$DEST_DIR/scripts"
 DEST_GHOSTTY_DIR="$DEST_DIR/ghostty"
 DEST_CLANGD_DIR="$DEST_DIR/cland"
 DEST_GIT_DIR="$DEST_DIR/git"
+DEST_LAZYFFMPEG_DIR="$DEST_DIR/scripts/.lazyffmpeg"
 
 DEST_PROGRAMMINGSETUP_DIR="$DEST_DIR/programmingsetup"
 DEST_CODEFORCES_DIR="$DEST_PROGRAMMINGSETUP_DIR/codeforces"
@@ -28,6 +29,7 @@ SOURCE_GHOSTTY_CONFIG="$HOME/.config/ghostty/config"
 SOURCE_CLANGD="$HOME/.clangd"
 SOURCE_FORMAT_CLANGD="$HOME/.clang-format"
 SOURCE_GIT_CONFIG_DIR="$HOME/.config/git"
+SOURCE_LAZYFFMPEG_CONFIG_DIR="$HOME/.lazyffmpeg/"
 
 # Programming setup sources
 SOURCE_NEWCF="$HOME/personal/cf/newcf"
@@ -77,7 +79,7 @@ copy_and_log "$SOURCE_GHOSTTY_CONFIG" "$DEST_GHOSTTY_DIR/config"
 copy_and_log "$SOURCE_CLANGD" "$DEST_CLANGD_DIR/.clangd"
 copy_and_log "$SOURCE_FORMAT_CLANGD" "$DEST_CLANGD_DIR/.clang-format"
 copy_dir_and_log "$SOURCE_GIT_CONFIG_DIR" "$DEST_GIT_DIR"
-
+copy_dir_and_log "$SOURCE_LAZYFFMPEG_CONFIG_DIR" "$DEST_LAZYFFMPEG_DIR"
 
 ######################################
 # Codeforces Setup

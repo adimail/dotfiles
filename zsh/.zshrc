@@ -19,7 +19,7 @@ alias gclt='~/scripts/gclt'
 alias newproj='~/scripts/newproject'
 alias countdown='~/scripts/countdown'
 alias grepforllm='~/scripts/grepforllm'
-alias ff='~/scripts/ff.sh'
+alias ff='~/scripts/lazyffmpeg.sh'
 
 #git alias
 alias gs='git status --short'

@@ -30,6 +30,8 @@ search_paths=(
 	"$HOME/.config/"
 	"$HOME/.tmux/"
 	"$HOME/Documents/GitHub/"
+	"$HOME/Pictures/screenshots/"
+	"$HOME/.lazyffmpeg/"
 )
 
 if [[ $# -eq 1 ]]; then
