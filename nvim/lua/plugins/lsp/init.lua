@@ -456,6 +456,25 @@ function M.config()
         },
     })
 
+    -- OCaml LSP Settings
+    nvim_lsp.ocamllsp.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { 'ocamllsp' },
+        filetypes = {
+            'ocaml',
+            'ocaml.menhir',
+            'ocaml.interface',
+            'ocaml.ocamllex',
+            'reason',
+        },
+        root_dir = nvim_lsp.util.root_pattern('*.opam', 'esy.json', 'package.json', '.git'),
+        settings = {
+            codelens = { enable = true },
+            inlayHints = { enable = true },
+        },
+    })
+
     -- Ember LSP Settings (Handlebars templates)
     nvim_lsp.ember.setup({
         on_attach = on_attach,

@@ -2,6 +2,7 @@
 
 directories=(
 	"$HOME/personal/"
+	"$HOME/personal/minions/"
 	"$HOME/personal/tmp"
 	"$HOME/personal/college/"
 	"$HOME/personal/scrappers/"
@@ -13,7 +14,7 @@ directories=(
 
 base_directory=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory: ")
 
-base_directory=$(eval echo "$base_directory")  # Handles ~ expansion if fzf returns it
+base_directory=$(eval echo "$base_directory") # Handles ~ expansion if fzf returns it
 
 if [[ -z "$base_directory" ]]; then
 	echo "No directory selected. Exiting."

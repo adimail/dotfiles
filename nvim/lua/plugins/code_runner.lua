@@ -22,6 +22,7 @@ function M.config()
             c = 'gcc $file -o out && ./out',
             go = 'go run $file',
             java = 'javac $file && java $basename',
+            ocaml = 'eval $(opam env) && ocaml $file',
         },
     })
 end

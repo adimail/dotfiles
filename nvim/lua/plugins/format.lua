@@ -23,6 +23,9 @@ function M.config()
             -- Lua files use 'stylua' for formatting
             lua = { 'stylua' },
 
+            -- Ocaml
+            ocaml = { 'ocamlformat' },
+
             -- cpp formatters
             cpp = { 'clang-format' },
 

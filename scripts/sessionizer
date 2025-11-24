@@ -21,6 +21,7 @@ hydrate() {
 
 search_paths=(
 	"$HOME/personal/"
+	"$HOME/personal/minions/"
 	"$HOME/personal/experiment/"
 	"$HOME/personal/tmp/"
 	"$HOME/scripts/"
