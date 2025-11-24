@@ -26,13 +26,28 @@ return {
     s('quote', { t('> '), i(1, 'Blockquote') }),
 
     -- Unordered List
-    s('ul', { t('- '), i(1, 'List Item') }),
+    s('ul', {
+        t('- '),
+        i(1, 'List Item'),
+        t({ '', '- ' }),
+        i(0),
+    }),
 
     -- Ordered List
-    s('ol', { t('1. '), i(1, 'List Item') }),
+    s('ol', {
+        t('1. '),
+        i(1, 'List Item'),
+        t({ '', '1. ' }),
+        i(0),
+    }),
 
     -- Task List
-    s('task', { t('- [ ] '), i(1, 'Task Item') }),
+    s('task', {
+        t('- [ ] '),
+        i(1, 'Task Item'),
+        t({ '', '- [ ] ' }),
+        i(0),
+    }),
 
     -- Code Block
     s('code', {

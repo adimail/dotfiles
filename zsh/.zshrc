@@ -19,7 +19,18 @@ alias gclt='~/scripts/gclt'
 alias newproj='~/scripts/newproject'
 alias countdown='~/scripts/countdown'
 alias grepforllm='~/scripts/grepforllm'
+alias openvsc='~/scripts/openvsc'
 alias ff='~/scripts/lazyffmpeg.sh'
+
+# docker
+alias d='docker'
+alias di='docker images'
+alias dvls='docker volume ls'
+alias dstats='docker stats --no-stream'
+alias dc='docker-compose'
+alias dcd='docker-compose down'
+alias dcup='docker-compose up -d --build'
+
 
 #git alias
 alias gs='git status --short'
@@ -31,7 +42,7 @@ alias gac='git add . && git commit'
 alias gc='git commit'
 alias gp='git push'
 alias gu='git pull'
-alias gl='git log'
+alias gl="git log --graph --decorate --all --pretty=format:'%C(auto)%h%d %C(bold)%s%Creset %C(dim)(%an, %ad)%Creset' --date=local"
 alias gb='git branch'
 alias gi='git init'
 alias gcl='git clone'

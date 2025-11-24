@@ -1,0 +1,22 @@
+[
+  {
+    "dataType": "video",
+    "name": "Plugin: Compress Video, Remove Audio, 1080p Res (CRF18)",
+    "command": "ffmpeg -i \"$INPUT_FILE\" -vf scale=-2:1080 -c:v libx264 -crf 18 -preset medium -an \"$OUTPUT_FILE\""
+  },
+  {
+    "dataType": "video",
+    "name": "Plugin: Compress Video, Remove Audio, 1080p Res (CRF23)",
+    "command": "ffmpeg -i \"$INPUT_FILE\" -vf scale=-2:1080 -c:v libx264 -crf 23 -preset medium -an \"$OUTPUT_FILE\""
+  },
+  {
+    "dataType": "image",
+    "name": "Plugin: Convert Image to WebP (Lossless)",
+    "command": "ffmpeg -i \"$INPUT_FILE\" -c:v libwebp -lossless 1 \"$OUTPUT_FILE\""
+  },
+  {
+    "dataType": "audio",
+    "name": "Plugin: Boost Volume by 6dB",
+    "command": "ffmpeg -i \"$INPUT_FILE\" -af \"volume=6dB\" \"$OUTPUT_FILE\""
+  }
+]

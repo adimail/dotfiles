@@ -167,13 +167,13 @@ get_file_info() {
 # Helper: build a sorted list of all matching files, newest-first
 get_sorted_file_list() {
 	local predicates=("$@")
-	if find . -type f "${predicates[@]}" -printf '' &>/dev/null; then
-		find . -type f "${predicates[@]}" -printf '%T@ %p\n' |
+	if find . -maxdepth 1 -type f "${predicates[@]}" -printf '' &>/dev/null; then
+		find . -maxdepth 1 -type f "${predicates[@]}" -printf '%T@ %p\n' |
 			sort -nr |
 			cut -d' ' -f2- |
 			sed 's|^\./||'
 	else
-		find . -type f "${predicates[@]}" -print0 |
+		find . -maxdepth 1 -type f "${predicates[@]}" -print0 |
 			xargs -0 stat -f "%m %N" |
 			sort -nr |
 			awk '{ $1=""; sub(/^ /, ""); print }' |

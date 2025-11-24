@@ -27,6 +27,7 @@ search_paths=(
 	"$HOME/Downloads/"
 	"$HOME/hackathons/"
 	"$HOME/work/"
+	"$HOME/work/ACM/"
 	"$HOME/.config/"
 	"$HOME/.tmux/"
 	"$HOME/Documents/GitHub/"
