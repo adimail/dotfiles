@@ -9,7 +9,8 @@ M.tools = {
     'luacheck',
     'shellcheck',
     'shfmt',
-	'lua-language-server',
+    'lua-language-server',
+    'typescript-language-server',
 }
 
 function M.check()

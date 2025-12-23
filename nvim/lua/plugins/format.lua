@@ -1,7 +1,21 @@
 local M = {
     'stevearc/conform.nvim',
     event = 'VeryLazy',
-    ft = { 'lua', 'go', 'yaml', 'javascript', 'python', 'json', 'markdown', 'html', 'shfmt', 'sh' },
+    ft = {
+        'lua',
+        'go',
+        'yaml',
+        'javascript',
+        'typescript',
+        'javascriptreact',
+        'typescriptreact',
+        'python',
+        'json',
+        'markdown',
+        'html',
+        'shfmt',
+        'sh',
+    },
     -- Uncomment below to bind a key for manual formatting
     -- keys = { { '<leader>ef', '<cmd>ConformFormat<cr>', desc = 'Format current file.' } },
 }
@@ -35,6 +49,8 @@ function M.config()
             -- JavaScript/TypeScript files use 'prettierd', fallback to 'prettier' if unavailable
             javascript = { 'prettierd', 'prettier' },
             typescript = { 'prettierd', 'prettier' },
+            javascriptreact = { 'prettierd', 'prettier' },
+            typescriptreact = { 'prettierd', 'prettier' },
 
             -- JSON files use 'jq' for lightweight formatting
             json = { 'jq' },

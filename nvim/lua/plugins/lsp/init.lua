@@ -22,6 +22,12 @@ function M.config()
         if client.server_capabilities.documentSymbolProvider then
             navic.attach(client, bufnr)
         end
+
+        -- Disable formatting for ts_ls if you use conform.nvim (recommended)
+        if client.name == 'ts_ls' then
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
+        end
     end
 
     -- nvim-cmp supports additional completion capabilities
@@ -67,7 +73,6 @@ function M.config()
         'dockerls',
         'marksman',
         'ansiblels',
-        'ts_ls',
         'jdtls',
     }
 
@@ -114,7 +119,25 @@ function M.config()
         },
     })
 
-    -- YAML LSP Settings
+    -- TypeScript/JavaScript LSP Settings (ts_ls)
+    -- This replaces the old ts_ls setup and ensures React/JSX is handled correctly.
+    nvim_lsp.ts_ls.setup({
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'javascript', 'typescript', 'javascriptreact', 'typescriptreact' },
+        root_dir = nvim_lsp.util.root_pattern(
+            'package.json',
+            'tsconfig.json',
+            'jsconfig.json',
+            '.git'
+        ),
+        settings = {
+            ['typescript.preferences.jsx.jsxRuntime'] = 'react-jsx',
+            ['javascript.preferences.jsx.jsxRuntime'] = 'react-jsx',
+        },
+    })
+
+    -- YAML LSP Settings (No change needed)
     nvim_lsp.yamlls.setup({
         on_attach = on_attach,
         capabilities = capabilities,
@@ -236,24 +259,6 @@ function M.config()
     end
     nvim_lsp.nginx_ls.setup({})
 
-    -- SQL LSP Settings (commented out)
-    -- nvim_lsp.sqls.setup{
-    --   settings = {
-    --     sqls = {
-    --       connections = {
-    --         {
-    --           driver = 'mysql',
-    --           dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
-    --         },
-    --         {
-    --           driver = 'postgresql',
-    --           dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
-    --         },
-    --       },
-    --     },
-    --   },
-    -- }
-
     -- Perl LSP Settings
     nvim_lsp.perlpls.setup({
         on_attach = on_attach,
@@ -343,23 +348,6 @@ function M.config()
             },
             scss = {
                 validate = true,
-            },
-        },
-    })
-
-    -- TypeScript/JavaScript LSP Settings (ts_ls)
-    nvim_lsp.ts_ls.setup({
-        on_attach = on_attach,
-        capabilities = capabilities,
-        root_dir = nvim_lsp.util.root_pattern(
-            'package.json',
-            'tsconfig.json',
-            'jsconfig.json',
-            '.git'
-        ),
-        settings = {
-            completions = {
-                completeFunctionCalls = true,
             },
         },
     })

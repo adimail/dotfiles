@@ -21,6 +21,7 @@ alias countdown='~/scripts/countdown'
 alias grepforllm='~/scripts/grepforllm'
 alias openvsc='~/scripts/openvsc'
 alias ff='~/scripts/lazyffmpeg.sh'
+alias mediadownloader='~/scripts/mediadownloader'
 
 # docker
 alias d='docker'
@@ -301,3 +302,5 @@ eval "$(pyenv init -)"
 # This section can be safely removed at any time if needed.
 [[ ! -r '/Users/aditya/.opam/opam-init/init.zsh' ]] || source '/Users/aditya/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 # END opam configuration
+export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:$HOME/go/bin

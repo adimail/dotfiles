@@ -30,7 +30,7 @@ return {
     {
         'nvim-treesitter/nvim-treesitter-context',
         cmd = 'TSContextToggle',
-        ft = { 'lua', 'go', 'astro' },
+        ft = { 'lua', 'go', 'astro', 'typescript', 'typescriptreact' }, -- Added TS/TSX filetypes
         config = function()
             require('treesitter-context').setup({
                 enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
