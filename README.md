@@ -29,6 +29,12 @@ It includes:
   - Other utilities for project management and development workflows.
 - Programming Setup (`programmingsetup/`): Templates and scripts for competitive programming (Codeforces) and LeetCode.
 
+To download just the nvim directory from your repository, use this command:
+
+```
+npx gitpick adimail/dotfiles/nvim
+```
+
 ## SS
 
 ![Screenshot](assets/ss1.png)
