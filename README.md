@@ -32,7 +32,7 @@ It includes:
 To download just the nvim directory from your repository, use this command:
 
 ```
-npx gitpick adimail/dotfiles/nvim
+npx gitpick https://github.com/adimail/dotfiles/tree/main/nvim
 ```
 
 ## SS
