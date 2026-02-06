@@ -22,6 +22,7 @@ alias grepforllm='~/scripts/grepforllm'
 alias openvsc='~/scripts/openvsc'
 alias ff='~/scripts/lazyffmpeg.sh'
 alias mediadownloader='~/scripts/mediadownloader'
+alias adimail='~/.adimail/adimail'
 
 # docker
 alias d='docker'
@@ -304,3 +305,5 @@ eval "$(pyenv init -)"
 # END opam configuration
 export PATH=$PATH:$HOME/go/bin
 export PATH=$PATH:$HOME/go/bin
+
+export PATH="/Library/TeX/texbin:$PATH"
