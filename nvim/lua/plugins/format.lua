@@ -37,6 +37,9 @@ function M.config()
             -- Lua files use 'stylua' for formatting
             lua = { 'stylua' },
 
+            -- rust
+            rust = { 'rustfmt' },
+
             -- Ocaml
             ocaml = { 'ocamlformat' },
 

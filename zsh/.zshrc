@@ -307,3 +307,6 @@ export PATH=$PATH:$HOME/go/bin
 export PATH=$PATH:$HOME/go/bin
 
 export PATH="/Library/TeX/texbin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/aditya/.antigravity/antigravity/bin:$PATH"

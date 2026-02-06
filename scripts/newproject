@@ -8,8 +8,10 @@ directories=(
 	"$HOME/personal/scrappers/"
 	"$HOME/scripts/"
 	"$HOME/work/"
+	"$HOME/work/ACM/"
 	"$HOME/Documents/GitHub/"
 	"$HOME/hackathons/"
+	"$HOME/personal/experiment/python"
 )
 
 base_directory=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory: ")
