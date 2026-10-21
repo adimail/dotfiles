@@ -49,6 +49,9 @@ function M.config()
             -- Go files run 'goimports' and 'gofumpt' in sequence
             go = { 'goimports', 'gofumpt' },
 
+			-- JAVA
+			java = { 'google-java-format' },
+
             -- JavaScript/TypeScript files use 'prettierd', fallback to 'prettier' if unavailable
             javascript = { 'prettierd', 'prettier' },
             typescript = { 'prettierd', 'prettier' },

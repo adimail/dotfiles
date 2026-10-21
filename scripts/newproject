@@ -12,6 +12,7 @@ directories=(
 	"$HOME/Documents/GitHub/"
 	"$HOME/hackathons/"
 	"$HOME/personal/experiment/python"
+	"$HOME/personal/experiment"
 )
 
 base_directory=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory: ")

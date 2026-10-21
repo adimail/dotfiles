@@ -80,6 +80,13 @@ function M.config()
         return ''
     end
 
+	local function instant_status()
+        if vim.g.instant_status then
+            return '⚡ pair'
+        end
+        return ''
+    end
+
     require('lualine').setup({
         options = {
             icons_enabled = true,
@@ -120,6 +127,7 @@ function M.config()
                     icon_only = false, -- Display only icon for filetype
                 },
                 py_venv_status,
+				instant_status
             },
             lualine_y = {
                 -- "progress",

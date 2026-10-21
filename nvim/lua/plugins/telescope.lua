@@ -63,6 +63,13 @@ return {
             end,
             desc = 'Live grep file content',
         },
+		{
+			'<leader>fk',
+			function()
+				require('telescope.builtin').keymaps()
+			end,
+			desc = 'Search Keymaps',
+		},
         {
             '<leader>ob',
             function()

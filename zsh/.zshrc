@@ -22,7 +22,44 @@ alias grepforllm='~/scripts/grepforllm'
 alias openvsc='~/scripts/openvsc'
 alias ff='~/scripts/lazyffmpeg.sh'
 alias mediadownloader='~/scripts/mediadownloader'
-alias adimail='~/.adimail/adimail'
+
+function adimail {
+    local session_name="adimail"
+    local dir="$HOME/personal/adimail"
+
+    if [[ ! -d "$dir" ]]; then
+        echo "Error: Directory $dir does not exist." >&2
+        return 1
+    fi
+
+    # If already inside the adimail session, just run it directly
+    if [[ -n "$TMUX" ]] && [[ "$(tmux display-message -p '#S' 2>/dev/null)" == "$session_name" ]]; then
+        "$dir/adimail" "$@"
+        return $?
+    fi
+
+    # Kill old session if new arguments/flags are passed so fresh flags apply
+    if [[ $# -gt 0 ]] && tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux kill-session -t "$session_name"
+    fi
+
+    # Create session with an interactive shell and send the command
+    if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux new-session -ds "$session_name" -c "$dir"
+        if [[ $# -gt 0 ]]; then
+            tmux send-keys -t "$session_name" "./adimail ${(q)@}" C-m
+        else
+            tmux send-keys -t "$session_name" "./adimail" C-m
+        fi
+    fi
+
+    # Attach or switch to the session
+    if [[ -n "$TMUX" ]]; then
+        tmux switch-client -t "$session_name"
+    else
+        tmux attach-session -t "$session_name"
+    fi
+}
 
 # docker
 alias d='docker'
@@ -32,6 +69,12 @@ alias dstats='docker stats --no-stream'
 alias dc='docker-compose'
 alias dcd='docker-compose down'
 alias dcup='docker-compose up -d --build'
+
+# Local scripts
+alias pxa="source ../venv/bin/activate"
+# I have a folder ~/python and there are multiple mini scripts inside
+# sessionizer can also open its child folders but I have the venv for the whole python project in root
+# this will allow me to activate the env in single command
 
 
 #git alias
@@ -48,9 +91,6 @@ alias gl="git log --graph --decorate --all --pretty=format:'%C(auto)%h%d %C(bold
 alias gb='git branch'
 alias gi='git init'
 alias gcl='git clone'
-
-# Vim
-alias n='nvim $(fzf)'
 
 # Node
 alias ni='npm install'
@@ -161,6 +201,29 @@ function notebook {
 	jupyter lab
 }
 
+cache() {
+  local dir="$HOME/personal/notes/Cache"
+  local session_name="cache"
+
+  open "obsidian://open?path=$dir"
+
+  if [[ -z "$TMUX" ]]; then
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+      tmux attach-session -t "$session_name"
+    else
+      tmux new-session -s "$session_name" -c "$dir"
+      tmux send-keys -t "$session_name" "opencode ." C-m
+    fi
+  else
+    if ! tmux has-session -t "$session_name" 2>/dev/null; then
+      tmux new-session -ds "$session_name" -c "$dir"
+      tmux send-keys -t "$session_name" "opencode ." C-m
+    fi
+    tmux switch-client -t "$session_name"
+  fi
+
+}
+
 function writenote {
     # Get current date details
     month=$(date '+%b' | tr '[:upper:]' '[:lower:]')
@@ -198,6 +261,26 @@ function writenote {
         tmux switch-client -t "$session_name"
         tmux send-keys -t "$session_name" "nvim $fileName" C-m
     fi
+}
+
+function cnp {
+    file="$HOME/personal/notes/tmp/clipboard.md"
+    workdir="$HOME/notes"
+    session_name="notes"
+
+    mkdir -p "$(dirname "$file")"
+
+    if tmux has-session -t "$session_name" 2>/dev/null; then
+        if [[ -z "$TMUX" ]]; then
+            tmux attach -t "$session_name"
+        else
+            tmux switch-client -t "$session_name"
+        fi
+    else
+        tmux new-session -ds "$session_name" -c "$workdir"
+    fi
+
+    tmux new-window -t "$session_name" -c "$workdir" "nvim $file"
 }
 
 # Kill tmux session by name
@@ -268,7 +351,7 @@ function cursor {
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 # perl
-source ${HOME}/perl5/perlbrew/etc/bashrc
+# source ${HOME}/perl5/perlbrew/etc/bashrc
 
 PATH="/Users/aditya/perl5/bin${PATH:+:${PATH}}"; export PATH;
 PERL5LIB="/Users/aditya/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
@@ -277,7 +360,7 @@ PERL_MB_OPT="--install_base \"/Users/aditya/perl5\""; export PERL_MB_OPT;
 PERL_MM_OPT="INSTALL_BASE=/Users/aditya/perl5"; export PERL_MM_OPT;
 
 # JAVA
-export JAVA_HOME=$(/usr/libexec/java_home -v 23.0.2)
+export JAVA_HOME=$(/usr/libexec/java_home -v 25.0.1)
 export PATH=$JAVA_HOME/bin:$PATH
 
 # pnpm
@@ -291,9 +374,9 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 # bun completions
 [ -s "/Users/aditya/.bun/_bun" ] && source "/Users/aditya/.bun/_bun"
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+# export PYENV_ROOT="$HOME/.pyenv"
+# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+# eval "$(pyenv init -)"
 
 
 # BEGIN opam configuration
@@ -307,6 +390,20 @@ export PATH=$PATH:$HOME/go/bin
 export PATH=$PATH:$HOME/go/bin
 
 export PATH="/Library/TeX/texbin:$PATH"
+export PATH="/Users/aditya/.bun/bin:$PATH"
 
 # Added by Antigravity
 export PATH="/Users/aditya/.antigravity/antigravity/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+mkdir -p "$NVM_DIR"
+source $(brew --prefix nvm)/nvm.sh
+export PATH=/Library/TeX/texbin:$PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+eval "$(rbenv init - zsh)"
+
+# opencode
+export PATH=/Users/aditya/.opencode/bin:$PATH
+
+unset zle_bracketed_paste

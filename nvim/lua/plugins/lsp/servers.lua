@@ -7,7 +7,6 @@ return {
     dockerls = {},
     marksman = {},
     ansiblels = {},
-    jdtls = { root_dir = util.root_pattern('pom.xml', 'gradle.build', '.git') },
     ocamllsp = { root_dir = util.root_pattern('*.opam', 'esy.json', 'package.json', '.git') },
 
     -- Go

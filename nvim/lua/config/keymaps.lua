@@ -23,6 +23,9 @@ bind('n', '<leader>q', vim.diagnostic.setloclist, opts)
 bind('n', '<leader>ld', vim.diagnostic.setloclist, opts)
 bind('n', '<leader>qd', vim.diagnostic.setqflist, opts)
 
+bind('n', '<leader>tc', '<cmd>TSContextToggle<CR>', { desc = 'Toggle Treesitter Context' })
+bind('n', '<leader>nt', '<cmd>NvimTreeToggle<CR>', { desc = 'NvimTree Toggle' })
+
 bind('n', 'u', '<CMD>undo<CR>', opts)
 bind('n', '<C-r>', '<CMD>redo<CR>', opts)
 bind('x', 'p', '"_dP', opts)
