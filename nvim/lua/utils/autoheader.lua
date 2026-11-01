@@ -1,7 +1,3 @@
-vim.cmd([[
-autocmd BufNewFile *.sh,*.py lua SetTitle()
-]])
-
 function SetTitle()
     if vim.fn.expand('%:e') == 'sh' then
         vim.fn.setline(1, '#!/bin/bash')
@@ -10,6 +6,7 @@ function SetTitle()
     end
 end
 
-vim.cmd([[
-autocmd BufNewFile * normal G
-]])
+vim.api.nvim_create_autocmd('BufNewFile', {
+    pattern = { '*.sh', '*.py' },
+    callback = SetTitle,
+})

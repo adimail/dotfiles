@@ -4,16 +4,17 @@ fi
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
-
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-# Aliases
 alias f='fzf'
 alias cls='clear'
+alias cr='clear'
 alias t='tmux'
+alias tls='t ls'
 alias nv='nvim .'
 alias nva='source ./venv/bin/activate && nv'
-alias tls='t ls'
+alias pxa="source ../venv/bin/activate"
+
 alias sessionizer='~/scripts/sessionizer'
 alias gclt='~/scripts/gclt'
 alias newproj='~/scripts/newproject'
@@ -23,45 +24,6 @@ alias openvsc='~/scripts/openvsc'
 alias ff='~/scripts/lazyffmpeg.sh'
 alias mediadownloader='~/scripts/mediadownloader'
 
-function adimail {
-    local session_name="adimail"
-    local dir="$HOME/personal/adimail"
-
-    if [[ ! -d "$dir" ]]; then
-        echo "Error: Directory $dir does not exist." >&2
-        return 1
-    fi
-
-    # If already inside the adimail session, just run it directly
-    if [[ -n "$TMUX" ]] && [[ "$(tmux display-message -p '#S' 2>/dev/null)" == "$session_name" ]]; then
-        "$dir/adimail" "$@"
-        return $?
-    fi
-
-    # Kill old session if new arguments/flags are passed so fresh flags apply
-    if [[ $# -gt 0 ]] && tmux has-session -t "$session_name" 2>/dev/null; then
-        tmux kill-session -t "$session_name"
-    fi
-
-    # Create session with an interactive shell and send the command
-    if ! tmux has-session -t "$session_name" 2>/dev/null; then
-        tmux new-session -ds "$session_name" -c "$dir"
-        if [[ $# -gt 0 ]]; then
-            tmux send-keys -t "$session_name" "./adimail ${(q)@}" C-m
-        else
-            tmux send-keys -t "$session_name" "./adimail" C-m
-        fi
-    fi
-
-    # Attach or switch to the session
-    if [[ -n "$TMUX" ]]; then
-        tmux switch-client -t "$session_name"
-    else
-        tmux attach-session -t "$session_name"
-    fi
-}
-
-# docker
 alias d='docker'
 alias di='docker images'
 alias dvls='docker volume ls'
@@ -70,14 +32,6 @@ alias dc='docker-compose'
 alias dcd='docker-compose down'
 alias dcup='docker-compose up -d --build'
 
-# Local scripts
-alias pxa="source ../venv/bin/activate"
-# I have a folder ~/python and there are multiple mini scripts inside
-# sessionizer can also open its child folders but I have the venv for the whole python project in root
-# this will allow me to activate the env in single command
-
-
-#git alias
 alias gs='git status --short'
 alias G='lazygit'
 alias gitl="git log --graph --decorate --all --pretty=format:'%C(auto)%h%d %C(#888888)(%an; %ar)%Creset %s'"
@@ -92,52 +46,24 @@ alias gb='git branch'
 alias gi='git init'
 alias gcl='git clone'
 
-# Node
 alias ni='npm install'
 alias nd='npm run dev'
 alias ns='npm run start'
 alias nb='npm run build'
 
-# Other
-alias cr='clear'
-alias c='cd $(fd --type directory | fzf)'
-
-# Python
-export PATH=$HOME/Library/Python/3.9/bin:$PATH
+alias c='zi'
 
 setopt interactive_comments
 setopt autocd
 setopt inc_append_history
 
-# Basic auto/tab complete:
-autoload -U compinit
 zstyle ':completion:*' menu select
-zmodload zsh/complist
-compinit
 _comp_options+=(globdots)
 
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-# export PATH="$HOME/.zig:$PATH"
-# export PATH="/usr/local/opt/tcl-tk/bin:$PATH"
-
 export ZSH="$HOME/.oh-my-zsh"
-export PATH="/Applications/MiKTeX Console.app/Contents/Resources/miktex/bin:$PATH"
-
-
 ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
 DISABLE_MAGIC_FUNCTIONS="true"
 ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 COMPLETION_WAITING_DOTS="true"
 HIST_STAMPS="dd.mm.yyyy"
 plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search)
@@ -145,19 +71,11 @@ plugins=(git zsh-autosuggestions zsh-syntax-highlighting web-search)
 source $ZSH/oh-my-zsh.sh
 source <(fzf --zsh)
 
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
   export EDITOR='mvim'
 fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 function whereis {
     command -v "$1"
@@ -166,11 +84,11 @@ function whereis {
 function srv() {
     local port=${1:-3000}
     if lsof -iTCP:$port -sTCP:LISTEN &>/dev/null; then
-        echo "Error: Port $port is already in use."
+        echo "Error: Port $port is already in use." >&2
         return 1
     fi
     echo "Starting Python HTTP server on port $port..."
-    python3 -m http.server $port
+    python3 -m http.server "$port"
 }
 
 function sol() {
@@ -192,151 +110,28 @@ function sol() {
     if [[ -f "$file" ]]; then
         g++ -std=c++11 "$file" -o out && ./out
     else
-        echo "Error: File '$file' not found."
+        echo "Error: File '$file' not found." >&2
     fi
 }
 
 function notebook {
-	cd ~/notes/notebooks
-	jupyter lab
+    cd ~/notes/notebooks && jupyter lab
 }
 
-cache() {
-  local dir="$HOME/personal/notes/Cache"
-  local session_name="cache"
-
-  open "obsidian://open?path=$dir"
-
-  if [[ -z "$TMUX" ]]; then
-    if tmux has-session -t "$session_name" 2>/dev/null; then
-      tmux attach-session -t "$session_name"
-    else
-      tmux new-session -s "$session_name" -c "$dir"
-      tmux send-keys -t "$session_name" "opencode ." C-m
-    fi
-  else
-    if ! tmux has-session -t "$session_name" 2>/dev/null; then
-      tmux new-session -ds "$session_name" -c "$dir"
-      tmux send-keys -t "$session_name" "opencode ." C-m
-    fi
-    tmux switch-client -t "$session_name"
-  fi
-
-}
-
-function writenote {
-    # Get current date details
-    month=$(date '+%b' | tr '[:upper:]' '[:lower:]')
-    date=$(date '+%d')
-    year=$(date '+%Y')
-
-    # Define directory and file paths
-    dirName="${month}${year}"
-    dirPath="$HOME/personal/notes/self/$dirName"
-    fileName="${date}${month}.md"
-
-    # Ensure the directory exists
-    mkdir -p "$dirPath"
-
-    # Define tmux session name
-    session_name="notes"
-
-    if [[ -z "$TMUX" ]]; then
-        # Not inside tmux, check if the session exists
-        if tmux has-session -t "$session_name" 2>/dev/null; then
-            tmux attach-session -t "$session_name"
-        else
-            # Create a new session and open the note
-            tmux new-session -s "$session_name" -c "$dirPath" -d
-            tmux send-keys -t "$session_name" "nvim $fileName" C-m
-            tmux attach-session -t "$session_name"
-        fi
-    else
-        # Already inside a tmux session
-        if ! tmux has-session -t "$session_name" 2>/dev/null; then
-            # Create a new detached session
-            tmux new-session -ds "$session_name" -c "$dirPath"
-        fi
-        # Open the note in the existing session
-        tmux switch-client -t "$session_name"
-        tmux send-keys -t "$session_name" "nvim $fileName" C-m
-    fi
-}
-
-function cnp {
-    file="$HOME/personal/notes/tmp/clipboard.md"
-    workdir="$HOME/notes"
-    session_name="notes"
-
-    mkdir -p "$(dirname "$file")"
-
-    if tmux has-session -t "$session_name" 2>/dev/null; then
-        if [[ -z "$TMUX" ]]; then
-            tmux attach -t "$session_name"
-        else
-            tmux switch-client -t "$session_name"
-        fi
-    else
-        tmux new-session -ds "$session_name" -c "$workdir"
-    fi
-
-    tmux new-window -t "$session_name" -c "$workdir" "nvim $file"
-}
-
-# Kill tmux session by name
 tks() {
   if [[ -z "$1" ]]; then
-    echo "Please provide a session name."
+    echo "Please provide a session name." >&2
     return 1
   fi
-
   tmux kill-session -t "$1"
 }
 
-# Attach to tmux session by name
 ta() {
   if [[ -z "$1" ]]; then
-    echo "Please provide a session name to attach to."
+    echo "Please provide a session name to attach to." >&2
     return 1
   fi
-
   tmux attach-session -t "$1"
-}
-
-# Function: tlogs
-# Usage:
-#   tlogs             - Opens the base logs directory.
-#   tlogs [subdir]    - Opens the specified subdirectory under ~/personal/logs/tmux.
-#   tlogs -ui         - Runs python3 ~/personal/logs/tmux/run.py.
-tlogs() {
-    local base_dir="$HOME/personal/logs/tmux"
-
-    # Ensure no more than one argument is provided.
-    if [[ $# -gt 1 ]]; then
-        echo "Usage: tlogs [subdirectory]" >&2
-        return 1
-    fi
-
-    # If the argument is exactly "-ui", run the Python script.
-    if [[ $# -eq 1 && "$1" == "-ui" ]]; then
-        python3 "$base_dir/run.py"
-        return $?
-    fi
-
-    # Determine the target directory: either base or base/subdirectory.
-    local target_dir="$base_dir"
-    if [[ $# -eq 1 ]]; then
-        target_dir="$base_dir/$1"
-    fi
-
-    # Check if the target directory exists.
-    if [[ -d "$target_dir" ]]; then
-        open "$target_dir"
-        echo "Opening: $target_dir"
-    else
-        echo "Error: Directory '$target_dir' does not exist." >&2
-        return 2
-    fi
 }
 
 tk0() {
@@ -347,63 +142,39 @@ function cursor {
   open -a "/Applications/Cursor.app" "$@"
 }
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+export PATH="/Users/aditya/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="/Users/aditya/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="/Users/aditya/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"/Users/aditya/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=/Users/aditya/perl5"
 
-# perl
-# source ${HOME}/perl5/perlbrew/etc/bashrc
+if [[ -z "$JAVA_HOME" ]]; then
+    export JAVA_HOME=$(/usr/libexec/java_home -v 25.0.1 2>/dev/null)
+fi
+[[ -n "$JAVA_HOME" ]] && export PATH="$JAVA_HOME/bin:$PATH"
 
-PATH="/Users/aditya/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/Users/aditya/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/aditya/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/aditya/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/aditya/perl5"; export PERL_MM_OPT;
-
-# JAVA
-export JAVA_HOME=$(/usr/libexec/java_home -v 25.0.1)
-export PATH=$JAVA_HOME/bin:$PATH
-
-# pnpm
 export PNPM_HOME="/Users/aditya/Library/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-# pnpm end
+
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-# bun completions
 [ -s "/Users/aditya/.bun/_bun" ] && source "/Users/aditya/.bun/_bun"
-# export PYENV_ROOT="$HOME/.pyenv"
-# command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
 
-
-# BEGIN opam configuration
-# This is useful if you're using opam as it adds:
-#   - the correct directories to the PATH
-#   - auto-completion for the opam binary
-# This section can be safely removed at any time if needed.
-[[ ! -r '/Users/aditya/.opam/opam-init/init.zsh' ]] || source '/Users/aditya/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
-# END opam configuration
-export PATH=$PATH:$HOME/go/bin
-export PATH=$PATH:$HOME/go/bin
-
+export PATH="$HOME/go/bin:$PATH"
 export PATH="/Library/TeX/texbin:$PATH"
 export PATH="/Users/aditya/.bun/bin:$PATH"
-
-# Added by Antigravity
 export PATH="/Users/aditya/.antigravity/antigravity/bin:$PATH"
-
-export NVM_DIR="$HOME/.nvm"
-mkdir -p "$NVM_DIR"
-source $(brew --prefix nvm)/nvm.sh
-export PATH=/Library/TeX/texbin:$PATH
+export PATH="/Applications/MiKTeX Console.app/Contents/Resources/miktex/bin:$PATH"
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/.local/bin:$PATH"
-eval "$(rbenv init - zsh)"
-
-# opencode
-export PATH=/Users/aditya/.opencode/bin:$PATH
+export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="/Users/aditya/.opencode/bin:$PATH"
+export PATH="/Users/aditya/scripts:$PATH"
 
 unset zle_bracketed_paste
+eval "$(zoxide init zsh)"
+
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

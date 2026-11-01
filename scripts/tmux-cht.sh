@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-selected=$(cat ~/scripts/tmux-cht-languages ~/scripts/tmux-cht-commands | fzf)
-if [[ -z $selected ]]; then
-	exit 0
-fi
+
+source "$HOME/scripts/config.sh"
+
+selected=$(cat "$CHT_LANGUAGES" "$CHT_COMMANDS" | fzf)
+[[ -z "$selected" ]] && exit 0
 
 read -r -p "Enter Query: " query
 
-if grep -qs "$selected" ~/.tmux-cht-languages; then
+if grep -qs "$selected" "$CHT_LANGUAGES"; then
 	query=$(echo "$query" | tr ' ' '+')
 	tmux neww bash -c "curl cht.sh/$selected/$query; echo 'Press Enter to close'; read; tmux kill-window"
 else

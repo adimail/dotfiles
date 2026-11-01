@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+session_name="adimail"
+dir="$HOME/personal/adimail"
+
+if [[ ! -d "$dir" ]]; then
+	echo "Error: Directory $dir does not exist." >&2
+	exit 1
+fi
+
+if [[ -n "$TMUX" ]] && [[ "$(tmux display-message -p '#S' 2>/dev/null)" == "$session_name" ]]; then
+	exec "$dir/adimail" "$@"
+fi
+
+if [[ $# -gt 0 ]] && tmux has-session -t "$session_name" 2>/dev/null; then
+	tmux kill-session -t "$session_name"
+fi
+
+if ! tmux has-session -t "$session_name" 2>/dev/null; then
+	tmux new-session -ds "$session_name" -c "$dir"
+	if [[ $# -gt 0 ]]; then
+		tmux send-keys -t "$session_name" "./adimail $*" C-m
+	else
+		tmux send-keys -t "$session_name" "./adimail" C-m
+	fi
+fi
+
+if [[ -n "$TMUX" ]]; then
+	tmux switch-client -t "$session_name"
+else
+	tmux attach-session -t "$session_name"
+fi

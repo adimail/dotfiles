@@ -11,8 +11,18 @@ return {
         { '<leader>gd', '<cmd>Gitsigns diffthis<CR>', desc = 'Git Diff' },
     },
     opts = {
-        current_line_blame = true,
-        current_line_blame_opts = { delay = 0 },
+        signs = {
+            add = { text = '▎' },
+            change = { text = '▎' },
+            delete = { text = '' },
+            topdelete = { text = '' },
+            changedelete = { text = '▎' },
+            untracked = { text = '┆' },
+        },
+        current_line_blame = false,
+        current_line_blame_opts = {
+            delay = 1000,
+        },
         current_line_blame_formatter = '      <author>, <author_time:%R> - <summary>',
     },
 }

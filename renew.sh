@@ -1,97 +1,192 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-DEST_DIR=$(pwd)
+set -euo pipefail
 
-DEST_NEOFETCH_DIR="$DEST_DIR/neofetch"
-DEST_NVIM_DIR="$DEST_DIR/nvim"
-DEST_TMUX_DIR="$DEST_DIR/tmux"
-DEST_ZSH_DIR="$DEST_DIR/zsh"
-DEST_HTOP_DIR="$DEST_DIR/htop"
-DEST_SCRIPTS_DIR="$DEST_DIR/scripts"
-DEST_GHOSTTY_DIR="$DEST_DIR/ghostty"
-DEST_CLANGD_DIR="$DEST_DIR/cland"
-DEST_GIT_DIR="$DEST_DIR/git"
-DEST_LAZYFFMPEG_DIR="$DEST_DIR/scripts/.lazyffmpeg"
+SCRIPT_DIR="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+REPO_ROOT="$SCRIPT_DIR"
 
-DEST_PROGRAMMINGSETUP_DIR="$DEST_DIR/programmingsetup"
-DEST_CODEFORCES_DIR="$DEST_PROGRAMMINGSETUP_DIR/codeforces"
-DEST_LEETCODE_DIR="$DEST_PROGRAMMINGSETUP_DIR/leetcode"
+DRY_RUN=0
 
-mkdir -p "$DEST_NEOFETCH_DIR" "$DEST_NVIM_DIR" "$DEST_TMUX_DIR" "$DEST_ZSH_DIR" "$DEST_HTOP_DIR" "$DEST_SCRIPTS_DIR" "$DEST_GHOSTTY_DIR" "$DEST_CLANGD_DIR" "$DEST_GIT_DIR" "$DEST_CODEFORCES_DIR" "$DEST_LEETCODE_DIR"
+ENTRIES=(
+	"file|$HOME/.zshrc|zsh/.zshrc"
+	"file|$HOME/.config/neofetch/config.conf|neofetch/config.conf"
+	"dir|$HOME/.config/nvim|nvim"
+	"file|$HOME/.tmux/.tmux.conf|tmux/.tmux.conf"
+	"file|$HOME/.config/htop/htoprc|htop/htoprc"
+	"dir|$HOME/scripts|scripts"
+	"file|$HOME/.config/ghostty/config|ghostty/config"
+	"file|$HOME/.clangd|clangd/.clangd"
+	"file|$HOME/.clang-format|clangd/.clang-format"
+	"dir|$HOME/.config/git|git"
+	"dir|$HOME/.lazyffmpeg|lazyffmpeg"
+	"file|$HOME/personal/cf/newcf|programmingsetup/codeforces/newcf"
+	"file|$HOME/personal/cf/.gitignore|programmingsetup/codeforces/.gitignore"
+	"dir|$HOME/personal/cf/templates|programmingsetup/codeforces/templates"
+	"file|$HOME/personal/lc/new|programmingsetup/leetcode/new"
+	"dir|$HOME/personal/lc/templates|programmingsetup/leetcode/templates"
+)
 
-SOURCE_ZSHRC="$HOME/.zshrc"
-SOURCE_NEOFETCH_CONFIG="$HOME/.config/neofetch/config.conf"
-SOURCE_NVIM_CONFIG_DIR="$HOME/.config/nvim"
-SOURCE_TMUX_CONF="$HOME/.tmux/.tmux.conf"
-SOURCE_HTOPRC="$HOME/.config/htop/htoprc"
-SOURCE_SCRIPTS_DIR="$HOME/scripts"
-SOURCE_GHOSTTY_CONFIG="$HOME/.config/ghostty/config"
-SOURCE_CLANGD="$HOME/.clangd"
-SOURCE_FORMAT_CLANGD="$HOME/.clang-format"
-SOURCE_GIT_CONFIG_DIR="$HOME/.config/git"
-SOURCE_LAZYFFMPEG_CONFIG_DIR="$HOME/.lazyffmpeg/"
+RSYNC_EXCLUDES=(
+	".git"
+	".DS_Store"
+	".env"
+	".env.*"
+	"*.pem"
+	"*.key"
+	"id_rsa*"
+	"id_ed25519*"
+	"credentials*"
+	"*.secret"
+	"*.token"
+)
 
-# Programming setup sources
-SOURCE_NEWCF="$HOME/personal/cf/newcf"
-SOURCE_GITIGNORE="$HOME/personal/cf/.gitignore"
-SOURCE_TEMPLATES_CODEFORCES="$HOME/personal/cf/templates"
-SOURCE_LC_NEW="$HOME/personal/lc/new"
-SOURCE_TEMPLATES_LEETCODE="$HOME/personal/lc/templates"
+WARNINGS=0
 
-# Function to copy file and show diff
-copy_and_log() {
+log() {
+	printf '%s\n' "$*"
+}
+
+warn() {
+	WARNINGS=$((WARNINGS + 1))
+	printf 'Warning: %s\n' "$*" >&2
+}
+
+die() {
+	printf 'Error: %s\n' "$*" >&2
+	exit 1
+}
+
+usage() {
+	log "Usage: $(basename "$0") [--dry-run] [--help]"
+	log ""
+	log "  --dry-run      Show what would change without touching the repo"
+	log "  --help         Show this message"
+}
+
+parse_args() {
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			--dry-run) DRY_RUN=1 ;;
+			--help) usage; exit 0 ;;
+			*) usage >&2; die "Unknown option: $1" ;;
+		esac
+		shift
+	done
+}
+
+require_command() {
+	command -v "$1" >/dev/null 2>&1 || die "Required command not found: $1"
+}
+
+verify_repo_root() {
+	local toplevel
+	toplevel="$(git -C "$REPO_ROOT" rev-parse --show-toplevel 2>/dev/null)" \
+		|| die "$REPO_ROOT is not inside a git repository"
+	[ "$toplevel" = "$REPO_ROOT" ] \
+		|| die "Script must live at the repository root ($toplevel), found in $REPO_ROOT"
+}
+
+preflight() {
+	require_command git
+	require_command rsync
+	require_command cmp
+	verify_repo_root
+}
+
+sync_file() {
 	local source=$1
-	local destination=$2
-	if [ -e "$source" ]; then
-		if [ ! -e "$destination" ] || ! cmp -s "$source" "$destination"; then
-			cp "$source" "$destination"
-			echo "Copied: $source → $destination"
-			git diff --no-index "$destination" "$source" | sed 's/^/    /'
-		fi
-	else
-		echo "Source not found: $source"
+	local destination="$REPO_ROOT/$2"
+
+	if [ ! -f "$source" ]; then
+		warn "Source file not found, destination left untouched: $source"
+		return 0
 	fi
-}
-# Function to copy directory and show diff
-copy_dir_and_log() {
-	local source_dir=$1
-	local destination_dir=$2
-	if [ -d "$source_dir" ]; then
-		mkdir -p "$destination_dir"
-		find "$source_dir" -type d -name ".git" -prune -o -type f -print | while IFS= read -r file; do
-			local relative_path="${file#"$source_dir"/}"
-			local dest_file="$destination_dir/$relative_path"
-			mkdir -p "$(dirname "$dest_file")"
-			copy_and_log "$file" "$dest_file"
-		done
-	else
-		echo "Source directory not found: $source_dir"
+
+	if [ -f "$destination" ] && cmp -s "$source" "$destination"; then
+		return 0
 	fi
+
+	if [ "$DRY_RUN" -eq 1 ]; then
+		log "Would copy: $source -> $destination"
+		return 0
+	fi
+
+	mkdir -p "$(dirname "$destination")"
+	cp "$source" "$destination"
+	log "Copied: $source -> $destination"
 }
 
-copy_and_log "$SOURCE_ZSHRC" "$DEST_ZSH_DIR/.zshrc"
-copy_and_log "$SOURCE_NEOFETCH_CONFIG" "$DEST_NEOFETCH_DIR/config.conf"
-copy_dir_and_log "$SOURCE_NVIM_CONFIG_DIR" "$DEST_NVIM_DIR"
-copy_and_log "$SOURCE_TMUX_CONF" "$DEST_TMUX_DIR/.tmux.conf"
-copy_and_log "$SOURCE_HTOPRC" "$DEST_HTOP_DIR/htoprc"
-copy_dir_and_log "$SOURCE_SCRIPTS_DIR" "$DEST_SCRIPTS_DIR"
-copy_and_log "$SOURCE_GHOSTTY_CONFIG" "$DEST_GHOSTTY_DIR/config"
-copy_and_log "$SOURCE_CLANGD" "$DEST_CLANGD_DIR/.clangd"
-copy_and_log "$SOURCE_FORMAT_CLANGD" "$DEST_CLANGD_DIR/.clang-format"
-copy_dir_and_log "$SOURCE_GIT_CONFIG_DIR" "$DEST_GIT_DIR"
-copy_dir_and_log "$SOURCE_LAZYFFMPEG_CONFIG_DIR" "$DEST_LAZYFFMPEG_DIR"
+dir_has_content() {
+	[ -n "$(find "$1" -mindepth 1 -maxdepth 1 -print -quit)" ]
+}
 
-######################################
-# Codeforces Setup
-######################################
-copy_and_log "$SOURCE_NEWCF" "$DEST_CODEFORCES_DIR/newcf"
-copy_and_log "$SOURCE_GITIGNORE" "$DEST_CODEFORCES_DIR/.gitignore"
-copy_dir_and_log "$SOURCE_TEMPLATES_CODEFORCES" "$DEST_CODEFORCES_DIR/templates"
+sync_dir() {
+	local source=$1
+	local destination="$REPO_ROOT/$2"
+	local -a flags=(-a --delete --itemize-changes)
+	local pattern
 
-######################################
-# Leetcode Setup
-######################################
-copy_and_log "$SOURCE_LC_NEW" "$DEST_LEETCODE_DIR/new"
-copy_dir_and_log "$SOURCE_TEMPLATES_LEETCODE" "$DEST_LEETCODE_DIR/templates"
-echo ""
-echo "All configuration files and programming setup files have been processed."
+	if [ ! -d "$source" ]; then
+		warn "Source directory not found, destination left untouched: $source"
+		return 0
+	fi
+
+	if ! dir_has_content "$source"; then
+		warn "Source directory is empty, skipping to protect destination: $source"
+		return 0
+	fi
+
+	for pattern in "${RSYNC_EXCLUDES[@]}"; do
+		flags+=(--exclude "$pattern")
+	done
+
+	if [ "$DRY_RUN" -eq 1 ]; then
+		flags+=(--dry-run)
+	else
+		mkdir -p "$destination"
+	fi
+
+	log "Syncing directory: $source -> $destination"
+	rsync "${flags[@]}" "$source/" "$destination/" | sed 's/^/    /'
+}
+
+process_entry() {
+	local kind source destination
+	IFS='|' read -r kind source destination <<<"$1"
+
+	case "$kind" in
+		file) sync_file "$source" "$destination" ;;
+		dir) sync_dir "$source" "$destination" ;;
+		*) die "Invalid entry kind '$kind' in: $1" ;;
+	esac
+}
+
+process_all_entries() {
+	local entry
+	for entry in "${ENTRIES[@]}"; do
+		process_entry "$entry"
+	done
+}
+
+report() {
+	log ""
+	if [ "$DRY_RUN" -eq 1 ]; then
+		log "Dry run complete. No files were changed."
+	else
+		log "Sync complete. Repository status:"
+		git -C "$REPO_ROOT" status --short | sed 's/^/    /'
+		git -C "$REPO_ROOT" diff --stat | sed 's/^/    /'
+	fi
+	if [ "$WARNINGS" -gt 0 ]; then
+		log "Finished with $WARNINGS warning(s)."
+	fi
+}
+
+main() {
+	parse_args "$@"
+	preflight
+	process_all_entries
+	report
+}
+
+main "$@"

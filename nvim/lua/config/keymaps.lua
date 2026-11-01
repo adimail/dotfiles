@@ -1,6 +1,8 @@
 local bind = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
+bind('i', 'jk', '<Esc>', opts)
+
 bind('n', 'gD', vim.lsp.buf.declaration, opts)
 bind('n', 'gi', vim.lsp.buf.implementation, opts)
 bind('n', '<leader>D', vim.lsp.buf.type_definition, opts)
@@ -11,9 +13,11 @@ bind('n', '<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 end, opts)
 
+bind('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+bind('n', '<leader>rn', vim.lsp.buf.rename, opts)
+
 bind('n', '<leader>fa', function()
-    vim.cmd('args **/*')
-    vim.cmd('argdo silent! ConformFormat | update')
+    require('conform').format({ async = true, lsp_fallback = true })
 end, opts)
 
 bind('n', '<leader>e', vim.diagnostic.open_float, opts)
@@ -24,11 +28,14 @@ bind('n', '<leader>ld', vim.diagnostic.setloclist, opts)
 bind('n', '<leader>qd', vim.diagnostic.setqflist, opts)
 
 bind('n', '<leader>tc', '<cmd>TSContextToggle<CR>', { desc = 'Toggle Treesitter Context' })
-bind('n', '<leader>nt', '<cmd>NvimTreeToggle<CR>', { desc = 'NvimTree Toggle' })
 
 bind('n', 'u', '<CMD>undo<CR>', opts)
 bind('n', '<C-r>', '<CMD>redo<CR>', opts)
-bind('x', 'p', '"_dP', opts)
+bind({ 'n', 'v' }, 'y', '"+y', opts)
+bind('n', 'Y', '"+Y', opts)
+bind('x', 'p', '"_d"+P', opts)
+bind({ 'n', 'v' }, 'p', '"+p', opts)
+bind({ 'n', 'v' }, 'P', '"+P', opts)
 
 bind('c', 'W', 'w', opts)
 bind('c', 'WQ', 'wq', opts)
@@ -49,6 +56,9 @@ bind('n', 'L', 'g_', opts)
 bind('v', 'H', 'g^', opts)
 bind('v', 'L', 'g_', opts)
 
+bind('v', 'J', ":m '>+1<CR>gv=gv", opts)
+bind('v', 'K', ":m '<-2<CR>gv=gv", opts)
+
 bind('n', '<leader>ll', '<CMD>bp<CR>', opts)
 bind('n', '<leader>hh', '<CMD>bn<CR>', opts)
 bind('n', '<leader>bd', '<CMD>bdelete<CR>', opts)
@@ -65,7 +75,7 @@ bind('n', '<C-k>', '<C-w>k', opts)
 bind('n', '<C-l>', '<C-w>l', opts)
 
 bind('n', '<C-a>', 'ggVG', opts)
-bind('n', '<C-Space>', 'ggVGy', opts)
+bind('n', '<C-Space>', 'ggVG"+y', opts)
 
 bind('v', '<tab>', '>gv', opts)
 bind('v', '<S-tab>', '<gv', opts)

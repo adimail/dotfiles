@@ -18,58 +18,43 @@ return {
                 obj = vim.system(
                     { 'cmake', '--build', 'build', '--config', 'Release' },
                     { cwd = plugin.dir }
-                )
-                    :wait()
+                ):wait()
                 if obj.code ~= 0 then
                     error(obj.stderr)
                 end
                 obj = vim.system(
                     { 'cmake', '--install', 'build', '--prefix', 'build' },
                     { cwd = plugin.dir }
-                )
-                    :wait()
+                ):wait()
                 if obj.code ~= 0 then
                     error(obj.stderr)
                 end
             end,
         },
-        {
-            'nvim-telescope/telescope-dap.nvim',
-        },
-        {
-            'folke/which-key.nvim',
-            config = function()
-                require('which-key').setup({})
-            end,
-        },
+        { 'nvim-telescope/telescope-dap.nvim' },
     },
     keys = {
         {
             '<leader>ff',
             function()
-                require('telescope.builtin').find_files({
-                    -- cwd = require("lazy.core.config").options.root
-                })
+                require('telescope.builtin').find_files()
             end,
             desc = 'Find Files',
         },
         {
             '<leader>fg',
             function()
-                require('telescope.builtin').live_grep({
-                    theme = 'dropdown',
-                    -- cwd = require("lazy.core.config").options.root
-                })
+                require('telescope.builtin').live_grep({ theme = 'dropdown' })
             end,
             desc = 'Live grep file content',
         },
-		{
-			'<leader>fk',
-			function()
-				require('telescope.builtin').keymaps()
-			end,
-			desc = 'Search Keymaps',
-		},
+        {
+            '<leader>fk',
+            function()
+                require('telescope.builtin').keymaps()
+            end,
+            desc = 'Search Keymaps',
+        },
         {
             '<leader>ob',
             function()
@@ -116,9 +101,7 @@ return {
             '<leader>gd',
             function()
                 local success, _ = pcall(function()
-                    require('telescope.builtin').lsp_definitions({
-                        quiet = true, -- Suppress output unless results are found
-                    })
+                    require('telescope.builtin').lsp_definitions({ quiet = true })
                 end)
                 if not success then
                     vim.notify('No definition found for this function/type', vim.log.levels.ERROR)
@@ -129,7 +112,6 @@ return {
         {
             '<leader>va',
             function()
-                -- This should now work without needing to load which_key extension
                 require('which-key').show()
             end,
             desc = 'View all keybindings',
@@ -214,80 +196,63 @@ return {
                     i = {
                         ['<C-n>'] = actions.cycle_history_next,
                         ['<C-p>'] = actions.cycle_history_prev,
-
                         ['<C-j>'] = actions.move_selection_next,
                         ['<C-k>'] = actions.move_selection_previous,
-
                         ['<C-c>'] = actions.close,
-                        --
                         ['<Down>'] = actions.move_selection_next,
                         ['<Up>'] = actions.move_selection_previous,
-
                         ['<CR>'] = actions.select_default,
                         ['<C-s>'] = actions.select_horizontal,
                         ['<C-v>'] = actions.select_vertical,
                         ['<C-t>'] = actions.select_tab,
-
                         ['<C-u>'] = actions.preview_scrolling_up,
                         ['<C-d>'] = actions.preview_scrolling_down,
-
                         ['<PageUp>'] = actions.results_scrolling_up,
                         ['<PageDown>'] = actions.results_scrolling_down,
-
                         ['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
                         ['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
                         ['<C-q>'] = actions.send_to_qflist + actions.open_qflist,
                         ['<M-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
                         ['<C-l>'] = actions.complete_tag,
-                        ['<C-_>'] = actions.which_key, -- keys from pressing <C-/>
+                        ['<C-_>'] = actions.which_key,
                         ['<c-t>'] = trouble.open,
                     },
-
                     n = {
                         ['<esc>'] = actions.close,
                         ['<CR>'] = actions.select_default,
                         ['<C-s>'] = actions.select_horizontal,
                         ['<C-v>'] = actions.select_vertical,
                         ['<C-t>'] = actions.select_tab,
-
                         ['<Tab>'] = actions.toggle_selection + actions.move_selection_worse,
                         ['<S-Tab>'] = actions.toggle_selection + actions.move_selection_better,
                         ['<C-q>'] = actions.send_to_qflist + actions.open_qflist,
                         ['<M-q>'] = actions.send_selected_to_qflist + actions.open_qflist,
-
                         ['j'] = actions.move_selection_next,
                         ['k'] = actions.move_selection_previous,
                         ['H'] = actions.move_to_top,
                         ['M'] = actions.move_to_middle,
                         ['L'] = actions.move_to_bottom,
-
                         ['<Down>'] = actions.move_selection_next,
                         ['<Up>'] = actions.move_selection_previous,
                         ['gg'] = actions.move_to_top,
                         ['G'] = actions.move_to_bottom,
-
                         ['<C-u>'] = actions.preview_scrolling_up,
                         ['<C-d>'] = actions.preview_scrolling_down,
-
                         ['<PageUp>'] = actions.results_scrolling_up,
                         ['<PageDown>'] = actions.results_scrolling_down,
-
                         ['?'] = actions.which_key,
                     },
                 },
             },
             extensions = {
                 fzf = {
-                    fuzzy = true, -- false will only do exact matching
-                    override_generic_sorter = true, -- override the generic sorter
-                    override_file_sorter = true, -- override the file sorter
-                    case_mode = 'smart_case', -- or "ignore_case" or "respect_case"
-                    -- the default case_mode is "smart_case"
+                    fuzzy = true,
+                    override_generic_sorter = true,
+                    override_file_sorter = true,
+                    case_mode = 'smart_case',
                 },
             },
         })
         telescope.load_extension('fzf')
-        -- telescope.load_extension('dap')  -- Uncomment if you want to enable DAP extension
-        -- telescope.load_extension('bookmarks')  -- Uncomment if you want to enable bookmarks extension
     end,
 }

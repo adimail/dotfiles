@@ -1,5 +1,6 @@
 local opt = vim.opt
 
+opt.clipboard = 'unnamedplus'
 opt.inccommand = 'nosplit'
 opt.completeopt = 'menu,menuone,noselect'
 opt.hlsearch = true
@@ -8,13 +9,12 @@ opt.number = true
 opt.hidden = true
 opt.breakindent = true
 opt.showbreak = '⤿ '
-opt.clipboard = 'unnamed'
 opt.swapfile = false
 opt.ignorecase = true
 opt.smartcase = true
 opt.updatetime = 200
 vim.wo.signcolumn = 'yes'
-opt.lazyredraw = true
+opt.lazyredraw = false
 opt.redrawtime = 100
 opt.termguicolors = true
 opt.shortmess:append('ISc')
@@ -58,11 +58,8 @@ opt.directory = vim.fn.stdpath('state') .. '/swap'
 opt.backupdir = vim.fn.stdpath('state') .. '/backup'
 opt.undodir = vim.fn.stdpath('state') .. '/undo'
 
-if vim.fn.executable('python3') == 1 then
-    vim.g.python3_host_prog = vim.fn.exepath('python3')
-end
-
 vim.g.loaded_python_provider = 0
+vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_node_provider = 0

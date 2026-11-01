@@ -1,23 +1,17 @@
 #!/usr/bin/env bash
 
-directories=(
-	"$HOME/personal/"
-	"$HOME/personal/minions/"
-	"$HOME/personal/tmp"
-	"$HOME/personal/college/"
-	"$HOME/personal/scrappers/"
-	"$HOME/scripts/"
-	"$HOME/work/"
-	"$HOME/work/ACM/"
-	"$HOME/Documents/GitHub/"
-	"$HOME/hackathons/"
-	"$HOME/personal/experiment/python"
-	"$HOME/personal/experiment"
+source "$HOME/scripts/config.sh"
+source "$HOME/scripts/lib/tmux.sh"
+source "$HOME/scripts/lib/frecency.sh"
+
+base_directory=$(
+	{
+		frecency_parents
+		printf "%s\n" "${STATIC_PARENT_DIRS[@]}"
+	} | awk '!seen[$0]++' | fzf --prompt="Select a base directory: "
 )
 
-base_directory=$(printf "%s\n" "${directories[@]}" | fzf --prompt="Select a base directory: ")
-
-base_directory=$(eval echo "$base_directory") # Handles ~ expansion if fzf returns it
+base_directory=$(eval echo "$base_directory")
 
 if [[ -z "$base_directory" ]]; then
 	echo "No directory selected. Exiting."
@@ -45,15 +39,5 @@ else
 	echo "Created: $new_folder"
 fi
 
-session_name=$(basename "$new_folder" | tr ' ' '_' | tr . _)
-
-# Start or attach tmux
-if ! tmux has-session -t "$session_name" 2>/dev/null; then
-	tmux new-session -ds "$session_name" -c "$new_folder"
-fi
-
-if [[ -z $TMUX ]]; then
-	tmux attach-session -t "$session_name"
-else
-	tmux switch-client -t "$session_name"
-fi
+frecency_touch "$new_folder"
+tmux_open_or_switch "$new_folder"

@@ -1,68 +1,16 @@
 #!/usr/bin/env bash
-switch_to() {
-	if [[ -z $TMUX ]]; then
-		tmux attach-session -t "$1"
-	else
-		tmux switch-client -t "$1"
-	fi
-}
 
-has_session() {
-	tmux list-sessions | grep -q "^$1:"
-}
-
-hydrate() {
-	if [ -f "$2"/.tmux-sessionizer ]; then
-		tmux send-keys -t "$1" "source $2/.tmux-sessionizer" c-M
-	elif [ -f "$HOME"/.tmux-sessionizer ]; then
-		tmux send-keys -t "$1" "source $HOME/.tmux-sessionizer" c-M
-	fi
-}
-
-search_paths=(
-	"$HOME/personal/"
-	"$HOME/personal/mahi/"
-	"$HOME/personal/minions/"
-	"$HOME/personal/notes/"
-	"$HOME/Documents/"
-	"$HOME/IdeaProjects/"
-	"$HOME/Documents/Arduino/"
-	"$HOME/personal/tmp/"
-	"$HOME/personal/python"
-	"$HOME/scripts/"
-	"$HOME/Downloads/"
-	"$HOME/hackathons/"
-	"$HOME/work/"
-	"$HOME/work/ACM/"
-	"$HOME/.config/"
-	"$HOME/.tmux/"
-	"$HOME/Documents/GitHub/"
-	"$HOME/Pictures/screenshots/"
-	"$HOME/.lazyffmpeg/"
-)
+source "$HOME/scripts/config.sh"
+source "$HOME/scripts/lib/tmux.sh"
+source "$HOME/scripts/lib/frecency.sh"
 
 if [[ $# -eq 1 ]]; then
 	selected="$1"
 else
-	selected=$(find "${search_paths[@]}" -mindepth 0 -maxdepth 1 -type d | fzf)
+	selected=$(frecency_select_dir "Select session: ")
 fi
 
-if [[ -z "$selected" ]]; then
-	exit 0
-fi
+[[ -z "$selected" ]] && exit 0
 
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
-
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-	tmux new-session -s "$selected_name" -c "$selected"
-	hydrate "$selected_name" "$selected"
-	exit 0
-fi
-
-if ! has_session "$selected_name"; then
-	tmux new-session -ds "$selected_name" -c "$selected"
-	hydrate "$selected_name" "$selected"
-fi
-
-switch_to "$selected_name"
+frecency_touch "$selected"
+tmux_open_or_switch "$selected"

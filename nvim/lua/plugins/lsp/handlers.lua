@@ -41,12 +41,7 @@ M.capabilities.textDocument.foldingRange = {
     lineFoldingOnly = true,
 }
 
-M.on_attach = function(client, bufnr)
-    local navic_ok, navic = pcall(require, 'nvim-navic')
-    if navic_ok and client.server_capabilities.documentSymbolProvider then
-        navic.attach(client, bufnr)
-    end
-
+M.on_attach = function(client, _)
     local disable_formatting = { 'ts_ls', 'lua_ls', 'html', 'jsonls', 'python' }
     if vim.tbl_contains(disable_formatting, client.name) then
         client.server_capabilities.documentFormattingProvider = false

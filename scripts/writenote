@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+month=$(date '+%b' | tr '[:upper:]' '[:lower:]')
+date=$(date '+%d')
+year=$(date '+%Y')
+
+dirName="${month}${year}"
+dirPath="$HOME/personal/notes/self/$dirName"
+fileName="${date}${month}.md"
+session_name="notes"
+
+mkdir -p "$dirPath"
+
+if ! tmux has-session -t "$session_name" 2>/dev/null; then
+	tmux new-session -ds "$session_name" -c "$dirPath"
+	tmux send-keys -t "$session_name" "nvim $fileName" C-m
+else
+	tmux send-keys -t "$session_name" "nvim $fileName" C-m
+fi
+
+if [[ -n "$TMUX" ]]; then
+	tmux switch-client -t "$session_name"
+else
+	tmux attach-session -t "$session_name"
+fi
