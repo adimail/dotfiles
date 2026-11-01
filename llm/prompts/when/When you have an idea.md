@@ -1,0 +1,1 @@
+Assume this idea is weaker than I think it is. Identify its weakest assumptions, biggest risks, hidden costs, and likely failure modes. Give me the strongest argument against pursuing it. Be specific, not contrarian for the sake of it.

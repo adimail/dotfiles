@@ -1,0 +1,1 @@
+Explain this from first principles. Start with the simplest mental model, show a concrete example, explain how it works internally, and then show where that understanding is useful. Don't skip prerequisites, but don't explain things I already understand.

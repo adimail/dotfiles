@@ -1,0 +1,1 @@
+Solve the actual problem with the simplest reliable approach. Inspect the available context, identify the root cause if relevant, and provide a complete, usable solution. Respect my existing architecture and constraints. Mention only important trade-offs and edge cases.

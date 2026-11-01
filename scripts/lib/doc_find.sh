@@ -13,14 +13,17 @@ doc_find_and_copy() {
 		exit 1
 	fi
 
-	local list_cmd="find \"${valid_paths[@]}\" -type f -name \"*.md\" 2>/dev/null | sort"
-	local name_cmd="find \"${valid_paths[@]}\" -type f -name \"*.md\" 2>/dev/null | grep -iF -- {q} | sort"
+	local base_dir="${valid_paths[0]}"
+	cd "$base_dir" || exit 1
+
+	local list_cmd="find . -type f -name \"*.md\" 2>/dev/null | sed 's|^\\./||' | sort"
+	local name_cmd="find . -type f -name \"*.md\" 2>/dev/null | sed 's|^\\./||' | grep -iF -- {q} | sort"
 
 	local content_cmd
 	if command -v rg >/dev/null 2>&1; then
-		content_cmd="rg -l -i -F --glob \"*.md\" -- {q} \"${valid_paths[@]}\" 2>/dev/null | sort"
+		content_cmd="rg -l -i -F --glob \"*.md\" -- {q} 2>/dev/null | sed 's|^\\./||' | sort"
 	else
-		content_cmd="grep -rliF --include=\"*.md\" -- {q} \"${valid_paths[@]}\" 2>/dev/null | sort"
+		content_cmd="grep -rliF --include=\"*.md\" -- {q} . 2>/dev/null | sed 's|^\\./||' | sort"
 	fi
 
 	local search_cmd="( $name_cmd; $content_cmd ) | awk '!seen[\$0]++'"

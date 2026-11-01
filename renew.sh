@@ -24,6 +24,8 @@ ENTRIES=(
 	"dir|$HOME/personal/cf/templates|programmingsetup/codeforces/templates"
 	"file|$HOME/personal/lc/new|programmingsetup/leetcode/new"
 	"dir|$HOME/personal/lc/templates|programmingsetup/leetcode/templates"
+	"dir|$HOME/personal/instructions|llm/instructions"
+	"dir|$HOME/personal/prompts|llm/prompts"
 )
 
 RSYNC_EXCLUDES=(
@@ -113,7 +115,6 @@ sync_file() {
 
 	mkdir -p "$(dirname "$destination")"
 	cp "$source" "$destination"
-	log "Copied: $source -> $destination"
 }
 
 dir_has_content() {
@@ -123,7 +124,7 @@ dir_has_content() {
 sync_dir() {
 	local source=$1
 	local destination="$REPO_ROOT/$2"
-	local -a flags=(-a --delete --itemize-changes)
+	local -a flags=(-a --delete)
 	local pattern
 
 	if [ ! -d "$source" ]; then
@@ -141,13 +142,13 @@ sync_dir() {
 	done
 
 	if [ "$DRY_RUN" -eq 1 ]; then
-		flags+=(--dry-run)
-	else
-		mkdir -p "$destination"
+		flags+=(--dry-run -v)
+		rsync "${flags[@]}" "$source/" "$destination/"
+		return 0
 	fi
 
-	log "Syncing directory: $source -> $destination"
-	rsync "${flags[@]}" "$source/" "$destination/" | sed 's/^/    /'
+	mkdir -p "$destination"
+	rsync "${flags[@]}" "$source/" "$destination/" >/dev/null
 }
 
 process_entry() {
@@ -169,15 +170,63 @@ process_all_entries() {
 }
 
 report() {
-	log ""
 	if [ "$DRY_RUN" -eq 1 ]; then
 		log "Dry run complete. No files were changed."
-	else
-		log "Sync complete. Repository status:"
-		git -C "$REPO_ROOT" status --short | sed 's/^/    /'
-		git -C "$REPO_ROOT" diff --stat | sed 's/^/    /'
+		return 0
 	fi
+
+	local -a added_files=()
+	local -a modified_files=()
+	local -a deleted_files=()
+
+	while IFS= read -r line; do
+		local status="${line:0:2}"
+		local file="${line:3}"
+		file="${file#\"}"
+		file="${file%\"}"
+		if [[ "$status" =~ [A\?] ]]; then
+			added_files+=("$file")
+		elif [[ "$status" =~ D ]]; then
+			deleted_files+=("$file")
+		elif [[ "$status" =~ [MR] ]]; then
+			modified_files+=("$file")
+		fi
+	done < <(git -C "$REPO_ROOT" status --porcelain -uall 2>/dev/null)
+
+	local total=$((${#added_files[@]} + ${#modified_files[@]} + ${#deleted_files[@]}))
+	if [ "$total" -eq 0 ]; then
+		log "Sync complete: no changes."
+		return 0
+	fi
+
+	log "Sync complete: ${#added_files[@]} added, ${#modified_files[@]} modified, ${#deleted_files[@]} deleted."
+	log ""
+
+	if [ "${#added_files[@]}" -gt 0 ]; then
+		log "Added:"
+		for file in "${added_files[@]}"; do
+			log "  + $file"
+		done
+	fi
+
+	if [ "${#modified_files[@]}" -gt 0 ]; then
+		[ "${#added_files[@]}" -gt 0 ] && log ""
+		log "Modified:"
+		for file in "${modified_files[@]}"; do
+			log "  ~ $file"
+		done
+	fi
+
+	if [ "${#deleted_files[@]}" -gt 0 ]; then
+		{ [ "${#added_files[@]}" -gt 0 ] || [ "${#modified_files[@]}" -gt 0 ]; } && log ""
+		log "Deleted:"
+		for file in "${deleted_files[@]}"; do
+			log "  - $file"
+		done
+	fi
+
 	if [ "$WARNINGS" -gt 0 ]; then
+		log ""
 		log "Finished with $WARNINGS warning(s)."
 	fi
 }

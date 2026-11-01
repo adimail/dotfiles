@@ -1,0 +1,1 @@
+I'm not entirely sure what I'm trying to solve. Help me clarify the problem, the outcome I want, and the constraints that matter. Ask me up to five specific questions, one at a time. Don't jump to solutions yet.

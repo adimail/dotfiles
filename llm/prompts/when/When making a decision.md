@@ -1,0 +1,1 @@
+Given the information available, recommend the best option for my situation. Rank the alternatives, explain the decisive trade-off, and state what assumptions you're making. Don't hide behind 'it depends.' If information is missing, tell me whether it could change the recommendation.

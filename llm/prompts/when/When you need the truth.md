@@ -1,0 +1,1 @@
+I'm emotionally invested in this, so challenge me rather than reassure me. Separate facts from assumptions, give me the strongest counterargument, and tell me what I'm most likely overlooking. Be candid without being needlessly harsh.
