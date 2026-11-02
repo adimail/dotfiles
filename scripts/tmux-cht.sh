@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 source "$HOME/scripts/config.sh"
+source "$HOME/scripts/lib/input.sh"
 
 selected=$(cat "$CHT_LANGUAGES" "$CHT_COMMANDS" | fzf)
 [[ -z "$selected" ]] && exit 0
 
-read -r -p "Enter Query: " query
+prompt_input "Enter Query: " query
 
 if grep -qs "$selected" "$CHT_LANGUAGES"; then
 	query=$(echo "$query" | tr ' ' '+')

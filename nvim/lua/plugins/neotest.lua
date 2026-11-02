@@ -4,14 +4,13 @@ return {
         dependencies = {
             'nvim-neotest/nvim-nio',
             'nvim-lua/plenary.nvim',
-            'antoinemadec/FixCursorHold.nvim',
             'nvim-treesitter/nvim-treesitter',
-            'fredrikaverpil/neotest-golang', -- Installation
+            'fredrikaverpil/neotest-golang',
         },
         config = function()
             require('neotest').setup({
                 adapters = {
-                    require('neotest-golang'), -- Registration
+                    require('neotest-golang'),
                 },
             })
         end,

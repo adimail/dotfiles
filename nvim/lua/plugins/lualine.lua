@@ -32,7 +32,8 @@ function M.config()
     local progress = function()
         local current_line = vim.fn.line('.')
         local total_lines = vim.fn.line('$')
-        local chars = { '__', '▁▁', '▂▂', '▃▃', '▄▄', '▅▅', '▆▆', '▇▇', '██' }
+        local chars =
+            { '__', '▁▁', '▂▂', '▃▃', '▄▄', '▅▅', '▆▆', '▇▇', '██' }
         local line_ratio = current_line / total_lines
         local index = math.ceil(line_ratio * #chars)
 
@@ -67,10 +68,14 @@ function M.config()
             component_separators = { left = '', right = '' },
             section_separators = { left = '', right = '' },
             disabled_filetypes = {
-                'alpha',
-                'dashboard',
-                'sagaoutline',
-                'tagbar',
+                statusline = {
+                    'NvimTree',
+                    'alpha',
+                    'dashboard',
+                    'sagaoutline',
+                    'tagbar',
+                },
+                winbar = {},
             },
             always_divide_middle = true,
         },

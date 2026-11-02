@@ -6,7 +6,7 @@ return {
 
     opts = {
         provider_selector = function()
-            return { 'treesitter', 'indent' }
+            return { 'lsp', 'indent' }
         end,
         open_fold_hl_timeout = 400,
         close_fold_kinds_for_ft = { default = { 'imports', 'comment' } },
@@ -61,7 +61,8 @@ return {
                 curWidth = curWidth + chunkWidth
             end
 
-            local rAlignAppndx = math.max(math.min(vim.opt.textwidth['_value'], width - 1) - curWidth - sufWidth, 0)
+            local rAlignAppndx =
+                math.max(math.min(vim.opt.textwidth['_value'], width - 1) - curWidth - sufWidth, 0)
             suffix = (' '):rep(rAlignAppndx) .. suffix
             table.insert(newVirtText, { suffix, 'MoreMsg' })
             return newVirtText

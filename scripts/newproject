@@ -3,6 +3,7 @@
 source "$HOME/scripts/config.sh"
 source "$HOME/scripts/lib/tmux.sh"
 source "$HOME/scripts/lib/frecency.sh"
+source "$HOME/scripts/lib/input.sh"
 
 base_directory=$(
 	{
@@ -18,7 +19,7 @@ if [[ -z "$base_directory" ]]; then
 	exit 1
 fi
 
-read -rp "Enter the new folder name: " folder_name
+prompt_input "Enter the new folder name: " folder_name
 
 if [[ -z "$folder_name" ]]; then
 	echo "No folder name provided. Exiting."

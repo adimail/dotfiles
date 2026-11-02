@@ -20,9 +20,19 @@ return {
     { 'm4xshen/autoclose.nvim', event = 'VeryLazy', config = true },
     { 'danymat/neogen', event = 'VeryLazy', config = true },
     { 'mbbill/undotree', event = 'VeryLazy' },
-    { 'norcalli/nvim-colorizer.lua', event = 'VeryLazy', config = true },
-    { 'j-hui/fidget.nvim', branch = 'legacy', event = 'LspAttach', config = true },
+    {
+        'norcalli/nvim-colorizer.lua',
+        ft = { 'css', 'scss', 'html', 'javascriptreact', 'typescriptreact' },
+        config = function()
+            require('colorizer').setup({
+                'css',
+                'scss',
+                'html',
+                'javascriptreact',
+                'typescriptreact',
+            })
+        end,
+    },
     { 'yanskun/gotests.nvim', ft = 'go', config = true },
     { 'icholy/lsplinks.nvim', ft = 'go', config = true },
-    { 'maxandron/goplements.nvim', ft = 'go', opts = {} },
 }

@@ -16,10 +16,6 @@ end, opts)
 bind('n', '<leader>ca', vim.lsp.buf.code_action, opts)
 bind('n', '<leader>rn', vim.lsp.buf.rename, opts)
 
-bind('n', '<leader>fa', function()
-    require('conform').format({ async = true, lsp_fallback = true })
-end, opts)
-
 bind('n', '<leader>e', vim.diagnostic.open_float, opts)
 bind('n', '[d', vim.diagnostic.goto_prev, opts)
 bind('n', ']d', vim.diagnostic.goto_next, opts)
@@ -82,5 +78,5 @@ bind('v', '<S-tab>', '<gv', opts)
 
 bind('n', 'z<space>', 'zt', opts)
 bind('n', '<leader>st', function()
-    vim.opt.spell = not vim.opt.spell:get()
+    vim.wo.spell = not vim.wo.spell
 end, opts)

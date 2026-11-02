@@ -105,6 +105,8 @@ function M.config()
     local function on_attach(bufnr)
         local api = require('nvim-tree.api')
 
+        vim.opt_local.statusline = '%#Normal# '
+
         local function opts(desc)
             return {
                 desc = 'nvim-tree: ' .. desc,
@@ -131,21 +133,9 @@ function M.config()
         end, opts('Print Node Path'))
         vim.keymap.set('n', 'o', api.node.run.system, opts('Run System'))
         vim.keymap.set('n', 'T', open_tab_silent, opts('Open Tab Silent'))
-
-        vim.keymap.set('n', '<leader>Fa', api.fs.create, opts('Create File/Folder'))
-        vim.keymap.set('n', '<leader>Fr', api.fs.rename, opts('Rename File/Folder'))
-        vim.keymap.set('n', '<leader>Fs', api.fs.rename_sub, opts('Rename with Substitution'))
-        vim.keymap.set('n', '<leader>Fd', api.fs.remove, opts('Delete File/Folder'))
-        vim.keymap.set('n', '<leader>Ft', api.fs.trash, opts('Move to Trash'))
-        vim.keymap.set('n', '<leader>Fy', api.fs.copy.node, opts('Copy File/Folder'))
-        vim.keymap.set('n', '<leader>Fx', api.fs.cut, opts('Cut File/Folder'))
-        vim.keymap.set('n', '<leader>Fp', api.fs.paste, opts('Paste File/Folder'))
-        vim.keymap.set('n', '<leader>Fc', api.fs.copy.filename, opts('Copy Filename'))
-        vim.keymap.set('n', '<leader>Fv', api.fs.copy.relative_path, opts('Copy Relative Path'))
-        vim.keymap.set('n', '<leader>Fb', api.fs.copy.absolute_path, opts('Copy Absolute Path'))
-        vim.keymap.set('n', '<leader>Fe', reveal_in_explorer, opts('Reveal in Explorer'))
-        vim.keymap.set('n', '<leader>FDd', duplicate_file_auto, opts('Duplicate File'))
-        vim.keymap.set('n', '<leader>FDa', duplicate_file_custom, opts('Duplicate File with Custom Name'))
+        vim.keymap.set('n', 'e', reveal_in_explorer, opts('Reveal in Explorer'))
+        vim.keymap.set('n', 'D', duplicate_file_auto, opts('Duplicate File'))
+        vim.keymap.set('n', 'Y', duplicate_file_custom, opts('Duplicate File with Custom Name'))
     end
 
     require('nvim-web-devicons').setup({
@@ -255,7 +245,7 @@ function M.config()
         },
         update_focused_file = {
             enable = true,
-            debounce_delay = 15,
+            debounce_delay = 100,
             update_root = true,
             ignore_list = { 'toggleterm', 'term' },
         },

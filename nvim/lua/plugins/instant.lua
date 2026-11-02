@@ -30,14 +30,20 @@ return {
                 end
 
                 vim.ui.input({ prompt = 'Port (default 8080): ' }, function(port)
-                    if port == nil then return end
+                    if port == nil then
+                        return
+                    end
                     port = port ~= '' and port or '8080'
 
                     local handle = io.popen('lsof -i :' .. port .. ' -t 2>/dev/null')
+                    if not handle then
+                        vim.notify('Failed to check port availability.', vim.log.levels.ERROR)
+                        return
+                    end
                     local result = handle:read('*a')
                     handle:close()
 
-                    if result ~= '' then
+                    if result and result ~= '' then
                         vim.notify(
                             'Port ' .. port .. ' is already in use. Try a different port.',
                             vim.log.levels.ERROR
@@ -54,7 +60,10 @@ return {
                     vim.defer_fn(function()
                         local ok2, err2 = pcall(vim.cmd, 'InstantStartSession localhost ' .. port)
                         if not ok2 then
-                            vim.notify('Server started but session failed: ' .. err2, vim.log.levels.ERROR)
+                            vim.notify(
+                                'Server started but session failed: ' .. err2,
+                                vim.log.levels.ERROR
+                            )
                             pcall(vim.cmd, 'InstantStop')
                             return
                         end
@@ -62,7 +71,10 @@ return {
                         local ip = vim.fn.system('hostname -I'):match('%S+')
                             or vim.fn.system('ipconfig getifaddr en0'):gsub('%s+', '')
                         vim.g.instant_status = true
-                        vim.notify('⚡ Session started — share with pair: ' .. ip .. ':' .. port, vim.log.levels.INFO)
+                        vim.notify(
+                            '⚡ Session started — share with pair: ' .. ip .. ':' .. port,
+                            vim.log.levels.INFO
+                        )
                     end, 300)
                 end)
             end,
@@ -83,7 +95,9 @@ return {
                     end
 
                     vim.ui.input({ prompt = 'Port (default 8080): ' }, function(port)
-                        if port == nil then return end
+                        if port == nil then
+                            return
+                        end
                         port = port ~= '' and port or '8080'
 
                         local ok, err = pcall(vim.cmd, 'InstantJoinSession ' .. ip .. ' ' .. port)
@@ -93,7 +107,10 @@ return {
                         end
 
                         vim.g.instant_status = true
-                        vim.notify('⚡ Joined session at ' .. ip .. ':' .. port, vim.log.levels.INFO)
+                        vim.notify(
+                            '⚡ Joined session at ' .. ip .. ':' .. port,
+                            vim.log.levels.INFO
+                        )
                     end)
                 end)
             end,
@@ -136,7 +153,9 @@ return {
         {
             '<leader>ib',
             function()
-                if not vim.g.instant_status then return end
+                if not vim.g.instant_status then
+                    return
+                end
                 local bufs = vim.api.nvim_list_bufs()
                 local instant_bufs = {}
                 for _, buf in ipairs(bufs) do
@@ -167,19 +186,31 @@ return {
         {
             '<leader>if',
             function()
-                if not vim.g.instant_status then return end
+                if not vim.g.instant_status then
+                    return
+                end
                 local users = {}
                 local seen = {}
                 for ns_name, ns_id in pairs(vim.api.nvim_get_namespaces()) do
                     if ns_name:match('instant') then
                         for _, buf in ipairs(vim.api.nvim_list_bufs()) do
                             if vim.api.nvim_buf_is_loaded(buf) then
-                                local marks = vim.api.nvim_buf_get_extmarks(buf, ns_id, 0, -1, {details = true})
+                                local marks = vim.api.nvim_buf_get_extmarks(
+                                    buf,
+                                    ns_id,
+                                    0,
+                                    -1,
+                                    { details = true }
+                                )
                                 for _, mark in ipairs(marks) do
                                     if mark[4] and mark[4].virt_text then
                                         for _, vt in ipairs(mark[4].virt_text) do
                                             local uname = vt[1]
-                                            if uname and not seen[uname] and uname ~= vim.g.instant_username then
+                                            if
+                                                uname
+                                                and not seen[uname]
+                                                and uname ~= vim.g.instant_username
+                                            then
                                                 seen[uname] = true
                                                 table.insert(users, uname)
                                             end
@@ -192,12 +223,16 @@ return {
                 end
                 if #users == 0 then
                     vim.ui.input({ prompt = 'Enter username to follow: ' }, function(input)
-                        if input and input ~= '' then vim.cmd('InstantFollow ' .. input) end
+                        if input and input ~= '' then
+                            vim.cmd('InstantFollow ' .. input)
+                        end
                     end)
                     return
                 end
                 vim.ui.select(users, { prompt = 'Select user to follow:' }, function(choice)
-                    if choice then vim.cmd('InstantFollow ' .. choice) end
+                    if choice then
+                        vim.cmd('InstantFollow ' .. choice)
+                    end
                 end)
             end,
             desc = 'Instant: Follow User',
@@ -205,7 +240,9 @@ return {
         {
             '<leader>iF',
             function()
-                if vim.g.instant_status then vim.cmd('InstantFollowStop') end
+                if vim.g.instant_status then
+                    vim.cmd('InstantFollowStop')
+                end
             end,
             desc = 'Instant: Stop Following',
         },

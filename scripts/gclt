@@ -3,6 +3,7 @@
 source "$HOME/scripts/config.sh"
 source "$HOME/scripts/lib/tmux.sh"
 source "$HOME/scripts/lib/frecency.sh"
+source "$HOME/scripts/lib/input.sh"
 
 base=$(
 	{
@@ -18,8 +19,7 @@ if [[ -z "$base" ]]; then
 	exit 1
 fi
 
-read -rp "Enter the Git repository URL or owner/repo: " raw_input
-repo_input=$(echo "$raw_input" | sed -E 's/\x1B\[[0-9;]*[~a-zA-Z]//g')
+prompt_input "Enter the Git repository URL or owner/repo: " repo_input
 
 if [[ -z "$repo_input" ]]; then
 	echo "No input provided. Exiting."
@@ -40,7 +40,7 @@ fi
 repo_url="https://github.com/${owner}/${repo_name}.git"
 clone_path="$base/$repo_name"
 
-read -rp "Enter maximum depth (press Enter for no limit): " max_depth
+prompt_input "Enter maximum depth (press Enter for no limit): " max_depth
 
 clone_cmd="git clone --single-branch"
 [[ -n "$max_depth" ]] && clone_cmd="$clone_cmd --depth $max_depth"
