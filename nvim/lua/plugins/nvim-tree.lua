@@ -1,7 +1,7 @@
 local M = {
     'nvim-tree/nvim-tree.lua',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-	lazy = false,
+    lazy = false,
     cmd = { 'NvimTreeToggle', 'NvimTreeOpen', 'NvimTreeFocus', 'NvimTreeFindFile' },
     keys = {
         { '<M-n>', '<Cmd>NvimTreeToggle<CR>', desc = 'Toggle NvimTree' },
@@ -249,7 +249,6 @@ function M.config()
             update_root = true,
             ignore_list = { 'toggleterm', 'term' },
         },
-        system_open = { cmd = '', args = {} },
         diagnostics = {
             enable = true,
             show_on_dirs = false,

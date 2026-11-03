@@ -18,14 +18,16 @@ return {
                 obj = vim.system(
                     { 'cmake', '--build', 'build', '--config', 'Release' },
                     { cwd = plugin.dir }
-                ):wait()
+                )
+                    :wait()
                 if obj.code ~= 0 then
                     error(obj.stderr)
                 end
                 obj = vim.system(
                     { 'cmake', '--install', 'build', '--prefix', 'build' },
                     { cwd = plugin.dir }
-                ):wait()
+                )
+                    :wait()
                 if obj.code ~= 0 then
                     error(obj.stderr)
                 end
@@ -75,13 +77,6 @@ return {
                 require('telescope.builtin').help_tags()
             end,
             desc = 'Search help manual page',
-        },
-        {
-            '<leader>td',
-            function()
-                vim.cmd('TodoTelescope')
-            end,
-            desc = 'Toggle Todo Telescope',
         },
         {
             '<leader>jl',
